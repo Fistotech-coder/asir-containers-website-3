@@ -1,0 +1,39 @@
+import type { Metadata } from "next";
+import { ProcessHero } from "@/components/process/ProcessHero";
+import { QualityStatement } from "@/components/process/QualityStatement";
+import { InProcessStages } from "@/components/process/InProcessStages";
+import { FlowStrip } from "@/components/process/FlowStrip";
+import { ColorCTA } from "@/components/sections/ColorCTA";
+import { site } from "@/data/site";
+
+export const metadata: Metadata = {
+  title: "Manufacturing Process & Inspection",
+  description:
+    "Explore ASIR Containers' manufacturing process: in-house injection moulding cells, 3 printing routes (Screen Printing, HTL, IML), and multi-stage quality inspection gates.",
+  alternates: { canonical: "/process" },
+  openGraph: {
+    title: "Manufacturing Process & Inspection — ASIR Containers",
+    description:
+      "Moulded, printed, and packed on one floor. Industrial-grade injection moulding and precision container printing.",
+    url: `${site.url}/process`,
+  },
+};
+
+export default function ProcessPage() {
+  return (
+    <>
+      <ProcessHero />
+      <FlowStrip />
+      <InProcessStages />
+      <QualityStatement />
+      <ColorCTA
+        eyebrow="Quality Assurance & Custom Runs"
+        heading="Looking for process validation or custom batches?"
+        body="Review batch inspection criteria, in-process quality checklists, and decorative finishes with our technical engineers."
+        ctaLabel="Contact engineering"
+        image="/images/facility/dispatch.jpg"
+        imageAlt="Pallets of finished containers at the dispatch bay"
+      />
+    </>
+  );
+}
