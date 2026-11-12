@@ -4,7 +4,13 @@ import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP, revealLines, reduceMotion, EASE } from "@/lib/animations";
 
-export function ContactHero({ title, intro }: { title: string; intro: string }) {
+export function ContactHero({
+  children,
+  intro = "Send us a message, give us a call, or better still visit us.",
+}: {
+  children?: React.ReactNode;
+  intro?: string;
+}) {
   const root = useRef<HTMLElement | null>(null);
 
   useGSAP(
@@ -44,49 +50,44 @@ export function ContactHero({ title, intro }: { title: string; intro: string }) 
   return (
     <section
       ref={root}
-      className="relative overflow-hidden border-b border-ink/10 h-[220px] sm:h-[250px] lg:h-[280px] flex items-center bg-[#fdfbf9]"
+      className="relative bg-white pt-28 sm:pt-32 lg:pt-36 pb-20 sm:pb-28 lg:pb-32 flex flex-col items-center"
     >
-      {/* Background Graphic Image - full bleed contact-us-bg.webp */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Graphic Image - Ends precisely across the card's midsection (at the red line boundary) */}
+      <div className="absolute top-0 inset-x-0 z-0 h-[500px] sm:h-[550px] lg:h-[580px] overflow-hidden bg-slate-900">
         <Image
-          src="/images/contact/contact-us-bg.webp"
-          alt="ASIR Containers Contact Us background"
+          src="/images/contact/contact-support.webp"
+          alt="We want to hear from you — ASIR Containers"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center pointer-events-none"
-        />
-
-        {/* Soft subtle gradient overlay on the left to ensure headline readability */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none bg-gradient-to-r from-white/90 via-white/50 to-transparent w-full sm:w-[55%] lg:w-[45%]"
+          className="object-cover object-[center_30%] pointer-events-none"
         />
       </div>
 
-      {/* Main Text Content */}
-      <div className="shell relative z-10 w-full pt-16 sm:pt-18 lg:pt-20">
-        <div className="max-w-md lg:max-w-lg">
+      {/* Main Container over Background Image & White Section */}
+      <div className="shell relative z-10 w-full max-w-6xl mx-auto px-4">
+        {/* Centered Heading */}
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <h1
             data-contact-heading
-            className="font-display text-[clamp(2.1rem,3.4vw,2.9rem)] font-extrabold leading-[1.05] tracking-tight text-ink drop-shadow-xs"
+            className="font-display text-[2.75rem] sm:text-[3.5rem] lg:text-[4.25rem] font-bold tracking-tight text-white leading-[1.08] drop-shadow-[0_2px_14px_rgba(0,0,0,0.65)]"
           >
-            {title === "Contact Us" ? (
-              <>
-                Contact <span className="text-brand">Us</span>
-              </>
-            ) : (
-              title
-            )}
+            We want to{" "}
+            <span className="text-[#38bdf8] font-bold drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+              hear from you
+            </span>
           </h1>
 
           <p
-            className="mt-2.5 max-w-sm sm:max-w-md text-[14px] sm:text-[15px] leading-relaxed text-slate-700 font-medium"
+            className="mt-4 max-w-xl mx-auto text-[15.5px] sm:text-[17.5px] leading-relaxed text-white font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]"
             data-contact-fade
           >
             {intro}
           </p>
         </div>
+
+        {/* Floating Card Popup: Top half over background image, bottom half over clean white background */}
+        {children}
       </div>
     </section>
   );

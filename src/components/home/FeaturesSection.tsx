@@ -3,115 +3,53 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Reveal } from "@/components/motion/Reveal";
+import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 type FeatureItem = {
   title: string;
-  subtitle: string;
-  theme: {
-    accentColor: string;
-    iconBgFilled: string;
-    iconColorFilled: string;
-    iconColorOutline: string;
-    borderColor: string;
-  };
+  color: string;
   icon: string;
 };
 
 const featuresList: FeatureItem[] = [
   {
     title: "Oven Safe",
-    subtitle: "Microwave Friendly",
-    theme: {
-      accentColor: "#0066cc",
-      iconBgFilled: "bg-[#e8f1fd]",
-      iconColorFilled: "text-[#0066cc]",
-      iconColorOutline: "text-[#0066cc]",
-      borderColor: "border-[#0066cc]",
-    },
+    color: "#0066cc",
     icon: "tabler:microwave",
   },
   {
     title: "Hygienic",
-    subtitle: "Untouched by Hand",
-    theme: {
-      accentColor: "#10b981",
-      iconBgFilled: "bg-[#dcfce7]",
-      iconColorFilled: "text-[#10b981]",
-      iconColorOutline: "text-[#10b981]",
-      borderColor: "border-[#10b981]",
-    },
+    color: "#10b981",
     icon: "lucide:shield-check",
   },
   {
     title: "Stackable",
-    subtitle: "Compact Storage",
-    theme: {
-      accentColor: "#2563eb",
-      iconBgFilled: "bg-[#dbeafe]",
-      iconColorFilled: "text-[#2563eb]",
-      iconColorOutline: "text-[#2563eb]",
-      borderColor: "border-[#2563eb]",
-    },
+    color: "#2563eb",
     icon: "fluent:stack-24-regular",
   },
   {
     title: "BPA Free",
-    subtitle: "100% Non-Toxic",
-    theme: {
-      accentColor: "#f97316",
-      iconBgFilled: "bg-[#ffedd5]",
-      iconColorFilled: "text-[#f97316]",
-      iconColorOutline: "text-[#f97316]",
-      borderColor: "border-[#f97316]",
-    },
+    color: "#f97316",
     icon: "tabler:leaf",
   },
   {
     title: "Food Safe",
-    subtitle: "Food Grade Certified",
-    theme: {
-      accentColor: "#9333ea",
-      iconBgFilled: "bg-[#f3e8ff]",
-      iconColorFilled: "text-[#9333ea]",
-      iconColorOutline: "text-[#9333ea]",
-      borderColor: "border-[#9333ea]",
-    },
+    color: "#9333ea",
     icon: "tabler:tools-kitchen-2",
   },
   {
     title: "Freezer Safe",
-    subtitle: "Freezer Proof",
-    theme: {
-      accentColor: "#0284c7",
-      iconBgFilled: "bg-[#e0f2fe]",
-      iconColorFilled: "text-[#0284c7]",
-      iconColorOutline: "text-[#0284c7]",
-      borderColor: "border-[#0284c7]",
-    },
+    color: "#0284c7",
     icon: "tabler:snowflake",
   },
   {
     title: "Recyclable",
-    subtitle: "Eco & Sustainable",
-    theme: {
-      accentColor: "#059669",
-      iconBgFilled: "bg-[#d1fae5]",
-      iconColorFilled: "text-[#059669]",
-      iconColorOutline: "text-[#059669]",
-      borderColor: "border-[#059669]",
-    },
+    color: "#059669",
     icon: "tabler:recycle",
   },
   {
     title: "Printable",
-    subtitle: "Custom Branding",
-    theme: {
-      accentColor: "#d97706",
-      iconBgFilled: "bg-[#fef3c7]",
-      iconColorFilled: "text-[#d97706]",
-      iconColorOutline: "text-[#d97706]",
-      borderColor: "border-[#d97706]",
-    },
+    color: "#d97706",
     icon: "tabler:box",
   },
 ];
@@ -124,7 +62,7 @@ export function FeaturesSection({ index = "02" }: Props) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  // Auto-cycle through cards every 2.4 seconds, pausing when user hovers
+  // Auto-cycle through items every 2.4 seconds, pausing when user hovers
   useEffect(() => {
     if (hoveredIdx !== null) return;
     const timer = setInterval(() => {
@@ -135,105 +73,79 @@ export function FeaturesSection({ index = "02" }: Props) {
   }, [hoveredIdx]);
 
   return (
-    <section className="relative bg-white py-16 lg:py-24 border-b border-slate-100/80">
+    <section className="relative bg-white py-14 lg:py-20 border-b border-slate-100/80">
       <div className="shell relative z-10">
         {/* Header */}
         <Reveal>
-          <div data-reveal data-reveal-dir="down" data-reveal-delay="0.1" className="mx-auto mb-14 max-w-2xl text-center">
-            <h2 className="font-display text-[2.5rem] font-bold tracking-tight text-slate-900 sm:text-[3.25rem] lg:text-[3.5rem] leading-[1.06]">
-              Product Features
+          <div
+            data-reveal
+            data-reveal-dir="down"
+            data-reveal-delay="0.1"
+            className="mx-auto mb-12 lg:mb-16 max-w-2xl text-center"
+          >
+            <h2 className="font-display text-[2.25rem] font-bold tracking-tight text-slate-900 sm:text-[2.75rem] lg:text-[3.25rem] leading-[1.08]">
+              Product <WavyHighlight dot={false}>Features</WavyHighlight>
             </h2>
-            <p className="mt-3.5 text-[15.5px] font-medium leading-relaxed text-slate-500 sm:text-[16.5px]">
+            <p className="mt-3 text-[15px] font-medium leading-relaxed text-slate-500 sm:text-[16px]">
               Thoughtfully designed for safer, cleaner and more convenient storage.
             </p>
           </div>
         </Reveal>
 
-        {/* 4x2 Horizontal Pill Card Grid */}
+        {/* Responsive Grid: Desktop (single line 8 items), Tablet (4 per line), Mobile (2 per line) — No card borders */}
         <Reveal>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <div className="grid grid-cols-2 gap-y-10 gap-x-4 sm:grid-cols-4 sm:gap-y-10 sm:gap-x-6 lg:grid-cols-8 lg:gap-x-3 lg:gap-y-0">
             {featuresList.map((item, idx) => {
-              const t = item.theme;
-              const isHighlighted = hoveredIdx !== null ? hoveredIdx === idx : activeIdx === idx;
-              // Diverse directional reveals across the 4-column grid
-              const cardDir = idx % 4 === 0 ? "left" : idx % 4 === 1 ? "scale" : idx % 4 === 2 ? "scale-rotate" : "right";
+              const isHighlighted =
+                hoveredIdx !== null ? hoveredIdx === idx : activeIdx === idx;
 
               return (
                 <div
                   key={item.title}
                   data-reveal
-                  data-reveal-dir={cardDir}
-                  data-reveal-delay={(0.06 * (idx % 4)).toFixed(2)}
+                  data-reveal-dir="up"
+                  data-reveal-delay={(0.05 * idx).toFixed(2)}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}
-                  className={`group relative flex items-center overflow-hidden rounded-[28px] bg-white p-6 transition-all duration-300 ${
-                    isHighlighted
-                      ? "border-2 -translate-y-1 shadow-md"
-                      : "border hover:border-2 hover:shadow-md"
-                  }`}
-                  style={{
-                    borderColor: isHighlighted ? t.accentColor : `${t.accentColor}40`,
-                  }}
+                  className="group relative flex flex-col items-center text-center cursor-default transition-all duration-300"
                 >
-                  {/* Clean Sweeping Organic Wave in bottom-right corner - VISIBLE ONLY WHEN ACTIVE/HOVERED */}
+                  {/* Icon Pod:
+                      Normal state: border and icon have item's color, background is white.
+                      Highlighted state: background filled with item's color, icon is white, elevated with shadow.
+                  */}
                   <div
-                    className={`pointer-events-none absolute -bottom-0.5 -right-0.5 h-36 w-44 overflow-hidden transition-all duration-500 ${
+                    style={{
+                      borderColor: item.color,
+                      backgroundColor: isHighlighted ? item.color : "#ffffff",
+                      color: isHighlighted ? "#ffffff" : item.color,
+                      boxShadow: isHighlighted
+                        ? `0 14px 28px -4px ${item.color}45`
+                        : "none",
+                    }}
+                    className={`flex h-16 w-16 sm:h-[70px] sm:w-[70px] items-center justify-center rounded-full border-2 transition-all duration-300 ease-out ${
                       isHighlighted
-                        ? "opacity-100 scale-100"
-                        : "opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100"
+                        ? "-translate-y-2 scale-110"
+                        : "group-hover:-translate-y-1.5 group-hover:scale-105"
                     }`}
                   >
-                    <svg
-                      viewBox="0 0 180 150"
-                      className="h-full w-full"
-                      fill="none"
-                    >
-                      {/* Outer clean pastel wave */}
-                      <path
-                        d="M0 150 C 40 130, 80 110, 105 75 C 130 40, 145 15, 180 0 L 180 150 Z"
-                        fill={t.accentColor}
-                        fillOpacity="0.16"
-                      />
-                      {/* Inner clean accent wave crest */}
-                      <path
-                        d="M45 150 C 75 135, 105 118, 125 90 C 145 62, 155 35, 180 10 L 180 150 Z"
-                        fill={t.accentColor}
-                        fillOpacity="0.24"
-                      />
-                    </svg>
+                    <Icon
+                      icon={item.icon}
+                      className="h-7 w-7 sm:h-8 sm:w-8 transition-transform duration-300"
+                    />
                   </div>
 
-                  {/* Content: Circle Icon Pod + Text */}
-                  <div className="relative z-10 flex items-center gap-4.5">
-                    {/* Circle Icon Badge */}
-                    <div
-                      className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
-                        isHighlighted
-                          ? `${t.iconBgFilled} ${t.iconColorFilled} border-transparent scale-105`
-                          : `bg-transparent ${t.iconColorOutline} border-current/25 group-hover:${t.iconBgFilled} group-hover:${t.iconColorFilled} group-hover:border-transparent group-hover:scale-105`
+                  {/* Text below icon (Title only) */}
+                  <div className="mt-3.5 flex flex-col items-center">
+                    <h3
+                      style={{
+                        color: isHighlighted ? item.color : undefined,
+                      }}
+                      className={`font-display text-[14.5px] sm:text-[15.5px] font-bold tracking-tight leading-snug transition-colors duration-200 ${
+                        isHighlighted ? "" : "text-slate-800"
                       }`}
                     >
-                      <Icon icon={item.icon} className="h-7 w-7 transition-colors duration-300" />
-                    </div>
-
-
-                    {/* Text block */}
-                    <div className="text-left">
-                      <h3
-                        className={`font-display text-[17.5px] font-bold tracking-tight leading-snug transition-colors duration-300 ${
-                          isHighlighted ? "text-slate-900" : "text-slate-800 group-hover:text-slate-900"
-                        }`}
-                      >
-                        {item.title}
-                      </h3>
-                      <p
-                        className={`mt-1 text-[13.5px] font-medium transition-colors duration-300 ${
-                          isHighlighted ? "text-slate-600" : "text-slate-400 group-hover:text-slate-600"
-                        }`}
-                      >
-                        {item.subtitle}
-                      </p>
-                    </div>
+                      {item.title}
+                    </h3>
                   </div>
                 </div>
               );
@@ -244,12 +156,3 @@ export function FeaturesSection({ index = "02" }: Props) {
     </section>
   );
 }
-
-
-
-
-
-
-
-
-

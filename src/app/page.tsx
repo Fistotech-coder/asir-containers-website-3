@@ -3,7 +3,6 @@ import { HeroSlider } from "@/components/home/HeroSlider";
 import { HeroSliderOld } from "@/components/home/HeroSliderOld";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { AboutSection } from "@/components/home/AboutSection";
-import { AdvantagesSection } from "@/components/home/AdvantagesSection";
 import { ManufacturingSection } from "@/components/home/ManufacturingSection";
 import { VisionMissionSection } from "@/components/home/VisionMissionSection";
 import { ClientsSection } from "@/components/home/ClientsSection";
@@ -65,16 +64,13 @@ export default function HomePage() {
       {/* 3. About us */}
       <AboutSection />
 
-      {/* 4. Why choose us */}
-      <AdvantagesSection />
+      {/* 4. Vision mission */}
+      <VisionMissionSection index="04" />
 
-      {/* 5. Machinaries */}
+      {/* 5. Where Design Meets Manufacturing */}
       <ManufacturingSection />
 
-      {/* 6. Vision mission */}
-      <VisionMissionSection index="06" />
-
-      {/* 7. Our clients */}
+      {/* 6. Our clients */}
       <ClientsSection />
 
       {/* 8. Testimonial video section */}

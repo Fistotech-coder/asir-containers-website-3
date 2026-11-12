@@ -12,9 +12,17 @@ export async function POST(request: Request) {
     const product = data.product || "";
     const message = data.message?.trim() || "";
 
-    if (!name || !email || !message) {
+    if (!name || !email || !phone || !message) {
       return NextResponse.json(
-        { success: false, message: "Name, email and message are required." },
+        { success: false, message: "Name, email, phone number, and message are required." },
+        { status: 422 }
+      );
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 7 || phoneDigits.length > 15) {
+      return NextResponse.json(
+        { success: false, message: "Phone number must be between 7 and 15 digits." },
         { status: 422 }
       );
     }

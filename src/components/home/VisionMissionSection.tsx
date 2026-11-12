@@ -2,6 +2,7 @@
 
 import { Icon } from "@iconify/react";
 import { Reveal } from "@/components/motion/Reveal";
+import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 type Props = {
   index?: string;
@@ -74,11 +75,8 @@ export function VisionMissionSection({ index = "06" }: Props) {
         <Reveal className="text-center max-w-3xl mx-auto mb-6 sm:mb-2">
           
           <h2 className="font-display text-[2.4rem] sm:text-[3.1rem] lg:text-[3.35rem] font-bold tracking-tight text-slate-900 leading-[1.08]">
-            Our Mission, Vision & <span className="text-[#0066cc]">Core Values</span>
+            Our Mission, Vision & <WavyHighlight dot={false}>Core Values</WavyHighlight>
           </h2>
-          <p className="mt-3 text-[13.5px] sm:text-[15px] leading-relaxed text-slate-500 font-normal max-w-xl mx-auto">
-            A continuous strategic continuum of sustainable packaging innovation, precision manufacturing, and unwavering client trust.
-          </p>
         </Reveal>
 
         {/* 1. DESKTOP VIEW: Continuous Undulating Smooth Wave with Reduced Inter-Circle Gap (xl and up) */}
@@ -94,7 +92,7 @@ export function VisionMissionSection({ index = "06" }: Props) {
             >
               {/* Concentric guide halo rings around each circle */}
               <circle cx="190" cy="250" r="160" stroke="#f1f5f9" strokeWidth="1" />
-              <circle cx="570" cy="250" r="160" stroke="#f1f5f9" strokeWidth="1" />
+              <circle cx="570" cy="250" r="160" stroke="#222d38ff" strokeWidth="1" />
               <circle cx="950" cy="250" r="160" stroke="#f1f5f9" strokeWidth="1" />
 
               {/* Node 1: Coral Arc (Loops Over Top with 40px Equal Gap) + Glides to Midpoint (380, 250) */}
@@ -151,17 +149,17 @@ export function VisionMissionSection({ index = "06" }: Props) {
                     >
                       <ShieldBadge color={item.color} icon={item.icon} />
 
-                      <div className="mt-8 flex flex-col items-center max-w-[215px] mx-auto">
-                        <h4 className="font-display text-[19px] font-bold text-slate-900 leading-tight">
+                      <div className="mt-7 flex flex-col items-center max-w-[225px] mx-auto">
+                        <h4 className="font-display text-[21.5px] font-bold text-slate-900 leading-tight">
                           {item.title}
                         </h4>
                         <p
-                          className="mt-1 text-[11.5px] font-bold uppercase tracking-wider"
+                          className="mt-1 text-[12.5px] font-bold uppercase tracking-wider"
                           style={{ color: item.color }}
                         >
                           {item.subtitle}
                         </p>
-                        <p className="mt-2 text-[12.5px] leading-[1.48] text-slate-500 font-normal">
+                        <p className="mt-2 text-[14px] leading-[1.48] text-slate-500 font-normal">
                           {item.desc}
                         </p>
                       </div>
@@ -244,17 +242,17 @@ export function VisionMissionSection({ index = "06" }: Props) {
                     >
                       <ShieldBadge color={item.color} icon={item.icon} />
 
-                      <div className="mt-7 sm:mt-8 flex flex-col items-center max-w-[210px] mx-auto">
-                        <h4 className="font-display text-[17px] sm:text-[19px] font-bold text-slate-900 leading-tight">
+                      <div className="mt-7 flex flex-col items-center max-w-[220px] mx-auto">
+                        <h4 className="font-display text-[19px] sm:text-[21.5px] font-bold text-slate-900 leading-tight">
                           {item.title}
                         </h4>
                         <p
-                          className="mt-1 text-[11px] sm:text-[11.5px] font-bold uppercase tracking-wider"
+                          className="mt-1 text-[12px] sm:text-[12.5px] font-bold uppercase tracking-wider"
                           style={{ color: item.color }}
                         >
                           {item.subtitle}
                         </p>
-                        <p className="mt-1.5 sm:mt-2 text-[11.5px] sm:text-[12.5px] leading-[1.46] text-slate-500 font-normal">
+                        <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-[14px] leading-[1.46] text-slate-500 font-normal">
                           {item.desc}
                         </p>
                       </div>

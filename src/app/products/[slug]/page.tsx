@@ -73,22 +73,28 @@ export default async function ProductPage({ params }: PageProps) {
   const previous = products[(index - 1 + products.length) % products.length];
   const next = products[(index + 1) % products.length];
 
+  // Extract GSL and OFC specifications
+  const gslMatch = product.specs.gslOfc.match(/GSL\s*([^/]+)/i)?.[1]?.trim();
+  const ofcMatch = product.specs.gslOfc.match(/OFC\s*(.+)/i)?.[1]?.trim();
+
+  const brimfulValue = product.specs.brimful
+    ? (gslMatch ? `${product.specs.brimful} (${gslMatch})` : product.specs.brimful)
+    : (gslMatch || "—");
+
+  const ofcValue = ofcMatch || product.specs.gslOfc || "—";
+
+  const lidStr = lids.length > 0 ? lids.join(", ") : "";
+  const lockStr = product.locks.length > 0 ? product.locks.join(", ") : "";
+  const lidAndLockValue = [lidStr, lockStr].filter(Boolean).join(" / ") || "Not applicable";
+
   const specRows: { label: string; value: string }[] = [
-    { label: "Material", value: product.material || "Polypropylene (PP)" },
     { label: "Capacity", value: capacityDisplay(product) },
-    { label: "Brimful volume", value: product.specs.brimful },
-    { label: "Product height", value: product.specs.height },
-    { label: "Product weight", value: product.specs.weight ?? "Available on enquiry" },
-    { label: "GSL / OFC", value: product.specs.gslOfc },
-    { label: "Application", value: applicationNames.join(" · ") },
-    {
-      label: "Lid options",
-      value: lids.length > 0 ? lids.join(" · ") : "Not applicable",
-    },
-    {
-      label: "Lock type",
-      value: product.locks.length > 0 ? product.locks.join(" · ") : "Not applicable",
-    },
+    { label: "Material", value: product.material || "Polypropylene (PP)" },
+    { label: "Brimful capacity (GSL)", value: brimfulValue },
+    { label: "OFC (Optimum Filling Capacity)", value: ofcValue },
+    { label: "Height", value: product.specs.height },
+    { label: "Weight", value: product.specs.weight ?? "Available on enquiry" },
+    { label: "Lid Options / Lock Type", value: lidAndLockValue },
   ];
 
   const structuredData = {
@@ -104,15 +110,14 @@ export default async function ProductPage({ params }: PageProps) {
     manufacturer: { "@type": "Organization", name: site.name, url: site.url },
     url: `${site.url}/products/${product.slug}`,
     additionalProperty: [
-      { "@type": "PropertyValue", name: "Material", value: "Polypropylene (PP)" },
       { "@type": "PropertyValue", name: "Capacity", value: capacityDisplay(product) },
+      { "@type": "PropertyValue", name: "Material", value: product.material || "Polypropylene (PP)" },
+      { "@type": "PropertyValue", name: "Brimful capacity (GSL)", value: brimfulValue },
+      { "@type": "PropertyValue", name: "OFC (Optimum Filling Capacity)", value: ofcValue },
+      { "@type": "PropertyValue", name: "Height", value: product.specs.height },
+      { "@type": "PropertyValue", name: "Weight", value: product.specs.weight ?? "Available on enquiry" },
+      { "@type": "PropertyValue", name: "Lid Options / Lock Type", value: lidAndLockValue },
       { "@type": "PropertyValue", name: "Product codes", value: codesFor(product).join(", ") },
-      { "@type": "PropertyValue", name: "Brimful volume", value: product.specs.brimful },
-      { "@type": "PropertyValue", name: "Product height", value: product.specs.height },
-      { "@type": "PropertyValue", name: "GSL / OFC", value: product.specs.gslOfc },
-      ...(product.specs.weight
-        ? [{ "@type": "PropertyValue", name: "Product weight", value: product.specs.weight }]
-        : []),
       ...(product.codes.tin
         ? [{ "@type": "PropertyValue", name: "Tinned code", value: product.codes.tin }]
         : []),

@@ -1,61 +1,157 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import gsap from "gsap";
 
-export const sodaData = [
+export interface HeroProduct {
+  id: string;
+  size: string;
+  img: string;
+  code?: string;
+}
+
+export const heroProducts: HeroProduct[] = [
   {
-    name: "Black Cherry",
-    desc: "Cherry Vanilla",
-    img: "https://halftimebeverage.com/media/catalog/product/cache/5a9ece781d558937ae51db0fc99c94f4/rdi/rdi/loverboy-black-cherry-vanilla-38289_1.png",
-    color: "#f710aa",
+    id: "500ml-paint-pail-p2",
+    size: "500 ml",
+    img: "/images/hero/dummy-pail-1.png",
+    code: "P/2",
   },
   {
-    name: "Berry Bliss",
-    desc: "Wild Strawberry Mix",
-    img: "https://drinkloverboy.com/cdn/shop/files/strawberry-lemonade_1920x.png?v=1705975712",
-    color: "#E91E63",
+    id: "1l-paint-pail-p1a",
+    size: "1 Litre",
+    img: "/images/hero/dummy-pail-2.png",
+    code: "P1a",
   },
   {
-    name: "Blue Hues",
-    desc: "Blueberry Lemon",
-    img: "https://cdn.shopify.com/s/files/1/0469/9894/5945/files/Loverboy_Spritz_250mlSlimlineCan_Blueberry-FOP.png?v=1739381664",
-    color: "#bd5df5",
+    id: "4l-paint-pail-p4",
+    size: "4 Litre",
+    img: "/images/hero/dummy-pail-3.png",
+    code: "P4",
   },
   {
-    name: "Orange Blast",
-    desc: "Orange Basil Dream",
-    img: "https://cdn.shopify.com/s/files/1/0469/9894/5945/files/Loverboy-LIT-Non-Alc2.png?v=1710755794",
-    color: "#FFC107",
+    id: "5l-round-pail-a5",
+    size: "5 Litre",
+    img: "/images/hero/dummy-pail-1.png",
+    code: "A5",
   },
   {
-    name: "Pina Hina",
-    desc: "Pineapple Hibiscus",
-    img: "https://cdn.shopify.com/s/files/1/0469/9894/5945/files/7c1e5a60a48701b8759b8724555618882ed0dfc0-1288x1600_900x1118.png?v=1684512288",
-    color: "#bcce78",
+    id: "5l-square-pail-interlock-f5",
+    size: "5 Litre",
+    img: "/images/hero/dummy-pail-3.png",
+    code: "F5p",
   },
   {
-    name: "Sparkling Peach",
-    desc: "White Tea Peach Sparkling Hard Tea",
-    img: "https://cdn.shopify.com/s/files/1/0469/9894/5945/files/Loverboy-LIT-Non-Alc2.png?v=1710755794",
-    color: "#f17579",
+    id: "10l-paint-pail-p10",
+    size: "10 Litre",
+    img: "/images/hero/dummy-pail-2.png",
+    code: "P10p",
   },
   {
-    name: "Half n Half",
-    desc: "Iced tea meets lemonade",
-    img: "https://bevmo.com/cdn/shop/files/59ca8a9d-eb29-4dd5-b369-8cb7d64bce0f-padded.png?v=1719294057",
-    color: "#4da9be",
+    id: "15l-square-pail-interlock-f15",
+    size: "15 Litre",
+    img: "/images/hero/dummy-pail-3.png",
+    code: "F15p",
+  },
+  {
+    id: "17l-square-pail-interlock-f17a",
+    size: "17 Litre",
+    img: "/images/hero/dummy-pail-3.png",
+    code: "F17ip",
+  },
+  {
+    id: "17l-square-pail-outer-lock-f17b",
+    size: "17 Litre",
+    img: "/images/hero/dummy-pail-3.png",
+    code: "F17op",
+  },
+  {
+    id: "20l-paint-pail-p20a",
+    size: "20 Litre",
+    img: "/images/hero/dummy-pail-1.png",
+    code: "P20ap",
+  },
+  {
+    id: "1kg-storage-pail-k1",
+    size: "1 Kg",
+    img: "/images/hero/dummy-pail-2.png",
+    code: "K1",
+  },
+  {
+    id: "2kg-storage-pail-k2",
+    size: "2 Kg",
+    img: "/images/hero/dummy-pail-1.png",
+    code: "K2",
+  },
+  {
+    id: "5kg-storage-pail-k5",
+    size: "5 Kg",
+    img: "/images/hero/dummy-pail-2.png",
+    code: "K5",
+  },
+  {
+    id: "10kg-storage-pail-k10",
+    size: "10 Kg",
+    img: "/images/hero/dummy-pail-1.png",
+    code: "K10p",
+  },
+  {
+    id: "20kg-storage-pail-k20",
+    size: "20 Kg",
+    img: "/images/hero/dummy-pail-2.png",
+    code: "K20p",
   },
 ];
+
+// Backwards-compatible export
+export const sodaData = heroProducts;
 
 export function HeroSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
-  const lastWheelTime = useRef<number>(0);
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
 
   const move = useCallback((dir: number) => {
-    setCurrentIndex((prev) => (prev + dir + sodaData.length) % sodaData.length);
+    setCurrentIndex(
+      (prev) => (prev + dir + heroProducts.length) % heroProducts.length
+    );
   }, []);
+
+  // GSAP Entrance animation for heading
+  useEffect(() => {
+    if (!headingRef.current) return;
+    const wordInners = headingRef.current.querySelectorAll(".word-inner");
+    if (!wordInners.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        wordInners,
+        {
+          y: "115%",
+          opacity: 0,
+        },
+        {
+          y: "0%",
+          opacity: 1,
+          duration: 0.95,
+          stagger: 0.1,
+          ease: "power3.out",
+          delay: 0.15,
+        }
+      );
+    }, headingRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Auto-run cycle across all 15 products every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      move(1);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [move]);
 
   const update = useCallback(() => {
     if (!carouselRef.current) return;
@@ -63,59 +159,53 @@ export function HeroSlider() {
     const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
 
     // Dynamic horizontal spread based on screen size
-    const xOffset = winW > 768 ? 450 : winW * 0.4;
-    const zOffset = -300; // How far the side cans sit back
+    const xOffset = winW > 1024 ? 410 : winW > 768 ? 290 : winW * 0.38;
+    const zOffset = -260;
 
     cans.forEach((can, i) => {
       let relIndex = i - currentIndex;
 
-      // Circular logic to find the shortest path
-      if (relIndex > sodaData.length / 2) relIndex -= sodaData.length;
-      if (relIndex < -sodaData.length / 2) relIndex += sodaData.length;
+      // Circular logic across all 15 items
+      if (relIndex > heroProducts.length / 2) relIndex -= heroProducts.length;
+      if (relIndex < -heroProducts.length / 2) relIndex += heroProducts.length;
 
       const isActive = i === currentIndex;
       can.classList.toggle("active", isActive);
 
       if (isActive) {
-        // CENTER CAN
+        // CENTER CONTAINER
         can.style.transform = `translate3d(0, 0, 450px) rotateY(0deg)`;
         can.style.opacity = "1";
         can.style.filter = "blur(0px)";
         can.style.zIndex = "100";
 
-        // Update UI
-        const flavorTitle = document.getElementById("flavorTitle");
-        if (flavorTitle) {
-          flavorTitle.innerText = sodaData[i].name;
+        const sizeValue = document.getElementById("productSizeValue");
+        if (sizeValue) {
+          sizeValue.innerText = heroProducts[i].size;
         }
-        const flavorDesc = document.getElementById("flavorDesc");
-        if (flavorDesc) {
-          flavorDesc.innerText = sodaData[i].desc;
-        }
-
-        const bgGradient = `radial-gradient(circle at center, ${sodaData[i].color}80 0%, #ffffffc7 100%)`;
-        if (sceneRef.current) {
-          sceneRef.current.style.background = bgGradient;
-        }
-        if (typeof document !== "undefined" && document.body) {
-          document.body.style.background = bgGradient;
-        }
-      } else if (
-        Math.abs(relIndex) === 1 ||
-        Math.abs(relIndex) === sodaData.length - 1
-      ) {
-        // SIDE CANS (The ones right next to center)
+      } else if (Math.abs(relIndex) === 1) {
+        // IMMEDIATE SIDE CONTAINERS
         const direction = relIndex > 0 ? 1 : -1;
         can.style.transform = `translate3d(${
           direction * xOffset
-        }px, 0, ${zOffset}px) scale(0.75) rotateY(${direction * -15}deg)`;
-        can.style.opacity = "0.7";
-        can.style.filter = "blur(2px)";
+        }px, 0, ${zOffset}px) scale(0.72) rotateY(${direction * -14}deg)`;
+        can.style.opacity = "0.75";
+        can.style.filter = "blur(1.5px)";
+        can.style.zIndex = "20";
+      } else if (Math.abs(relIndex) === 2 && winW > 768) {
+        // SECONDARY SIDE CONTAINERS (Desktop depth)
+        const direction = relIndex > 0 ? 1 : -1;
+        can.style.transform = `translate3d(${
+          direction * (xOffset * 1.65)
+        }px, 0, ${zOffset * 2}px) scale(0.48) rotateY(${direction * -20}deg)`;
+        can.style.opacity = "0.35";
+        can.style.filter = "blur(3px)";
         can.style.zIndex = "10";
       } else {
-        // HIDE OTHERS (Far away cans)
+        // HIDE OTHER CONTAINERS
         can.style.transform = `translate3d(0, 0, -1000px) scale(0)`;
         can.style.opacity = "0";
+        can.style.filter = "blur(5px)";
         can.style.zIndex = "0";
       }
     });
@@ -132,45 +222,32 @@ export function HeroSlider() {
   }, [update]);
 
   useEffect(() => {
-    // Wheel controls (active when hero is in view)
-    const handleWheel = (e: WheelEvent) => {
-      if (!sceneRef.current) return;
-      const rect = sceneRef.current.getBoundingClientRect();
-      if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
+    // Touch swipe support (horizontal only, normal vertical page scroll preserved)
+    let startX = 0;
+    let startY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    };
+    const handleTouchEnd = (e: TouchEvent) => {
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = startX - endX;
+      const diffY = startY - endY;
 
-      const now = Date.now();
-      if (now - lastWheelTime.current > 220 && Math.abs(e.deltaY) > 20) {
-        lastWheelTime.current = now;
-        move(e.deltaY > 0 ? 1 : -1);
+      // Only trigger if horizontal swipe is intentional and distinct from vertical scrolling
+      if (Math.abs(diffX) > 55 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        if (diffX > 0) move(1);
+        else move(-1);
       }
     };
 
-    // Touch support
-    let startX = 0;
-    const handleTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].clientX;
-    };
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (!sceneRef.current) return;
-      const rect = sceneRef.current.getBoundingClientRect();
-      if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
-
-      const endX = e.changedTouches[0].clientX;
-      if (startX - endX > 50) move(1);
-      if (endX - startX > 50) move(-1);
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: true });
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
-      window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
-      if (typeof document !== "undefined" && document.body) {
-        document.body.style.background = "";
-      }
     };
   }, [move]);
 
@@ -179,21 +256,24 @@ export function HeroSlider() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            @import url("https://fonts.googleapis.com/css2?family=Chokokutai&family=Homemade+Apple&family=Slackey&display=swap");
+            @import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@600;700;800&display=swap");
 
             :root {
-              --panel-bg: rgba(255, 255, 255, 0.041);
-              --can-w: 160px;
-              --active-can-w: 300px;
-              --font-apple: "Homemade Apple", cursive;
-              --font-chokokutai: "Chokokutai", system-ui;
-              --font-slackey: "Slackey", sans-serif;
+              --can-w: 185px;
+              --active-can-w: 310px;
             }
 
             @media (max-width: 768px) {
               :root {
-                --can-w: 100px;
-                --active-can-w: 220px;
+                --can-w: 110px;
+                --active-can-w: 210px;
+              }
+            }
+
+            @media (max-width: 480px) {
+              :root {
+                --can-w: 85px;
+                --active-can-w: 175px;
               }
             }
 
@@ -201,13 +281,17 @@ export function HeroSlider() {
               position: relative;
               width: 100%;
               height: 100vh;
-              min-height: 100svh;
+              min-height: 620px;
               perspective: 1500px;
               display: flex;
+              flex-direction: column;
               justify-content: center;
               align-items: center;
               overflow: hidden;
-              transition: background 0.6s ease;
+              background-image: url("/images/hero-bg.webp");
+              background-size: cover;
+              background-position: center center;
+              background-repeat: no-repeat;
             }
 
             .carousel {
@@ -218,15 +302,19 @@ export function HeroSlider() {
               display: flex;
               justify-content: center;
               align-items: center;
+              transform: translateY(-34px);
             }
 
             .can {
               position: absolute;
               width: var(--can-w);
-              transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+              transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1);
               user-select: none;
               cursor: pointer;
               z-index: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
 
             .can.active {
@@ -238,127 +326,354 @@ export function HeroSlider() {
             @keyframes floating {
               0%,
               100% {
-                transform: translate3d(0, 0, 450px) rotate(-8deg);
+                transform: translate3d(0, 0, 450px) translateY(0);
               }
               50% {
-                transform: translate3d(0, -20px, 480px) rotate(-10deg);
+                transform: translate3d(0, -14px, 465px);
               }
             }
 
             .can img {
               width: 100%;
               height: auto;
-              filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.15));
+              max-height: 400px;
+              object-fit: contain;
+              filter: drop-shadow(0 20px 35px rgba(11, 25, 44, 0.16));
+              pointer-events: none;
+              transition: filter 0.3s ease;
+            }
+
+            .can.active img {
+              filter: drop-shadow(0 28px 45px rgba(11, 25, 44, 0.22));
+            }
+
+            /* Bottom Content Block */
+            .hero-bottom-content {
+              position: absolute;
+              bottom: 3.5%;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 92%;
+              max-width: 1280px;
+              z-index: 150;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
               pointer-events: none;
             }
 
-            .info-panel {
-              position: absolute;
-              bottom: 8%;
-              width: 280px;
-              padding: 10px;
-              background: var(--panel-bg);
-              backdrop-filter: blur(20px);
-              -webkit-backdrop-filter: blur(20px);
-              border-radius: 24px;
-              text-align: center;
-              z-index: 1000;
-              box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-              color: white;
+            .hero-heading-block {
+              display: inline-flex;
+              flex-direction: column;
+              align-items: flex-start;
+              text-align: left;
             }
 
-            .info-panel h2 {
-              font-family: var(--font-slackey);
-              margin: 0 0 4px 0;
-              font-size: 1.35rem;
-              letter-spacing: -0.01em;
-              text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-            }
-
-            .info-panel p {
-              font-family: var(--font-apple);
+            .hero-heading {
+              font-family: var(--font-sans), "Plus Jakarta Sans Variable", -apple-system, sans-serif;
               margin: 0;
-              font-size: 1.1rem;
-              text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+              padding: 0;
+              line-height: 1.08;
+              display: flex;
+              flex-direction: column;
+              gap: 2px;
             }
 
+            .heading-line {
+              display: flex;
+              align-items: baseline;
+              white-space: nowrap;
+            }
+
+            .heading-line-1 {
+              font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+              font-weight: 800;
+              letter-spacing: -0.025em;
+              color: #081426;
+              font-style: normal;
+            }
+
+            .heading-line-2 {
+              font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+              font-weight: 800;
+              letter-spacing: -0.02em;
+              color: #0066ff;
+              font-style: italic;
+              padding-left: clamp(24px, 4.5vw, 54px);
+              position: relative;
+            }
+
+            .swoosh-underline {
+              position: absolute;
+              bottom: -4px;
+              left: 0;
+              width: 100%;
+              height: 10px;
+              pointer-events: none;
+              animation: swooshReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
+            }
+
+            @keyframes swooshReveal {
+              from {
+                opacity: 0;
+                transform: scaleX(0);
+                transform-origin: left center;
+              }
+              to {
+                opacity: 1;
+                transform: scaleX(1);
+                transform-origin: left center;
+              }
+            }
+
+            .word-mask {
+              display: inline-block;
+            
+              vertical-align: top;
+            }
+
+            .word-inner {
+              display: inline-block;
+              will-change: transform, opacity;
+            }
+
+            @media (max-width: 768px) {
+              .hero-bottom-content {
+                bottom: 3%;
+                width: 96%;
+                gap: 6px;
+              }
+              .heading-line-1,
+              .heading-line-2 {
+                font-size: clamp(1.15rem, 4.4vw, 1.65rem);
+              }
+              .heading-line-2 {
+                padding-left: clamp(18px, 4vw, 36px);
+              }
+            }
+
+            @media (max-width: 480px) {
+              .hero-bottom-content {
+                bottom: 2.5%;
+              }
+              .heading-line-1,
+              .heading-line-2 {
+                font-size: clamp(1rem, 4.5vw, 1.35rem);
+              }
+            }
+
+            /* Clean size display: redesigned font style */
+            .hero-size-display {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: transparent;
+              border: none;
+              padding: 0;
+              margin: 0;
+              box-shadow: none;
+            }
+
+            .size-value {
+              font-family: "Outfit Variable", var(--font-sans), sans-serif;
+              font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+              font-weight: 700;
+              letter-spacing: 0.03em;
+              line-height: 1;
+              color: #0f172a;
+              display: inline-block;
+              will-change: transform, opacity, filter;
+              animation: smoothPopup 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+
+            @keyframes smoothPopup {
+              0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.92);
+                filter: blur(4px);
+              }
+              50% {
+                opacity: 0.75;
+                filter: blur(1px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0px);
+              }
+            }
+
+            @media (max-width: 768px) {
+              .size-value {
+                font-size: clamp(1.2rem, 3.8vw, 1.6rem);
+              }
+            }
+
+            /* Chevron Navigation Buttons: < and > */
             .nav-btn {
               position: absolute;
               top: 50%;
               transform: translateY(-50%);
-              background: rgba(166, 230, 16, 0.5);
-              color: white;
-              border: none;
-              width: 50px;
-              height: 50px;
+              background: rgba(255, 255, 255, 0.92);
+              color: #0b192c;
+              border: 1px solid rgba(203, 213, 225, 0.85);
+              width: 46px;
+              height: 46px;
               border-radius: 50%;
               cursor: pointer;
               z-index: 2000;
-              font-size: 1.2rem;
-              transition: 0.3s;
+              transition: all 0.25s ease;
               display: flex;
               align-items: center;
               justify-content: center;
+              box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.12), 0 2px 6px -1px rgba(15, 23, 42, 0.06);
+              backdrop-filter: blur(8px);
+              -webkit-backdrop-filter: blur(8px);
             }
 
             .nav-btn:hover {
-              background: rgba(230, 155, 16, 0.521);
+              background: #0066cc;
+              color: #ffffff;
+              border-color: #0066cc;
+              box-shadow: 0 10px 25px -3px rgba(0, 102, 204, 0.4);
+              transform: translateY(-50%) scale(1.08);
             }
 
             .prev {
-              left: 5%;
+              left: 3.5%;
             }
 
             .next {
-              right: 5%;
+              right: 3.5%;
+            }
+
+            @media (max-width: 640px) {
+              .nav-btn {
+                width: 38px;
+                height: 38px;
+              }
+              .prev {
+                left: 2%;
+              }
+              .next {
+                right: 2%;
+              }
             }
           `,
         }}
       />
 
-      <div className="scene" id="scene" ref={sceneRef}>
+      <div
+        className="scene"
+        id="scene"
+        ref={sceneRef}
+      >
+        {/* 3D Carousel of all 15 industrial products */}
         <div className="carousel" id="carousel" ref={carouselRef}>
-          {sodaData.map((data, i) => (
+          {heroProducts.map((data, i) => (
             <div
-              key={data.name + i}
+              key={data.id}
               className={`can ${i === currentIndex ? "active" : ""}`}
               onClick={() => {
                 setCurrentIndex(i);
               }}
+              title={data.size}
             >
-              <img
-                src={data.img}
-                alt={data.name}
-                onError={(e) => {
-                  // Fallback for CDN link availability
-                  e.currentTarget.src =
-                    "https://drinkloverboy.com/cdn/shop/files/white-tea-peach_1920x.png";
-                }}
-              />
+              <img src={data.img} alt={`Container ${data.size}`} />
             </div>
           ))}
         </div>
 
+        {/* Navigation arrows with < and > chevron icons */}
         <button
           type="button"
           className="nav-btn prev"
-          onClick={() => move(1)}
-          aria-label="Previous can"
+          onClick={() => move(-1)}
+          aria-label="Previous container"
         >
-          ←
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
+
         <button
           type="button"
           className="nav-btn next"
-          onClick={() => move(-1)}
-          aria-label="Next can"
+          onClick={() => move(1)}
+          aria-label="Next container"
         >
-          →
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
 
-        <div className="info-panel" id="infoPanel">
-          <h2 id="flavorTitle">{sodaData[currentIndex].name}</h2>
-          <p id="flavorDesc">{sodaData[currentIndex].desc}</p>
+        {/* Bottom Content: 2-Line Animated Heading (with padding-left on 2nd line + swoosh) + Clean Size */}
+        <div className="hero-bottom-content">
+          <div className="hero-heading-block">
+            <h1 className="hero-heading" ref={headingRef}>
+              <div className="heading-line heading-line-1">
+                <span className="word-mask">
+                  <span className="word-inner">Strong</span>
+                </span>{" "}
+                <span className="word-mask">
+                  <span className="word-inner">Containers.</span>
+                </span>
+              </div>
+
+              <div className="heading-line heading-line-2">
+                <span className="word-mask">
+                  <span className="word-inner">Smarter</span>
+                </span>{" "}
+                <span className="word-mask relative inline-block">
+                  <span className="word-inner">Solutions.</span>
+                  <svg
+                    className="swoosh-underline"
+                    viewBox="0 0 160 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                   <path
+                      d="M2 9C45 13 115 12 158 3C118 8 48 10 2 9Z"
+                      fill="#0066ff"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </h1>
+          </div>
+
+          <div className="hero-size-display">
+            <span
+              key={currentIndex}
+              className="size-value"
+              id="productSizeValue"
+            >
+              {heroProducts[currentIndex].size}
+            </span>
+          </div>
         </div>
       </div>
     </>

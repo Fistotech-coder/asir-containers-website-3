@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, ChevronRight, Mail, MapPin, Phone } from "lucide-react";
+import { ChevronRight, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { site } from "@/data/site";
 
 const year = new Date().getFullYear();
 
-/** Social icons with rounded circular border */
+/** Circular social icons matching reference design */
 function LinkedinIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -43,43 +43,43 @@ function YoutubeIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-/** Clean outline application icons matching reference mockup */
-function PaintBrushIcon({ className = "h-4.5 w-4.5" }: { className?: string }) {
+/** Application line icons matching reference graphic */
+function PaintRollerIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z" />
-      <path d="m5 2 5 5" />
-      <path d="M2 13h15" />
-      <path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.6 2-4 .3 1.4 2 2.4 2 4Z" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="6" rx="2" />
+      <path d="M10 9v3a3 3 0 0 0 3 3h4a2 2 0 0 1 2 2v4" />
+      <path d="M19 19v2" />
     </svg>
   );
 }
 
-function SeedlingIcon({ className = "h-4.5 w-4.5" }: { className?: string }) {
+function AgroIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22v-9" />
-      <path d="M9 13a4.5 4.5 0 0 1 3-4.24 4.5 4.5 0 0 1 8 2.24c0 3-4 4-8 4" />
-      <path d="M12 17c-4 0-8-1-8-4 0-2.5 3-4 5.5-3.5" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 21V10" />
+      <path d="M12 10a5 5 0 0 1-5-5c4 0 5 2 5 5z" />
+      <path d="M12 13a5 5 0 0 0 5-5c-4 0-5 2-5 5z" />
     </svg>
   );
 }
 
-function CutleryIcon({ className = "h-4.5 w-4.5" }: { className?: string }) {
+function FoodIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 2v20" />
-      <path d="M18 2a4 4 0 0 1 4 4v4h-4" />
-      <path d="M6 2v7a3 3 0 0 0 6 0V2" />
-      <path d="M9 12v10" />
+      <path d="M21 2c0 2.5-1.5 4.5-3 4.5" />
+      <path d="M3 2v7c0 1.5 1 2.5 2.5 2.5V22" />
+      <path d="M8 2v7c0 1.5-1 2.5-2.5 2.5" />
+      <path d="M5.5 2v7" />
     </svg>
   );
 }
 
-function DropIcon({ className = "h-4.5 w-4.5" }: { className?: string }) {
+function LubeIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-6-1.5-1.6-3-3.9-4-7-1 3.1-2.5 5.4-4 7-2 2.1-3 4-3 6a7 7 0 0 0 7 7Z" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
     </svg>
   );
 }
@@ -93,112 +93,100 @@ const navLinks = [
 ];
 
 const applicationsList = [
-  { label: "Paint", count: "12", href: "/products?application=paint", icon: PaintBrushIcon },
-  { label: "Agro", count: "10", href: "/products?application=agro", icon: SeedlingIcon },
-  { label: "Food", count: "10", href: "/products?application=food", icon: CutleryIcon },
-  { label: "Lube", count: "04", href: "/products?application=lube", icon: DropIcon },
+  { label: "Paint", href: "/products?application=paint", icon: PaintRollerIcon },
+  { label: "Agro", href: "/products?application=agro", icon: AgroIcon },
+  { label: "Food", href: "/products?application=food", icon: FoodIcon },
+  { label: "Lube", href: "/products?application=lube", icon: LubeIcon },
 ];
 
 export function Footer() {
   return (
     <footer
-      className="relative text-slate-900 overflow-hidden border-t border-sandal-border bg-sandal"
-      style={{ backgroundColor: "#f4eee2" }}
+      className="relative text-white overflow-hidden bg-[#00295D] border-t border-white/10"
+      style={{ backgroundColor: "#00295D" }}
     >
-      {/* Background Graphic Image: seamless pure sandal matching footer background */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-end justify-end">
-        <div className="relative h-full w-full">
-          <Image
-            src="/images/footer-bg.webp"
-            alt="ASIR Industrial Packaging"
-            fill
-            priority={false}
-            className="object-contain object-bottom sm:object-contain sm:object-bottom lg:object-cover lg:object-right"
-          />
-        </div>
-      </div>
+      {/* Top-Right Decorative Blue Arc matching reference graphic */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-12 -right-12 h-[340px] w-[420px] rounded-full bg-[#05448B]/40 blur-[30px]"
+      />
 
-      {/* Main Footer Content — clean flex layout so columns have rock-solid widths */}
-      <div className="relative z-10 w-full pt-12 pb-12 lg:pt-[3.2vw] lg:pb-[1.2vw] px-6 sm:px-10 lg:px-[4.5vw]">
-        <div className="flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-start gap-8 lg:gap-[2.6vw]">
+      {/* Main Footer Body */}
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 pt-12 pb-10 lg:pt-14 lg:pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-0 items-start">
           
-          {/* Column 1: Brand & About */}
-          <div className="w-full sm:w-[300px] lg:w-[22vw] shrink-0 flex flex-col justify-between">
+          {/* Column 1: Brand & About (~28%) */}
+          <div className="lg:col-span-4 xl:col-span-3 flex flex-col justify-between lg:pr-8 xl:pr-10 lg:border-r lg:border-white/15">
             <div>
-              <div className="flex items-center -mt-1 lg:-mt-[0.2vw]">
-                <Logo tone="dark" imageClassName="!h-11 sm:!h-12 lg:!h-[2.85vw]" />
+              <div className="flex items-center -mt-1">
+                <Logo tone="light" imageClassName="!h-10 sm:!h-11 w-auto" />
               </div>
 
-              <p className="mt-5 lg:mt-[1.2vw] text-[14.5px] sm:text-[15px] lg:text-[0.92vw] leading-relaxed lg:leading-[1.6] text-slate-600 font-normal">
-                ASIR Containers manufactures rigid plastic pails and containers for the paint, agro, food and lubricant industries — in round and square formats, with multiple closure options and industry-specific colour availability.
+              <p className="mt-5 text-[13.5px] sm:text-[14px] leading-relaxed text-white/80 font-normal">
+                ASIR Containers manufactures rigid plastic pails and containers for the paint, agro, food and lubricant industries — innovating and square formats, with multiple closure options and industry-specific colour availability.
               </p>
             </div>
 
-            {/* Social Icons */}
-            <div className="mt-7 lg:mt-[1.6vw] flex items-center gap-3 lg:gap-[0.7vw]">
+            {/* Social Icons with dark blue circular pill buttons */}
+            <div className="mt-6 sm:mt-7 flex items-center gap-3">
               <a
                 href={site.social.find((s) => s.icon === "linkedin")?.href || "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="flex h-9.5 w-9.5 lg:h-[2.25vw] lg:w-[2.25vw] items-center justify-center rounded-full bg-white/80 hover:bg-brand hover:text-white text-slate-800 transition-colors shadow-xs"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#001c44] hover:bg-[#0052cc] text-white transition-all duration-200 border border-white/10 shadow-xs hover:scale-105"
               >
-                <LinkedinIcon className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+                <LinkedinIcon className="h-4 w-4" />
               </a>
               <a
                 href={site.social.find((s) => s.icon === "instagram")?.href || "https://instagram.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="flex h-9.5 w-9.5 lg:h-[2.25vw] lg:w-[2.25vw] items-center justify-center rounded-full bg-white/80 hover:bg-brand hover:text-white text-slate-800 transition-colors shadow-xs"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#001c44] hover:bg-[#0052cc] text-white transition-all duration-200 border border-white/10 shadow-xs hover:scale-105"
               >
-                <InstagramIcon className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+                <InstagramIcon className="h-4 w-4" />
               </a>
               <a
                 href={site.social.find((s) => s.icon === "facebook")?.href || "https://facebook.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="flex h-9.5 w-9.5 lg:h-[2.25vw] lg:w-[2.25vw] items-center justify-center rounded-full bg-white/80 hover:bg-brand hover:text-white text-slate-800 transition-colors shadow-xs"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#001c44] hover:bg-[#0052cc] text-white transition-all duration-200 border border-white/10 shadow-xs hover:scale-105"
               >
-                <FacebookIcon className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+                <FacebookIcon className="h-4 w-4" />
               </a>
               <a
                 href={site.social.find((s) => s.icon === "youtube")?.href || "https://youtube.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="flex h-9.5 w-9.5 lg:h-[2.25vw] lg:w-[2.25vw] items-center justify-center rounded-full bg-white/80 hover:bg-brand hover:text-white text-slate-800 transition-colors shadow-xs"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-[#001c44] hover:bg-[#0052cc] text-white transition-all duration-200 border border-white/10 shadow-xs hover:scale-105"
               >
-                <YoutubeIcon className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+                <YoutubeIcon className="h-4 w-4" />
               </a>
-            </div>
-
-            {/* Red accent line indicator */}
-            <div className="mt-7 lg:mt-[1.6vw] flex items-center">
-              <div className="h-[2.5px] lg:h-[0.15vw] w-12 lg:w-[2.8vw] bg-brand" />
-              <div className="h-[1px] lg:h-[0.06vw] w-28 lg:w-[6.5vw] bg-slate-200" />
             </div>
           </div>
 
-          {/* Column 2: Contact Details */}
-          <div className="w-full sm:w-[280px] lg:w-[17vw] shrink-0 pt-0 sm:pt-5 lg:pt-[1.2vw]">
-            <h3 className="font-display text-[17.5px] lg:text-[1.08vw] font-bold text-ink tracking-tight leading-none">
+          {/* Column 2: Contact (~24%) */}
+          <div className="lg:col-span-3 xl:col-span-3 lg:px-6 xl:px-8 lg:border-r lg:border-white/15">
+            <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Contact
             </h3>
-            <div className="mt-2.5 lg:mt-[0.55vw] mb-5 lg:mb-[1.1vw] h-[2px] lg:h-[0.14vw] w-6 lg:w-[1.4vw] bg-brand" />
+            {/* Cyan indicator bar */}
+            <div className="mt-2.5 mb-5 h-[2.5px] w-9 rounded-full bg-[#29aae4]" />
 
-            <div className="space-y-3.5 lg:space-y-[0.8vw]">
-              {/* Address */}
-              <div className="flex items-start gap-3 lg:gap-[0.7vw]">
-                <span className="flex h-8 w-8 lg:h-[1.9vw] lg:w-[1.9vw] shrink-0 items-center justify-center rounded-full bg-white/90 text-brand shadow-xs mt-0.5 lg:mt-[0.1vw]">
-                  <MapPin className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+            <div className="space-y-4">
+              {/* Address with circular icon */}
+              <div className="flex items-start gap-3">
+                <span className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full bg-[#001c44] text-white border border-white/10 shadow-xs mt-0.5">
+                  <MapPin className="h-4 w-4" />
                 </span>
                 <a
                   href={site.contact.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([site.contact.addressLines.join(", "), site.contact.country].filter(Boolean).join(", "))}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-800 text-[14px] sm:text-[14.5px] lg:text-[0.88vw] font-medium leading-snug lg:leading-[1.45] hover:text-brand transition-colors"
+                  className="text-white/85 text-[13px] sm:text-[13.5px] font-normal leading-relaxed hover:text-white transition-colors"
                 >
                   1734-c1, Pallapatti Rd,<br />
                   near Central Excise Office,<br />
@@ -207,27 +195,27 @@ export function Footer() {
                 </a>
               </div>
 
-              {/* Phone */}
-              <div className="flex items-center gap-3 lg:gap-[0.7vw] pt-0.5 lg:pt-[0.1vw]">
-                <span className="flex h-8 w-8 lg:h-[1.9vw] lg:w-[1.9vw] shrink-0 items-center justify-center rounded-full bg-white/90 text-brand shadow-xs">
-                  <Phone className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+              {/* Phone with circular icon */}
+              <div className="flex items-center gap-3">
+                <span className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full bg-[#001c44] text-white border border-white/10 shadow-xs">
+                  <Phone className="h-4 w-4" />
                 </span>
                 <a
                   href="tel:+919876543210"
-                  className="text-slate-800 text-[14px] sm:text-[14.5px] lg:text-[0.88vw] font-medium hover:text-brand transition-colors"
+                  className="text-white/90 text-[13.5px] sm:text-[14px] font-medium hover:text-white transition-colors"
                 >
                   +91 98765 43210
                 </a>
               </div>
 
-              {/* Email */}
-              <div className="flex items-center gap-3 lg:gap-[0.7vw] pt-0.5 lg:pt-[0.1vw]">
-                <span className="flex h-8 w-8 lg:h-[1.9vw] lg:w-[1.9vw] shrink-0 items-center justify-center rounded-full bg-white/90 text-brand shadow-xs">
-                  <Mail className="h-4 w-4 lg:h-[0.95vw] lg:w-[0.95vw]" />
+              {/* Email with circular icon */}
+              <div className="flex items-center gap-3">
+                <span className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-full bg-[#001c44] text-white border border-white/10 shadow-xs">
+                  <Mail className="h-4 w-4" />
                 </span>
                 <a
                   href="mailto:sales@asircontainers.com"
-                  className="text-slate-800 text-[14px] sm:text-[14.5px] lg:text-[0.88vw] font-medium hover:text-brand transition-colors"
+                  className="text-white/90 text-[13.5px] sm:text-[14px] font-medium hover:text-white transition-colors"
                 >
                   sales@asircontainers.com
                 </a>
@@ -235,52 +223,53 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Navigate */}
-          <div className="w-full sm:w-[145px] lg:w-[9.5vw] shrink-0 pt-0 sm:pt-5 lg:pt-[1.2vw] lg:-ml-[0.8vw]">
-            <h3 className="font-display text-[17.5px] lg:text-[1.08vw] font-bold text-ink tracking-tight leading-none">
+          {/* Column 3: Navigate (~17%) */}
+          <div className="lg:col-span-2 xl:col-span-2 lg:px-5 xl:px-6 lg:border-r lg:border-white/15">
+            <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Navigate
             </h3>
-            <div className="mt-2.5 lg:mt-[0.55vw] mb-5 lg:mb-[1.1vw] h-[2px] lg:h-[0.14vw] w-6 lg:w-[1.4vw] bg-brand" />
+            {/* Cyan indicator bar */}
+            <div className="mt-2.5 mb-5 h-[2.5px] w-9 rounded-full bg-[#29aae4]" />
 
-            <ul className="space-y-1.5 lg:space-y-[0.2vw]">
+            <ul className="space-y-2">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group flex items-center justify-between text-[14.5px] sm:text-[15px] lg:text-[0.92vw] font-medium text-slate-700 hover:text-brand py-2.5 lg:py-[0.3vw] transition-colors"
+                    className="group flex items-center justify-between rounded-xl bg-[#001c44]/70 hover:bg-[#001c44] px-3.5 py-2 text-[13.5px] font-medium text-white/90 hover:text-white transition-all"
                   >
                     <span>{link.label}</span>
-                    <ChevronRight className="h-4 w-4 lg:h-[0.9vw] lg:w-[0.9vw] text-slate-400 group-hover:text-brand group-hover:translate-x-0.5 lg:group-hover:translate-x-[0.12vw] transition-all" />
+                    <ChevronRight className="h-4 w-4 text-white group-hover:translate-x-0.5 transition-all" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 4: Applications */}
-          <div className="w-full sm:w-[175px] lg:w-[12vw] shrink-0 pt-0 sm:pt-5 lg:pt-[1.2vw]">
-            <h3 className="font-display text-[17.5px] lg:text-[1.08vw] font-bold text-ink tracking-tight leading-none">
+          {/* Column 4: Applications (~16%) */}
+          <div className="lg:col-span-3 xl:col-span-2 lg:pl-5 xl:pl-6">
+            <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Applications
             </h3>
-            <div className="mt-2.5 lg:mt-[0.55vw] mb-5 lg:mb-[1.1vw] h-[2px] lg:h-[0.14vw] w-6 lg:w-[1.4vw] bg-brand" />
+            {/* Cyan indicator bar */}
+            <div className="mt-2.5 mb-5 h-[2.5px] w-9 rounded-full bg-[#29aae4]" />
 
-            <ul className="space-y-1.5 lg:space-y-[0.35vw]">
+            <ul className="space-y-2.5">
               {applicationsList.map((app) => {
                 const Icon = app.icon;
                 return (
                   <li key={app.label}>
                     <Link
                       href={app.href}
-                      className="group flex items-center justify-between text-[14.5px] sm:text-[15px] lg:text-[0.92vw] font-medium text-slate-700 hover:text-brand py-2.5 lg:py-[0.5vw] transition-colors"
+                      className="group flex items-center justify-between text-[13.5px] sm:text-[14px] font-medium text-white/90 hover:text-white py-0.5 transition-colors"
                     >
-                      <span className="flex items-center gap-2.5 lg:gap-[0.55vw]">
-                        <Icon className="h-4.5 w-4.5 lg:h-[0.98vw] lg:w-[0.98vw] text-brand shrink-0" />
+                      <span className="flex items-center gap-3">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#001c44] text-white border border-white/10 group-hover:bg-[#002456] transition-all">
+                          <Icon className="h-4 w-4" />
+                        </span>
                         <span>{app.label}</span>
                       </span>
-                      <span className="flex items-center gap-1 lg:gap-[0.2vw] font-mono text-[13px] lg:text-[0.8vw] text-slate-400 group-hover:text-brand transition-colors">
-                        <span>{app.count}</span>
-                        <ArrowUpRight className="h-3.5 w-3.5 lg:h-[0.8vw] lg:w-[0.8vw]" />
-                      </span>
+                      <ChevronRight className="h-4 w-4 text-white group-hover:translate-x-0.5 transition-all" />
                     </Link>
                   </li>
                 );
@@ -288,19 +277,36 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Column 5: Right Visual (Transparent Containers Cluster) */}
+          <div className="hidden xl:flex xl:col-span-2 relative h-[260px] items-end justify-end self-end">
+            <div className="relative h-[245px] w-full">
+              <Image
+                src="/images/footer-pails.webp"
+                alt="ASIR Containers Range"
+                fill
+                priority={false}
+                sizes="(min-width: 1280px) 280px, 0vw"
+                className="object-contain object-right-bottom drop-shadow-[0_16px_30px_rgba(0,10,35,0.4)]"
+              />
+            </div>
+          </div>
+
         </div>
       </div>
 
-      {/* Bottom Copyright Bar with Slogan */}
-      <div className="relative z-10 border-t border-sandal-border lg:border-t-[0.07vw] py-5 lg:py-[1.3vw] px-6 sm:px-10 lg:px-[4.5vw]">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-[1vw]">
+      {/* Bottom Bar matching reference layout with Copyright & Tagline */}
+      <div className="relative z-10 border-t border-white/15 bg-[#002454]/60 py-4 px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4">
           
-         
-          {/* Center: Copyright Text */}
-          <div className="text-center">
-            <p className="text-[13px] lg:text-[0.8vw] text-slate-500 font-normal">
-              © {year} {site.name}. All rights reserved.
-            </p>
+          {/* Left: Copyright */}
+          <div className="text-[12.5px] sm:text-[13.5px] text-white/80 font-normal">
+            © {year} ASIR Containers. All rights reserved.
+          </div>
+
+          {/* Right: Tagline */}
+          <div className="flex items-center gap-3 text-[13px] sm:text-[13.5px] text-white/80 font-normal italic">
+            <span className="h-4 w-[1px] bg-white/20 not-italic" />
+            <span>Innovative Packaging . Sustainable Future</span>
           </div>
 
         </div>

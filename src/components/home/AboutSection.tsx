@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { Icon } from "@iconify/react";
 import { gsap, useGSAP, revealLines, reduceMotion, useScrollReveal } from "@/lib/animations";
+import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 export function AboutSection() {
   const root = useRef<HTMLElement | null>(null);
@@ -53,10 +54,12 @@ export function AboutSection() {
             <div>
               {/* Title: Who We Are */}
               <h2
-                data-about-heading
+                data-reveal
+                data-reveal-dir="left"
+                data-reveal-delay="0.1"
                 className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-slate-900 leading-[1.06]"
               >
-                Who <span className="text-brand">We Are</span>
+                Who We <WavyHighlight dot={false}>Are</WavyHighlight>
               </h2>
 
               {/* Subtitle */}

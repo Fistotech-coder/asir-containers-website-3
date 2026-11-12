@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { Reveal } from "@/components/motion/Reveal";
+import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 export function ManufacturingSection() {
   const features = [
@@ -63,10 +64,12 @@ export function ManufacturingSection() {
                 data-reveal
                 data-reveal-dir="left"
                 data-reveal-delay="0.1"
-                className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight leading-[1.06]"
+                className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-[#002b49] leading-[1.06]"
               >
-                <span className="text-[#002b49] block">Where Design</span>
-                <span className="text-brand block">Meets Manufacturing</span>
+                <span className="block">Where Design</span>
+                <span className="block">
+                  Meets <WavyHighlight dot={false}>Manufacturing</WavyHighlight>
+                </span>
               </h2>
 
               {/* Formatted Narrative */}

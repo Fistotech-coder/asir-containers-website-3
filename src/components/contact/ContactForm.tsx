@@ -29,16 +29,28 @@ const EMPTY: Fields = {
 };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
-const phonePattern = /^[+0-9\s()-]{7,20}$/;
+const phonePattern = /^\+?[0-9\s-]{7,20}$/;
 
 const validate = (values: Fields, productRef: string): Errors => {
   const errors: Errors = {};
   if (values.name.trim().length < 2) errors.name = "Enter your full name.";
   if (!values.company.trim()) errors.company = "Enter your company name.";
   if (!emailPattern.test(values.email.trim())) errors.email = "Enter a valid email address.";
-  if (values.phone.trim() && !phonePattern.test(values.phone.trim())) {
-    errors.phone = "Enter a valid phone number, digits and + only.";
+
+  // Phone validation: mandatory, digits and + only, max 15 digits
+  if (!values.phone.trim()) {
+    errors.phone = "Enter your phone number.";
+  } else {
+    const digitsOnly = values.phone.replace(/\D/g, "");
+    if (!phonePattern.test(values.phone.trim()) || /[a-zA-Z,.;:"'[\]{}]/.test(values.phone)) {
+      errors.phone = "Phone number cannot contain letters or special characters.";
+    } else if (digitsOnly.length < 7) {
+      errors.phone = "Phone number is too short (minimum 7 digits).";
+    } else if (digitsOnly.length > 15) {
+      errors.phone = "Phone number cannot exceed 15 digits.";
+    }
   }
+
   if (!values.enquiryType) errors.enquiryType = "Select an enquiry type.";
   if (values.enquiryType === "Other" && !values.otherSpecific.trim()) {
     errors.otherSpecific = "Please specify your enquiry.";
@@ -105,6 +117,37 @@ export function ContactForm() {
     });
   };
 
+  const handlePhoneChange = (input: string) => {
+    // Disallow letters and punctuation (, . ; : " ' [ ] { } etc.)
+    // Only allow digits, plus sign, spaces, and hyphens
+    let sanitized = input.replace(/[^0-9+\s-]/g, "");
+
+    // Allow '+' only at the very start
+    if (sanitized.includes("+")) {
+      const startsWithPlus = sanitized.startsWith("+");
+      sanitized = (startsWithPlus ? "+" : "") + sanitized.slice(startsWithPlus ? 1 : 0).replace(/\+/g, "");
+    }
+
+    // Enforce max 15 digits in real-time
+    const digitsOnly = sanitized.replace(/\D/g, "");
+    if (digitsOnly.length > 15) {
+      let count = 0;
+      let cutIndex = sanitized.length;
+      for (let i = 0; i < sanitized.length; i++) {
+        if (/\d/.test(sanitized[i])) {
+          count++;
+          if (count === 15) {
+            cutIndex = i + 1;
+            break;
+          }
+        }
+      }
+      sanitized = sanitized.slice(0, cutIndex);
+    }
+
+    update("phone", sanitized);
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const found = validate(values, productRef);
@@ -148,20 +191,12 @@ export function ContactForm() {
       noValidate
       className="w-full"
     >
-      <div data-reveal data-reveal-delay="0.05" className="flex items-start justify-between gap-4 border-b border-ink pb-5">
-        <div>
-          <h2 className="font-display text-[26px] font-semibold leading-tight text-ink">
-            Enquiry form
-          </h2>
-        </div>
-      </div>
-
       {productRef && (
-        <div data-reveal data-reveal-delay="0.1" className="mt-6 flex flex-wrap items-baseline gap-x-3 border-b border-line pb-3 text-[14px] text-mid">
+        <div data-reveal data-reveal-delay="0.1" className="mb-5 flex flex-wrap items-baseline gap-x-3 border-b border-line pb-3 text-[14px] text-mid">
           <span className="text-[14px] text-mid">
             Product
           </span>
-          <span className="text-ink">{products.find((product) => product.slug === productRef)?.name}</span>
+          <span className="text-ink font-semibold">{products.find((product) => product.slug === productRef)?.name}</span>
           <button
             type="button"
             onClick={() => setProductRef("")}
@@ -175,7 +210,7 @@ export function ContactForm() {
       {errorEntries.length > 0 && (
         <div
           role="alert"
-          className="mt-6 flex items-start gap-3 rounded-[12px] border border-brand/20 bg-brand/[0.04] px-4 py-3 text-[14px] text-ink"
+          className="mb-5 flex items-start gap-3 rounded-[12px] border border-brand/20 bg-brand/[0.04] px-4 py-3 text-[14px] text-ink"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
           <p>
@@ -187,7 +222,7 @@ export function ContactForm() {
         </div>
       )}
 
-      <div className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+      <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
         <div data-reveal data-reveal-delay="0.1"><Field
           label="Name"
           name="name"
@@ -196,7 +231,7 @@ export function ContactForm() {
           onChange={(value) => update("name", value)}
           error={errors.name}
           autoComplete="name"
-          placeholder="Full name"
+          placeholder="Full name *"
         /></div>
         <div data-reveal data-reveal-delay="0.15"><Field
           label="Company"
@@ -206,7 +241,7 @@ export function ContactForm() {
           onChange={(value) => update("company", value)}
           error={errors.company}
           autoComplete="organization"
-          placeholder="Company name"
+          placeholder="Company name *"
         /></div>
         <div data-reveal data-reveal-delay="0.2"><Field
           label="Email"
@@ -217,18 +252,19 @@ export function ContactForm() {
           onChange={(value) => update("email", value)}
           error={errors.email}
           autoComplete="email"
-          placeholder="name@company.com"
+          placeholder="Email address *"
         /></div>
         <div data-reveal data-reveal-delay="0.25"><Field
           label="Phone"
           name="phone"
           type="tel"
+          required
           value={values.phone}
-          onChange={(value) => update("phone", value)}
+          onChange={handlePhoneChange}
           error={errors.phone}
           autoComplete="tel"
-          placeholder="+91"
-          hint="Optional"
+          placeholder="Phone number *"
+          maxLength={18}
         /></div>
 
         <div
@@ -238,21 +274,16 @@ export function ContactForm() {
           ref={enquiryDropdownRef}
         >
           <div
-            className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 pb-2.5 pt-3 transition-all duration-200 hover:bg-white ${
+            className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 py-3.5 transition-all duration-200 hover:bg-white ${
               errors.enquiryType
                 ? "border-brand bg-brand/[0.02] ring-2 ring-brand/15"
                 : enquiryMenuOpen
-                ? "border-ink bg-white ring-2 ring-ink/10 shadow-sm"
-                : "border-line/90 hover:border-mid/50"
+                ? "border-[#0066cc] bg-white ring-2 ring-[#0066cc]/10 shadow-sm"
+                : "border-slate-200/90 hover:border-slate-300"
             }`}
           >
-            <label
-              id="enquiryType-label"
-              className={`block text-[11.5px] font-semibold uppercase tracking-[0.12em] transition-colors ${
-                enquiryMenuOpen ? "text-ink" : "text-mid/80"
-              }`}
-            >
-              Enquiry type <span className="text-brand">*</span>
+            <label id="enquiryType-label" className="sr-only">
+              Enquiry type (required)
             </label>
 
             <button
@@ -262,14 +293,14 @@ export function ContactForm() {
               aria-expanded={enquiryMenuOpen}
               aria-labelledby="enquiryType-label enquiryType"
               onClick={() => setEnquiryMenuOpen((prev) => !prev)}
-              className="mt-1 flex h-8 w-full items-center justify-between text-left text-[15.5px] font-medium outline-none focus-visible:outline-none"
+              className="flex h-7 w-full items-center justify-between text-left text-[15px] font-medium outline-none focus-visible:outline-none"
             >
-              <span className={values.enquiryType ? "text-ink font-semibold" : "text-mid/45"}>
-                {values.enquiryType || "Select an enquiry type"}
+              <span className={values.enquiryType ? "text-ink font-semibold" : "text-slate-400"}>
+                {values.enquiryType || "Select enquiry type *"}
               </span>
               <ChevronDown
                 aria-hidden
-                className={`h-4 w-4 text-mid/70 transition-transform duration-200 ${
+                className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${
                   enquiryMenuOpen ? "rotate-180 text-ink" : ""
                 }`}
               />
@@ -339,24 +370,21 @@ export function ContactForm() {
               value={values.otherSpecific}
               onChange={(value) => update("otherSpecific", value)}
               error={errors.otherSpecific}
-              placeholder="E.g., custom mold, export tender, etc."
+              placeholder="Specify enquiry (e.g. custom mould, tender) *"
             />
           </div>
         )}
 
         <div data-reveal data-reveal-delay="0.35" className="sm:col-span-2">
           <div
-            className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 pb-3 pt-3 transition-all duration-200 hover:bg-white ${
+            className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 py-3.5 transition-all duration-200 hover:bg-white ${
               errors.message
                 ? "border-brand bg-brand/[0.02] ring-2 ring-brand/15"
-                : "border-line/90 hover:border-mid/50 focus-within:border-ink focus-within:bg-white focus-within:ring-2 focus-within:ring-ink/10 focus-within:shadow-sm"
+                : "border-slate-200/90 hover:border-slate-300 focus-within:border-[#0066cc] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0066cc]/10 focus-within:shadow-sm"
             }`}
           >
-            <label
-              htmlFor="message"
-              className="block text-[11.5px] font-semibold uppercase tracking-[0.12em] text-mid/80 transition-colors group-focus-within:text-ink"
-            >
-              Message <span className="text-brand">*</span>
+            <label htmlFor="message" className="sr-only">
+              Message (required)
             </label>
             <textarea
               id="message"
@@ -366,8 +394,8 @@ export function ContactForm() {
               onChange={(event) => update("message", event.target.value)}
               aria-invalid={Boolean(errors.message)}
               aria-describedby={errors.message ? "message-error" : undefined}
-              placeholder="Capacity, colour, closure and quantity you need — plus anything specific to your filling line."
-              className="mt-1 w-full resize-y border-0 bg-transparent p-0 text-[15.5px] font-medium leading-relaxed text-ink outline-none placeholder:text-mid/45 focus-visible:outline-none"
+              placeholder="Type your message in here..."
+              className="w-full resize-y border-0 bg-transparent p-0 text-[15px] font-medium leading-relaxed text-ink outline-none placeholder:text-slate-400 focus-visible:outline-none"
             />
           </div>
           {errors.message && (
@@ -385,24 +413,21 @@ export function ContactForm() {
         <input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div data-reveal data-reveal-delay="0.4" className="mt-8 flex flex-col gap-4 border-t border-line/80 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-xs text-[12.5px] leading-relaxed text-mid">
-          We use your details only to respond to this enquiry.
-        </p>
+      <div data-reveal data-reveal-delay="0.4" className="mt-7">
         <button
           type="submit"
           disabled={status === "sending"}
-          className="group inline-flex h-12 items-center justify-center gap-2 rounded-[12px] bg-brand px-7 text-[14.5px] font-semibold text-white shadow-xs transition-all duration-200 hover:bg-brand-dark hover:shadow-md active:scale-[0.98] disabled:opacity-70"
+          className="group w-full flex h-13 items-center justify-center gap-2.5 rounded-xl bg-[#0066cc] px-8 text-[15.5px] font-bold text-white shadow-[0_4px_18px_rgba(0,102,204,0.30)] transition-all duration-200 hover:bg-[#0052a3] hover:shadow-[0_6px_22px_rgba(0,102,204,0.40)] active:scale-[0.99] disabled:opacity-70"
         >
           {status === "sending" ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Checking…
+              <Loader2 className="h-5 w-5 animate-spin" />
+              Sending Message…
             </>
           ) : (
             <>
-              Send enquiry
-              <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              Send Message
+              <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </>
           )}
         </button>
@@ -471,7 +496,7 @@ function Field({
   required,
   placeholder,
   autoComplete,
-  hint,
+  maxLength,
 }: {
   label: string;
   name: string;
@@ -483,36 +508,32 @@ function Field({
   placeholder?: string;
   autoComplete?: string;
   hint?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
       <div
-        className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 pb-2.5 pt-3 transition-all duration-200 hover:bg-white ${
+        className={`field-shell group relative rounded-[14px] border bg-[#fafafa]/80 px-4.5 py-3.5 transition-all duration-200 hover:bg-white ${
           error
             ? "border-brand bg-brand/[0.02] ring-2 ring-brand/15"
-            : "border-line/90 hover:border-mid/50 focus-within:border-ink focus-within:bg-white focus-within:ring-2 focus-within:ring-ink/10 focus-within:shadow-sm"
+            : "border-slate-200/90 hover:border-slate-300 focus-within:border-[#0066cc] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#0066cc]/10 focus-within:shadow-sm"
         }`}
       >
-        <div className="flex items-baseline justify-between gap-3">
-          <label
-            htmlFor={name}
-            className="block text-[11.5px] font-semibold uppercase tracking-[0.12em] text-mid/80 transition-colors group-focus-within:text-ink"
-          >
-            {label} {required && <span className="text-brand">*</span>}
-          </label>
-          {hint && <span className="text-[11px] text-mid/70">{hint}</span>}
-        </div>
+        <label htmlFor={name} className="sr-only">
+          {label} {required && "(required)"}
+        </label>
         <input
           id={name}
           name={name}
           type={type}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          placeholder={placeholder}
+          placeholder={placeholder || (required ? `${label} *` : label)}
           autoComplete={autoComplete}
+          maxLength={maxLength}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${name}-error` : undefined}
-          className="mt-1 h-8 w-full border-0 bg-transparent p-0 text-[15.5px] font-medium text-ink outline-none placeholder:text-mid/45 focus-visible:outline-none"
+          className="h-7 w-full border-0 bg-transparent p-0 text-[15px] font-medium text-ink outline-none placeholder:text-slate-400 focus-visible:outline-none"
         />
       </div>
       {error && (

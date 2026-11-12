@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ArrowRight, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
+import { gsap, ScrollTrigger, useGSAP, reduceMotion } from "@/lib/animations";
 
 type VideoItem = {
   id: string;
@@ -42,6 +43,51 @@ export function TestimonialsSection() {
   const [playingId, setPlayingId] = useState<string>(videos[0].id);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
+
+  useGSAP(
+    () => {
+      const scope = sectionRef.current;
+      if (!scope) return;
+      if (reduceMotion()) return;
+
+      const words = scope.querySelectorAll(".word-reveal");
+      const swoosh = scope.querySelector(".swoosh-underline");
+
+      gsap.set(words, { yPercent: 120, opacity: 0, rotate: 2 });
+      if (swoosh) gsap.set(swoosh, { scaleX: 0, transformOrigin: "left center" });
+
+      ScrollTrigger.create({
+        trigger: headingRef.current,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(words, {
+            yPercent: 0,
+            opacity: 1,
+            rotate: 0,
+            duration: 0.85,
+            stagger: 0.08,
+            ease: "power3.out",
+          });
+          if (swoosh) {
+            tl.to(
+              swoosh,
+              {
+                scaleX: 1,
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "-=0.3"
+            );
+          }
+        },
+      });
+    },
+    { scope: sectionRef }
+  );
 
   const handleCardClick = (id: string) => {
     if (playingId === id) {
@@ -80,7 +126,10 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-white py-10 sm:py-12 lg:py-16 border-b border-slate-100/80">
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-white pt-5 sm:pt-6 lg:pt-7 pb-14 sm:pb-16 lg:pb-20 border-b border-slate-100/80"
+    >
       {/* Subtle background angled color accents matching reference */}
       <div
         aria-hidden
@@ -92,21 +141,54 @@ export function TestimonialsSection() {
       />
 
       <div className="shell relative z-10">
-        {/* Header matching reference */}
-        <Reveal>
-          <div className="flex flex-col justify-between gap-4 pb-7 sm:pb-8 sm:flex-row sm:items-end">
-            <div data-reveal data-reveal-dir="left" data-reveal-delay="0.1">
-              {/* Heading: Straight from the buyers. with red dot */}
-              <h2 className="mt-2.5 font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-ink leading-[1.06]">
-                Straight from the buyers<span className="text-brand">.</span>
-              </h2>
+        {/* Header with technical kicker and fluid masked entrance typography */}
+        <div className="flex flex-col justify-between gap-4 pb-5 sm:pb-6 sm:flex-row sm:items-end">
+          <div>
+            {/* Technical kicker */}
+            <div className="flex items-center gap-2 mb-2 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#0066cc]">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#0066cc]" />
+              <span>03 // CLIENT SPOTLIGHT</span>
+              <span className="h-px w-8 bg-[#0066cc]/30" />
             </div>
 
-            <p data-reveal data-reveal-dir="right" data-reveal-delay="0.15" className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 sm:pb-2 sm:text-right">
-              VERIFIED CLIENT FOOTAGE
-            </p>
+            {/* Distinctive masked reveal heading */}
+            <h2
+              ref={headingRef}
+              className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.65rem] font-bold tracking-tight text-slate-950 leading-[1.06]"
+            >
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal inline-block">Straight</span>
+              </span>{" "}
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal inline-block">from</span>
+              </span>{" "}
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal inline-block">the</span>
+              </span>{" "}
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal relative inline-block font-serif italic font-semibold text-[#0066cc] sm:ml-1">
+                  buyers<span className="text-[#0066cc]">.</span>
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 160 12"
+                    fill="none"
+                    className="swoosh-underline absolute -bottom-1 left-0 w-full h-[7px] text-[#0066cc]/85 stroke-current"
+                  >
+                    <path
+                      d="M2 8C45 3 115 2.5 158 7"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </h2>
           </div>
-        </Reveal>
+
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 sm:pb-2 sm:text-right">
+            VERIFIED CLIENT FOOTAGE
+          </p>
+        </div>
 
         {/* 3 Video Cards Grid (Direct In-Card Playback with Controls) */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
