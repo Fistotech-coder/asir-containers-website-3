@@ -9,6 +9,7 @@ type ProductMediaProps = {
   alt: string;
   capacity: string;
   category: string;
+  className?: string;
 };
 
 /** Representative detail shots shown beneath the main packshot. */
@@ -29,7 +30,7 @@ const detailShots = [
  * Product hero image: masked clip reveal on load, gentle parallax on scroll and
  * a subtle continuous float that stops under reduced-motion.
  */
-export function ProductMedia({ src, alt, capacity, category }: ProductMediaProps) {
+export function ProductMedia({ src, alt, capacity, category, className }: ProductMediaProps) {
   const root = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
@@ -54,8 +55,8 @@ export function ProductMedia({ src, alt, capacity, category }: ProductMediaProps
   );
 
   return (
-    <div ref={root} className="relative flex h-full flex-col">
-      <div className="group/main relative min-h-[380px] flex-1 overflow-hidden rounded-[20px] bg-light lg:min-h-[480px]">
+    <div ref={root} className={`relative flex flex-col ${className ?? ""}`}>
+      <div className="group/main relative h-[310px] sm:h-[340px] lg:h-[365px] lg:shrink-0 overflow-hidden rounded-[20px] bg-light">
         <div data-pm-frame className="absolute inset-0">
           <div data-pm-image className="relative h-full w-full">
             <Image
@@ -64,7 +65,7 @@ export function ProductMedia({ src, alt, capacity, category }: ProductMediaProps
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/main:scale-105"
+              className="object-contain p-4 sm:p-6 transition-transform duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/main:scale-105"
             />
           </div>
         </div>
@@ -84,10 +85,10 @@ export function ProductMedia({ src, alt, capacity, category }: ProductMediaProps
         </span>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-3">
+      <div className="mt-2.5 grid grid-cols-2 gap-2.5 lg:flex-1 lg:min-h-0">
         {detailShots.map((shot) => (
-          <figure key={shot.src} className="group/shot">
-            <span className="relative block aspect-4/3 overflow-hidden rounded-[14px] bg-light">
+          <figure key={shot.src} className="group/shot lg:h-full">
+            <span className="relative block aspect-[16/9] lg:aspect-auto lg:h-full overflow-hidden rounded-[14px] bg-light">
               <Image
                 src={shot.src}
                 alt={shot.alt}
@@ -96,7 +97,6 @@ export function ProductMedia({ src, alt, capacity, category }: ProductMediaProps
                 className="ambient-media-slow object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/shot:scale-108"
               />
             </span>
-            <figcaption className="mt-1.5 text-[12px] text-mid">{shot.caption}</figcaption>
           </figure>
         ))}
       </div>

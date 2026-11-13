@@ -12,23 +12,23 @@ import { products } from "@/data/products";
 
 // Product display configuration matching reference card design
 const navProductItems = [
-  { slug: "500ml-paint-pail-p2", title: "500ml", code: "5PK", img: "/images/products/nav/500ml-paint-pail-p2.png" },
-  { slug: "1l-paint-pail-p1a", title: "1Litre", code: "1L", img: "/images/products/nav/1l-paint-pail-p1a.png" },
-  { slug: "1l-paint-pail-p1b", title: "1 Litre", code: "1L2", img: "/images/products/nav/1l-paint-pail-p1b.png" },
-  { slug: "4l-paint-pail-p4", title: "4 Litre", code: "4L", img: "/images/products/nav/4l-paint-pail-p4.png" },
-  { slug: "10l-paint-pail-p10", title: "10 Litre", code: "10D", img: "/images/products/nav/10l-paint-pail-p10.png" },
-  { slug: "20l-paint-pail-p20a", title: "20 Litre", code: "20D", img: "/images/products/nav/20l-paint-pail-p20a.png" },
-  { slug: "20l-paint-pail-p20b", title: "20 Litre", code: "20Dg", img: "/images/products/nav/20l-paint-pail-p20b.png" },
-  { slug: "1kg-storage-pail-k1", title: "1 Kg", code: "1L", img: "/images/products/nav/1kg-storage-pail-k1.png" },
-  { slug: "2kg-storage-pail-k2", title: "2 Kg", code: "02", img: "/images/products/nav/2kg-storage-pail-k2.png" },
-  { slug: "5kg-storage-pail-k5", title: "5 Kg", code: "05", img: "/images/products/nav/5kg-storage-pail-k5.png" },
-  { slug: "10kg-storage-pail-k10", title: "10 Kg", code: "10kg", img: "/images/products/nav/10kg-storage-pail-k10.png" },
-  { slug: "20kg-storage-pail-k20", title: "20 Kg", code: "20kg", img: "/images/products/nav/20kg-storage-pail-k20.png" },
-  { slug: "5l-round-pail-a5", title: "5 Pro round", code: "5R", img: "/images/products/nav/5l-round-pail-a5.png" },
-  { slug: "5l-square-interlock-pail-f5", title: "5 Litre handleck", code: "5H3", img: "/images/products/nav/5l-square-pail-interlock-f5.png" },
-  { slug: "17l-square-interlock-pail-f17i", title: "17 Litre square handleck", code: "17SH", img: "/images/products/nav/17l-square-pail-interlock-f17a.png" },
-  { slug: "17l-square-outer-lock-pail-f17o", title: "17 Litre square round lock", code: "17SR", img: "/images/products/nav/17l-square-pail-outer-lock-f17b.png" },
-  { slug: "15l-square-interlock-pail-f15", title: "15 Litre Interlock", code: "15IL", img: "/images/products/nav/15l-square-pail-interlock-f15.png" },
+  { slug: "500ml-paint-pail-p2", title: "500ml", code: "P/2", img: "/images/products/product-images/500ml.webp" },
+  { slug: "1l-paint-pail-p1a", title: "1 Litre", code: "P1a", img: "/images/products/product-images/1ltr.webp" },
+  { slug: "1l-paint-pail-p1b", title: "1 Litre", code: "P1b", img: "/images/products/product-images/1ltr.webp" },
+  { slug: "4l-paint-pail-p4", title: "4 Litre", code: "P4", img: "/images/products/product-images/4ltr.webp" },
+  { slug: "10l-paint-pail-p10", title: "10 Litre", code: "P10p", img: "/images/products/product-images/10ltr.webp" },
+  { slug: "20l-paint-pail-p20a", title: "20 Litre", code: "P20ap", img: "/images/products/product-images/20Ltr.webp" },
+  { slug: "20l-paint-pail-p20b", title: "20 Litre", code: "P20bp", img: "/images/products/product-images/20Ltr.webp" },
+  { slug: "1kg-storage-pail-k1", title: "1 Kg", code: "K1", img: "/images/products/product-images/1kg.webp" },
+  { slug: "2kg-storage-pail-k2", title: "2 Kg", code: "K2", img: "/images/products/product-images/2kg.webp" },
+  { slug: "5kg-storage-pail-k5", title: "5 Kg", code: "K5", img: "/images/products/product-images/5kg.webp" },
+  { slug: "10kg-storage-pail-k10", title: "10 Kg", code: "K10p", img: "/images/products/product-images/10kg.webp" },
+  { slug: "20kg-storage-pail-k20", title: "20 Kg", code: "K20p", img: "/images/products/product-images/20kg.webp" },
+  { slug: "5l-round-pail-a5", title: "5 litre round", code: "A5", img: "/images/products/product-images/5ltr.webp" },
+  { slug: "5l-square-interlock-pail-f5", title: "5 Litre square", code: "F5p", img: "/images/products/product-images/5kgsquare.webp" },
+  { slug: "17l-square-interlock-pail-f17i", title: "17 Litre interlock", code: "F17ip", img: "/images/products/product-images/17kgsquare.webp" },
+  { slug: "17l-square-outer-lock-pail-f17o", title: "17 Litre outer lock", code: "F17op", img: "/images/products/product-images/17kgsquaarelock.webp" },
+  { slug: "15l-square-interlock-pail-f15", title: "15 Litre Interlock", code: "F15p", img: "/images/products/product-images/15ltr.webp" },
 ];
 
 export function Header() {
@@ -305,22 +305,6 @@ export function Header() {
                   All Products
                 </span>
               </div>
-
-              <Link
-                href="/products"
-                prefetch={true}
-                onClick={(e) => {
-                  if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
-                    e.preventDefault();
-                    setProductsOpen(false);
-                    setOpen(false);
-                    router.push("/products");
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-brand/20 bg-brand/5 px-3 py-1.5 text-[12.5px] font-semibold text-brand hover:bg-brand hover:text-white transition-all duration-200"
-              >
-                View all catalogue <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
 
             {/* Responsive grid matching user reference UI */}
@@ -342,10 +326,10 @@ export function Header() {
                       handleProductNavigate(item.slug);
                     }
                   }}
-                  className="group relative flex h-[62px] items-center justify-between rounded-2xl border border-slate-200/70 bg-white px-3 py-2 transition-all duration-200 hover:border-brand/50 hover:shadow-sm cursor-pointer"
+                  className="group relative flex h-[62px] items-center justify-between rounded-2xl border border-slate-200/70 bg-white px-3 py-2 transition-all duration-200 hover:border-brand hover:bg-brand hover:shadow-md cursor-pointer"
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-1">
-                    <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+                    <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 transition-colors duration-200 group-hover:bg-white/20">
                       <Image
                         src={item.img}
                         alt={item.title}
@@ -356,16 +340,16 @@ export function Header() {
                     </div>
 
                     <div className="flex flex-col min-w-0">
-                      <span className="font-display text-[13.5px] font-bold leading-tight text-slate-900 group-hover:text-brand transition-colors truncate">
+                      <span className="font-display text-[13.5px] font-bold leading-tight text-slate-900 group-hover:text-white transition-colors duration-200 truncate">
                         {item.title}
                       </span>
-                      <span className="text-[11.5px] font-normal text-slate-400 group-hover:text-slate-500 transition-colors mt-0.5">
+                      <span className="text-[11.5px] font-normal text-slate-400 group-hover:text-white/80 transition-colors duration-200 mt-0.5">
                         Code : {item.code}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-all duration-200 group-hover:bg-brand group-hover:text-white group-hover:translate-x-0.5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-400 transition-all duration-200 group-hover:bg-white group-hover:text-brand group-hover:translate-x-0.5">
                     <ChevronRight className="h-3.5 w-3.5 stroke-[2.5]" />
                   </div>
                 </Link>

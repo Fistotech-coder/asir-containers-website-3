@@ -1,40 +1,55 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
+import { Cog, Printer, ShieldCheck, CheckCircle2, type LucideIcon } from "lucide-react";
+import { useScrollReveal } from "@/lib/animations";
 import { Reveal } from "@/components/motion/Reveal";
 import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
+type Feature = {
+  title: string;
+  subtitle: string;
+  icon: LucideIcon;
+  color: string;
+};
+
 export function ManufacturingSection() {
-  const features = [
+  const root = useRef<HTMLElement | null>(null);
+  useScrollReveal(root);
+
+  const features: Feature[] = [
     {
       title: "Precision Injection",
       subtitle: "High-tonnage hydraulic & electric moulding with micron accuracy",
-      icon: "solar:settings-bold",
+      icon: Cog,
       color: "#0284c7", // Technical cyan/blue
     },
     {
       title: "Robotic Labelling",
       subtitle: "In-mould labelling (IML) and automated multi-axis transfer",
-      icon: "solar:printer-bold",
+      icon: Printer,
       color: "#0066cc", // Technical brand blue
     },
     {
       title: "Hermetic Tooling",
       subtitle: "Custom-built multi-cavity dies ensuring zero leakage",
-      icon: "solar:shield-check-bold",
+      icon: ShieldCheck,
       color: "#059669", // Precision emerald green
     },
     {
       title: "Triple-Gate QC",
       subtitle: "Comprehensive drop-weight, seal load and pressure testing",
-      icon: "solar:check-circle-bold",
+      icon: CheckCircle2,
       color: "#7c3aed", // Industrial violet
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-sandal py-12 lg:py-16 border-b border-sandal-border">
+    <section
+      ref={root}
+      className="relative overflow-hidden bg-sandal py-8 lg:py-12 border-b border-sandal-border"
+    >
       {/* Architectural Background Graphic Elements (similar to Who We Are) */}
       <div
         aria-hidden
@@ -55,15 +70,13 @@ export function ManufacturingSection() {
 
       <div className="shell relative z-10">
         {/* 2-Column Grid: Left Content / Right Image */}
-        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid items-stretch gap-8 lg:grid-cols-12 lg:gap-12">
           {/* Left Column (7 cols): Heading, Paragraph, and 2-per-row Icon + Text features */}
-          <div className="lg:col-span-7">
-            <Reveal>
+          <div className="lg:col-span-7 flex flex-col justify-between">
+            <div>
               {/* Bold Dual-Color Heading */}
               <h2
                 data-reveal
-                data-reveal-dir="left"
-                data-reveal-delay="0.1"
                 className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-[#002b49] leading-[1.06]"
               >
                 <span className="block">Where Design</span>
@@ -75,57 +88,56 @@ export function ManufacturingSection() {
               {/* Formatted Narrative */}
               <p
                 data-reveal
-                data-reveal-dir="left"
-                data-reveal-delay="0.18"
+                data-reveal-delay="0.1"
                 className="mt-3.5 text-[14.5px] sm:text-[15.5px] leading-[1.6] text-slate-600 font-normal max-w-[520px]"
               >
                 Our manufacturing facility brings moulding, robotic decoration, and quality auditing together under one roof—ensuring airtight seal integrity and reliable production timelines.
               </p>
 
-              {/* 2 Per Row Grid: [Icon] [Text] horizontal alignment without card box */}
+              {/* 2 Per Row Grid: [Icon] [Text] horizontal alignment */}
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-7 gap-y-5 pt-1">
-                {features.map((feature, idx) => (
-                  <div
-                    key={feature.title}
-                    data-reveal
-                    data-reveal-dir={idx % 2 === 0 ? "left" : "right"}
-                    data-reveal-delay={(0.2 + idx * 0.08).toFixed(2)}
-                    className="group flex items-start gap-3.5 transition-transform duration-300 hover:translate-x-1"
-                  >
-                    {/* Big Icon without card box - direct colored icon */}
+                {features.map((feature) => {
+                  const IconComponent = feature.icon;
+                  return (
                     <div
-                      className="shrink-0 transition-transform duration-300 group-hover:scale-110"
-                      style={{ color: feature.color }}
+                      key={feature.title}
+                      className="group flex items-start gap-3.5 transition-transform duration-300 hover:translate-x-1"
                     >
-                      <Icon
-                        icon={feature.icon}
-                        className="h-9 w-9 sm:h-10 sm:w-10"
-                      />
-                    </div>
+                      {/* Big Icon without card box - direct colored icon */}
+                      <div
+                        className="shrink-0 transition-transform duration-300 group-hover:scale-110"
+                        style={{ color: feature.color }}
+                      >
+                        <IconComponent
+                          className="h-9 w-9 sm:h-10 sm:w-10"
+                          strokeWidth={2.1}
+                        />
+                      </div>
 
-                    {/* Text block: Title + concise descriptor */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-display text-[15.5px] sm:text-[16.5px] font-bold text-[#002b49] leading-snug tracking-tight group-hover:text-ink transition-colors">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-0.5 text-[12.5px] sm:text-[13px] leading-relaxed text-slate-500 font-normal">
-                        {feature.subtitle}
-                      </p>
+                      {/* Text block: Title + concise descriptor */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-display text-[15.5px] sm:text-[16.5px] font-bold text-[#002b49] leading-snug tracking-tight group-hover:text-ink transition-colors">
+                          {feature.title}
+                        </h3>
+                        <p className="mt-0.5 text-[12.5px] sm:text-[13px] leading-relaxed text-slate-500 font-normal">
+                          {feature.subtitle}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-            </Reveal>
+            </div>
           </div>
 
-          {/* Right Column (5 cols): Rounded Corner High-Impact Facility Photo - Reduced Height */}
-          <div className="lg:col-span-5">
+          {/* Right Column (5 cols): Rounded Corner Facility Photo - Matched Height */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
             <Reveal>
               <div
                 data-reveal
                 data-reveal-dir="right"
                 data-reveal-delay="0.25"
-                className="relative w-full aspect-[4/3.8] min-h-[320px] sm:min-h-[380px] lg:min-h-[430px] overflow-hidden rounded-[28px] border border-slate-200/90 bg-slate-900 shadow-xl transition-all duration-500 hover:shadow-2xl"
+                className="relative w-full h-[280px] sm:h-[320px] lg:h-[365px] xl:h-[375px] overflow-hidden rounded-[24px] lg:rounded-[28px] border border-slate-200/90 bg-slate-900 shadow-xl transition-all duration-500 hover:shadow-2xl"
               >
                 <Image
                   src="/images/manufacturing/manufacturing-unit.webp"

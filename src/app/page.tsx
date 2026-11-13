@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { HeroSlider } from "@/components/home/HeroSlider";
-import { HeroSliderOld } from "@/components/home/HeroSliderOld";
+import { HeroBannerSlider } from "@/components/home/HeroBannerSlider";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { ManufacturingSection } from "@/components/home/ManufacturingSection";
@@ -54,9 +53,8 @@ export default function HomePage() {
 
   return (
     <>
-      {/* 1. Hero section slider */}
-      <HeroSlider />
-      {/* <HeroSliderOld /> */}
+      {/* 0. Hero Banner Slider (Featured 4 Applications) */}
+      <HeroBannerSlider />
 
       {/* 2. Features (mostly icon based) */}
       <FeaturesSection index="02" />

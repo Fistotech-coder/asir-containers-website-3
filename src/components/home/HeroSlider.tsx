@@ -14,91 +14,91 @@ export const heroProducts: HeroProduct[] = [
   {
     id: "500ml-paint-pail-p2",
     size: "500 ml",
-    img: "/images/hero/dummy-pail-1.png",
+    img: "/images/products/product-images/500ml.webp",
     code: "P/2",
   },
   {
     id: "1l-paint-pail-p1a",
     size: "1 Litre",
-    img: "/images/hero/dummy-pail-2.png",
+    img: "/images/products/product-images/1ltr.webp",
     code: "P1a",
   },
   {
     id: "4l-paint-pail-p4",
     size: "4 Litre",
-    img: "/images/hero/dummy-pail-3.png",
+    img: "/images/products/product-images/4ltr.webp",
     code: "P4",
   },
   {
     id: "5l-round-pail-a5",
     size: "5 Litre",
-    img: "/images/hero/dummy-pail-1.png",
+    img: "/images/products/product-images/5ltr.webp",
     code: "A5",
   },
   {
-    id: "5l-square-pail-interlock-f5",
+    id: "5l-square-interlock-pail-f5",
     size: "5 Litre",
-    img: "/images/hero/dummy-pail-3.png",
+    img: "/images/products/product-images/5kgsquare.webp",
     code: "F5p",
   },
   {
     id: "10l-paint-pail-p10",
     size: "10 Litre",
-    img: "/images/hero/dummy-pail-2.png",
+    img: "/images/products/product-images/10ltr.webp",
     code: "P10p",
   },
   {
-    id: "15l-square-pail-interlock-f15",
+    id: "15l-square-interlock-pail-f15",
     size: "15 Litre",
-    img: "/images/hero/dummy-pail-3.png",
+    img: "/images/products/product-images/15ltr.webp",
     code: "F15p",
   },
   {
-    id: "17l-square-pail-interlock-f17a",
+    id: "17l-square-interlock-pail-f17i",
     size: "17 Litre",
-    img: "/images/hero/dummy-pail-3.png",
+    img: "/images/products/product-images/17kgsquare.webp",
     code: "F17ip",
   },
   {
-    id: "17l-square-pail-outer-lock-f17b",
+    id: "17l-square-outer-lock-pail-f17o",
     size: "17 Litre",
-    img: "/images/hero/dummy-pail-3.png",
+    img: "/images/products/product-images/17kgsquaarelock.webp",
     code: "F17op",
   },
   {
     id: "20l-paint-pail-p20a",
     size: "20 Litre",
-    img: "/images/hero/dummy-pail-1.png",
+    img: "/images/products/product-images/20Ltr.webp",
     code: "P20ap",
   },
   {
     id: "1kg-storage-pail-k1",
     size: "1 Kg",
-    img: "/images/hero/dummy-pail-2.png",
+    img: "/images/products/product-images/1kg.webp",
     code: "K1",
   },
   {
     id: "2kg-storage-pail-k2",
     size: "2 Kg",
-    img: "/images/hero/dummy-pail-1.png",
+    img: "/images/products/product-images/2kg.webp",
     code: "K2",
   },
   {
     id: "5kg-storage-pail-k5",
     size: "5 Kg",
-    img: "/images/hero/dummy-pail-2.png",
+    img: "/images/products/product-images/5kg.webp",
     code: "K5",
   },
   {
     id: "10kg-storage-pail-k10",
     size: "10 Kg",
-    img: "/images/hero/dummy-pail-1.png",
+    img: "/images/products/product-images/10kg.webp",
     code: "K10p",
   },
   {
     id: "20kg-storage-pail-k20",
     size: "20 Kg",
-    img: "/images/hero/dummy-pail-2.png",
+    img: "/images/products/product-images/20kg.webp",
     code: "K20p",
   },
 ];
@@ -288,7 +288,7 @@ export function HeroSlider() {
               justify-content: center;
               align-items: center;
               overflow: hidden;
-              background-image: url("/images/hero-bg.webp");
+              background-image: url("/images/hero/background-image-new.webp");
               background-size: cover;
               background-position: center center;
               background-repeat: no-repeat;
@@ -399,7 +399,7 @@ export function HeroSlider() {
               font-size: clamp(1.5rem, 3.2vw, 2.75rem);
               font-weight: 800;
               letter-spacing: -0.02em;
-              color: #0066ff;
+              color: #0e4c9c;
               font-style: italic;
               padding-left: clamp(24px, 4.5vw, 54px);
               position: relative;
@@ -657,7 +657,7 @@ export function HeroSlider() {
                   >
                    <path
                       d="M2 9C45 13 115 12 158 3C118 8 48 10 2 9Z"
-                      fill="#0066ff"
+                      fill="#05448B"
                     />
                   </svg>
                 </span>

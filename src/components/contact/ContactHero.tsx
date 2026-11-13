@@ -50,7 +50,7 @@ export function ContactHero({
   return (
     <section
       ref={root}
-      className="relative bg-white pt-28 sm:pt-32 lg:pt-36 pb-20 sm:pb-28 lg:pb-32 flex flex-col items-center"
+      className="relative bg-white pt-28 sm:pt-32 lg:pt-36 pb-8 sm:pb-8 lg:pb-10 flex flex-col items-center"
     >
       {/* Background Graphic Image - Ends precisely across the card's midsection (at the red line boundary) */}
       <div className="absolute top-0 inset-x-0 z-0 h-[500px] sm:h-[550px] lg:h-[580px] overflow-hidden bg-slate-900">

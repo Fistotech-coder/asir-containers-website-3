@@ -1,100 +1,279 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { useScrollReveal } from "@/lib/animations";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import { ScrollTrigger, useGSAP, reduceMotion } from "@/lib/animations";
+
+const TOTAL_FRAMES = 190;
+
+const getFrameUrl = (index: number) => {
+  const frameNum = String(index + 1).padStart(5, "0");
+  return `/images/process/hero-video-images/${frameNum}.webp`;
+};
 
 export function ProcessHero() {
-  const root = useRef<HTMLElement | null>(null);
-  useScrollReveal(root);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Fast in-memory image cache
+  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
+  const currentFrameRef = useRef<number>(0);
+  const currentProgressRef = useRef<number>(0);
+  const rafIdRef = useRef<number | null>(null);
+
+  // DOM refs
+  const scrollCueRef = useRef<HTMLDivElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+
+  const [firstFrameReady, setFirstFrameReady] = useState(false);
+
+  // High-performance canvas draw routine with full-screen cover and gentle ending zoom
+  const drawFrame = (frameIdx: number, progress: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Pick target image or fallback to closest loaded frame
+    let img = imagesRef.current[frameIdx];
+    if (!img || !img.complete || img.naturalWidth === 0) {
+      for (let i = frameIdx - 1; i >= 0; i--) {
+        const candidate = imagesRef.current[i];
+        if (candidate && candidate.complete && candidate.naturalWidth > 0) {
+          img = candidate;
+          break;
+        }
+      }
+      if (!img) {
+        for (let i = frameIdx + 1; i < TOTAL_FRAMES; i++) {
+          const candidate = imagesRef.current[i];
+          if (candidate && candidate.complete && candidate.naturalWidth > 0) {
+            img = candidate;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!img || !img.complete || img.naturalWidth === 0) return;
+
+    const cw = canvas.width;
+    const ch = canvas.height;
+
+    // Clear background to pure black
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, cw, ch);
+
+    // Full-screen cover scaling: fills the screen edge-to-edge
+    const iw = img.naturalWidth;
+    const ih = img.naturalHeight;
+    const baseScale = Math.max(cw / iw, ch / ih);
+
+    // Ending zoom: gently zooms into the interior cavity (zoomed out konjam so the pail structure is clearly visible)
+    let extraZoom = 1.0;
+    if (progress > 0.55) {
+      const t = (progress - 0.55) / 0.45; // 0.0 to 1.0
+      // Gentle 8% zoom instead of previous 42%
+      extraZoom = 1.0 + Math.pow(t, 1.4) * 0.08;
+    }
+
+    const scale = baseScale * extraZoom;
+    const dw = iw * scale;
+    const dh = ih * scale;
+    const dx = (cw - dw) / 2;
+    const dy = (ch - dh) / 2;
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, 0, 0, iw, ih, dx, dy, dw, dh);
+  };
+
+  // Resize listener ensuring crisp full-bleed canvas matching window.devicePixelRatio
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    drawFrame(currentFrameRef.current, currentProgressRef.current);
+  };
+
+  // 1. Initial frame load + progressive background preloader
+  useEffect(() => {
+    let isMounted = true;
+    const images = imagesRef.current;
+
+    // Step A: Load frame 0 immediately and paint
+    const firstImg = new Image();
+    firstImg.src = getFrameUrl(0);
+    firstImg.onload = () => {
+      if (!isMounted) return;
+      images[0] = firstImg;
+      setFirstFrameReady(true);
+      resizeCanvas();
+    };
+
+    // Step B: Progressively preload remaining frames
+    for (let i = 1; i < TOTAL_FRAMES; i++) {
+      const img = new Image();
+      img.src = getFrameUrl(i);
+      img.onload = () => {
+        if (!isMounted) return;
+        images[i] = img;
+      };
+    }
+
+    const onResize = () => {
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(resizeCanvas);
+    };
+
+    window.addEventListener("resize", onResize, { passive: true });
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener("resize", onResize);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, []);
+
+  // 2. GSAP ScrollTrigger Scrubbing Engine
+  useGSAP(
+    () => {
+      if (reduceMotion()) return;
+      const section = sectionRef.current;
+      if (!section) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=280%",
+        pin: true,
+        scrub: 0.8,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          currentProgressRef.current = progress;
+
+          const frameIndex = Math.min(
+            TOTAL_FRAMES - 1,
+            Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1)))
+          );
+
+          currentFrameRef.current = frameIndex;
+          drawFrame(frameIndex, progress);
+
+          // Fade out the initial scroll prompt as soon as scrolling starts (0% -> 10%)
+          if (scrollCueRef.current) {
+            const cueOpacity = Math.max(0, 1 - progress * 10);
+            scrollCueRef.current.style.opacity = String(cueOpacity);
+            scrollCueRef.current.style.pointerEvents = cueOpacity <= 0.05 ? "none" : "auto";
+          }
+
+          // Deterministic overlay display:
+          // Emerges smoothly starting at progress 0.50, reaches 100% full opacity at 0.75,
+          // and stays at full 100% visibility through 1.00 so the user can read comfortably!
+          if (overlayRef.current) {
+            if (progress < 0.50) {
+              overlayRef.current.style.opacity = "0";
+              overlayRef.current.style.transform = "translateY(24px)";
+              overlayRef.current.style.pointerEvents = "none";
+            } else if (progress <= 0.75) {
+              const p = (progress - 0.50) / 0.25; // 0.0 to 1.0
+              const easeP = 1 - Math.pow(1 - p, 2);
+              overlayRef.current.style.opacity = String(easeP);
+              overlayRef.current.style.transform = `translateY(${(1 - easeP) * 24}px)`;
+              overlayRef.current.style.pointerEvents = easeP > 0.5 ? "auto" : "none";
+            } else {
+              overlayRef.current.style.opacity = "1";
+              overlayRef.current.style.transform = "translateY(0px)";
+              overlayRef.current.style.pointerEvents = "auto";
+            }
+          }
+        },
+      });
+
+      return () => {
+        trigger.kill();
+      };
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section ref={root} className="relative overflow-hidden bg-white">
-      {/* Background Soft Ambient Graphic Atmosphere */}
-      <div
-        aria-hidden
-        className="drift pointer-events-none absolute -right-32 -top-40 h-[540px] w-[540px] rounded-full bg-brand/10 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="drift pointer-events-none absolute -left-44 top-1/3 h-[420px] w-[420px] rounded-full bg-ocean/10 blur-3xl [animation-delay:-6s]"
-      />
+    <section
+      ref={sectionRef}
+      className="relative w-full bg-[#000000] text-white selection:bg-brand selection:text-white"
+    >
+      {/* Pinned full-screen viewport */}
+      <div className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        
+        {/* Full-bleed Edge-to-Edge Canvas (Covering entire screen) */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
+        />
 
-      <div className="shell relative grid items-center gap-10 pb-12 pt-28 sm:pt-32 lg:grid-cols-12 lg:gap-14 lg:pb-16 lg:pt-36">
-        {/* Left Column: Heading, description, and CTA button */}
-        <div className="lg:col-span-5 flex flex-col items-start">
-          <div data-reveal data-reveal-dir="left" data-reveal-delay="0.1">
-            <h1
-              className="font-display text-[clamp(2.3rem,4.4vw,3.75rem)] font-extrabold leading-[1.05] tracking-tight text-ink"
-            >
+        {/* Fallback initial poster before canvas first paint */}
+        {!firstFrameReady && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="/images/process/hero-video-images/00001.webp"
+            alt="Process hero pail container"
+            className="absolute inset-0 h-full w-full object-cover pointer-events-none z-0"
+          />
+        )}
+
+        {/* Initial Minimalist Scroll Cue (Fades away as soon as user starts scrolling) */}
+        <div
+          ref={scrollCueRef}
+          className="absolute bottom-8 inset-x-0 z-20 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-300"
+        >
+          <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-2 text-xs font-mono tracking-widest text-white/80 backdrop-blur-md shadow-lg">
+            <ChevronDown className="h-4 w-4 animate-bounce text-brand" />
+            <span>SCROLL TO EXPLORE PROCESS</span>
+          </div>
+        </div>
+
+        {/* ------------------------------------------------------------------- */}
+        {/* Ending Overlay: Displays smoothly across the final sequence         */}
+        {/* ------------------------------------------------------------------- */}
+        <div
+          ref={overlayRef}
+          className="absolute inset-0 z-30 flex items-center justify-center bg-gradient-to-t from-black/90 via-black/70 to-black/45 backdrop-blur-[6px] px-6 sm:px-10"
+          style={{ opacity: 0, transform: "translateY(24px)", pointerEvents: "none" }}
+        >
+          <div className="shell flex flex-col items-center text-center max-w-3xl">
+            {/* Requested Heading */}
+            <h1 className="font-display text-[clamp(2.3rem,5.2vw,4.5rem)] font-extrabold leading-[1.06] tracking-tight text-white drop-shadow-[0_4px_28px_rgba(0,0,0,0.9)]">
               Manufacturing &amp; Process Flow
             </h1>
-          </div>
 
-          <div data-reveal data-reveal-dir="up" data-reveal-delay="0.2">
-            <p className="mt-5 max-w-md text-[15px] sm:text-[16px] leading-relaxed text-slate-600 font-normal">
-              Fully integrated in-house manufacturing process: precision injection moulding
-              cycles, versatile multi-color container printing, and rigorous multi-stage quality
-              control under one roof.
+            {/* Requested Content Description */}
+            <p className="mt-5 text-[15.5px] sm:text-[18px] md:text-[19px] leading-relaxed text-white/90 max-w-2xl font-normal drop-shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
+              Fully integrated in-house manufacturing process: precision injection moulding cycles,
+              versatile multi-color container printing, and rigorous multi-stage quality control under one roof.
             </p>
-          </div>
 
-          <div data-reveal data-reveal-dir="up" data-reveal-delay="0.3">
-            <Link
-              href="/contact"
-              className="group mt-8 inline-flex h-12 items-center gap-2.5 rounded-[12px] bg-brand px-7 text-[14.5px] font-semibold text-white shadow-xs transition-all duration-300 hover:bg-brand-dark hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Contact engineering
-              <ArrowRight
-                aria-hidden
-                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-          </div>
-        </div>
-
-        {/* Right Column: Two Plates With Staggered Two-Way Reveal & Responsive Aspect Ratios */}
-        <div className="lg:col-span-7">
-          <div className="grid h-[280px] grid-cols-5 gap-3 sm:h-[340px] sm:gap-4 lg:h-[460px]">
-            {/* Plate 1: Wide Plant Floor Image */}
-            <div
-              data-reveal
-              data-reveal-dir="clip-down"
-              data-reveal-delay="0.18"
-              className="group/img relative col-span-3 overflow-hidden rounded-[24px] bg-slate-900 border border-slate-200/80 shadow-md transition-all duration-500 hover:shadow-xl"
-            >
-              <Image
-                src="/images/hero/hero-01.jpg"
-                alt="Containers stacked on the plant floor"
-                fill
-                priority
-                sizes="(max-width: 1024px) 60vw, 36vw"
-                className="ambient-media-slow object-cover transition-transform duration-700 ease-out group-hover/img:scale-106"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
-            </div>
-
-            {/* Plate 2: Narrow Machinery Detail Image */}
-            <div
-              data-reveal
-              data-reveal-dir="clip-down"
-              data-reveal-delay="0.32"
-              className="group/img relative col-span-2 overflow-hidden rounded-[24px] bg-slate-900 border border-slate-200/80 shadow-md transition-all duration-500 hover:shadow-xl"
-            >
-              <Image
-                src="/images/facility/machinery-01.jpg"
-                alt="Injection moulding machines running in the plant"
-                fill
-                priority
-                sizes="(max-width: 1024px) 40vw, 24vw"
-                className="ambient-media object-cover transition-transform duration-700 ease-out group-hover/img:scale-106"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+            {/* CTA */}
+            <div className="mt-8 flex items-center justify-center">
+              <Link
+                href="/contact?topic=engineering"
+                className="group inline-flex h-12 items-center gap-2.5 rounded-xl bg-brand px-7 text-[15px] font-semibold text-white shadow-xl transition-all duration-300 hover:bg-brand-dark hover:scale-[1.03] active:scale-[0.98]"
+              >
+                <span>Contact engineering</span>
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ export function ClientsSection() {
         <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
           <div data-reveal data-reveal-dir="left" data-reveal-delay="0.1">
             <h2 className="mt-3 font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-slate-900 leading-[1.06]">
-              Packaging brands rely on <WavyHighlight dot={true}>ASIR</WavyHighlight>
+              Trusted by Leading Packaging <WavyHighlight dot={true}>Brands</WavyHighlight>
             </h2>
           </div>
           <p

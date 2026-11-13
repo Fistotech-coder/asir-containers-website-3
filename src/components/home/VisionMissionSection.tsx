@@ -50,15 +50,15 @@ const infographicNodes: InfographicNode[] = [
 
 function ShieldBadge({ color, icon }: { color: string; icon: string }) {
   return (
-    <div className="absolute -top-[1px] left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-      <div className="relative w-[52px] h-[62px] flex items-center justify-center">
-        <svg viewBox="0 0 52 62" className="w-full h-full drop-shadow-xs" fill="none">
+    <div className="absolute -top-[5px] left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+      <div className="relative w-[52px] h-[66px] flex items-center justify-center">
+        <svg viewBox="0 0 52 66" className="w-full h-full drop-shadow-xs" fill="none">
           <path
-            d="M0 0 H52 V36 C52 48 26 60 26 60 C26 60 0 48 0 36 Z"
+            d="M0 6 A58 58 0 0 1 52 6 V38 C52 50 26 64 26 64 C26 64 0 50 0 38 Z"
             fill={color}
           />
         </svg>
-        <div className="absolute top-2.5 left-1/2 -translate-x-1/2 text-white transition-transform duration-300 group-hover:scale-110">
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 text-white transition-transform duration-300 group-hover:scale-110">
           <Icon icon={icon} className="w-[23px] h-[23px]" />
         </div>
       </div>
@@ -68,11 +68,11 @@ function ShieldBadge({ color, icon }: { color: string; icon: string }) {
 
 export function VisionMissionSection({ index = "06" }: Props) {
   return (
-    <section className="relative overflow-hidden bg-white py-12 lg:py-20 border-b border-slate-100/80">
+    <section className="relative overflow-hidden bg-white pt-8 pb-3 lg:pt-10 lg:pb-4 border-b border-slate-100/80">
       <div className="shell relative z-10">
 
         {/* Section Header */}
-        <Reveal className="text-center max-w-3xl mx-auto mb-6 sm:mb-2">
+        <Reveal className="text-center max-w-3xl mx-auto mb-4 sm:mb-1">
           
           <h2 className="font-display text-[2.4rem] sm:text-[3.1rem] lg:text-[3.35rem] font-bold tracking-tight text-slate-900 leading-[1.08]">
             Our Mission, Vision & <WavyHighlight dot={false}>Core Values</WavyHighlight>
@@ -81,18 +81,17 @@ export function VisionMissionSection({ index = "06" }: Props) {
 
         {/* 1. DESKTOP VIEW: Continuous Undulating Smooth Wave with Reduced Inter-Circle Gap (xl and up) */}
         <Reveal data-reveal data-reveal-dir="scale" data-reveal-delay="0.1" className="hidden xl:block">
-          <div className="relative w-full max-w-[1140px] mx-auto py-2">
+          <div className="relative w-full max-w-[1140px] mx-auto pt-1 pb-0">
             
-            {/* Desktop SVG: viewBox="0 0 1140 500", Centers at 190, 570, 950, Y=250, Curve Radius 180 (Card R=140, Equal Gap=40px) */}
+            {/* Desktop SVG: viewBox="0 60 1140 380", Centers at 190, 570, 950, Y=250, Curve Radius 180 (Card R=140, Equal Gap=40px) */}
             <svg
-              viewBox="0 0 1140 500"
+              viewBox="0 60 1140 380"
               className="w-full h-auto block select-none pointer-events-none"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               {/* Concentric guide halo rings around each circle */}
               <circle cx="190" cy="250" r="160" stroke="#f1f5f9" strokeWidth="1" />
-              <circle cx="570" cy="250" r="160" stroke="#222d38ff" strokeWidth="1" />
               <circle cx="950" cy="250" r="160" stroke="#f1f5f9" strokeWidth="1" />
 
               {/* Node 1: Coral Arc (Loops Over Top with 40px Equal Gap) + Glides to Midpoint (380, 250) */}
@@ -174,7 +173,7 @@ export function VisionMissionSection({ index = "06" }: Props) {
 
         {/* 2. TABLET & MOBILE VIEW: Vertical Weaving Serpentine Flow with Reduced Gap (under xl) */}
         <Reveal data-reveal data-reveal-dir="bottom" data-reveal-delay="0.1" className="xl:hidden">
-          <div className="relative w-full max-w-[420px] mx-auto py-6">
+          <div className="relative w-full max-w-[420px] mx-auto pt-3 pb-2">
             
             {/* Vertical SVG: viewBox="0 0 420 1140", Centers at Y=190, 570, 950, X=210, Curve Radius 180 */}
             <svg

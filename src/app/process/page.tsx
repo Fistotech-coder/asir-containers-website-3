@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { ProcessHero } from "@/components/process/ProcessHero";
-import { QualityStatement } from "@/components/process/QualityStatement";
-import { InProcessStages } from "@/components/process/InProcessStages";
-import { FlowStrip } from "@/components/process/FlowStrip";
+import { OurCapabilities } from "@/components/process/OurCapabilities";
 import { ColorCTA } from "@/components/sections/ColorCTA";
 import { site } from "@/data/site";
 
@@ -23,9 +21,7 @@ export default function ProcessPage() {
   return (
     <>
       <ProcessHero />
-      <FlowStrip />
-      <InProcessStages />
-      <QualityStatement />
+      <OurCapabilities />
       <ColorCTA
         eyebrow="Quality Assurance & Custom Runs"
         heading="Looking for process validation or custom batches?"

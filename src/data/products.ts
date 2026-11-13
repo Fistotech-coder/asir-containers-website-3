@@ -167,8 +167,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 500 ml round plastic pail container",
+    image: "/images/products/product-images/500ml.webp",
+    imageAlt: "ASIR white 500 ml round plastic pail container packshot",
     summary:
       "The smallest container in the range: a 500 ml round pail supplied plain (P/2) for paint, agro and food packing.",
     context:
@@ -186,8 +186,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 1 litre round plastic pail container",
+    image: "/images/products/product-images/1ltr.webp",
+    imageAlt: "ASIR white 1 litre round plastic pail container packshot",
     summary:
       "Retail-scale 1 litre round pail supplied plain (P1a) for paint and agro-chemical packing.",
     context:
@@ -204,8 +204,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 1 litre round plastic pail container, second tool",
+    image: "/images/products/product-images/1ltr.webp",
+    imageAlt: "ASIR white 1 litre round plastic pail container packshot, second tool",
     summary:
       "A second 1 litre round pail, supplied plain (P1b) for paint and agro-chemical packing.",
     context:
@@ -222,8 +222,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 4 litre round plastic pail container",
+    image: "/images/products/product-images/4ltr.webp",
+    imageAlt: "ASIR white 4 litre round plastic pail container packshot",
     summary:
       "Mid-retail 4 litre round pail supplied plain (P4) for paint and agro-chemical packing.",
     context:
@@ -240,8 +240,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid","Screw Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 10 litre round plastic pail container",
+    image: "/images/products/product-images/10ltr.webp",
+    imageAlt: "ASIR white 10 litre round plastic pail container packshot",
     summary:
       "The 10 litre workhorse of the range, available plain (P10p) or tinned (P10t) for paint, agro and food packing.",
     context:
@@ -259,8 +259,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid","Screw Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 20 litre round plastic pail container",
+    image: "/images/products/product-images/20Ltr.webp",
+    imageAlt: "ASIR white 20 litre round plastic pail container packshot",
     summary:
       "Bulk 20 litre round pail, plain (P20ap) or tinned (P20at), for paint, agro and food packing.",
     context:
@@ -273,13 +273,13 @@ export const products: Product[] = [
     type: "paint-pail",
     capacity: { value: 20, unit: "L" },
     specs: { height: "386 mm", brimful: "21.30 L", gslOfc: "GSL 150 mm / OFC 164 mm" },
-    applications: ["paint", "agro"],
+    applications: ["paint", "agro", "food"],
     codes: { plain: "P20bp", tin: "P20bt" },
     locks: ["Outer Lock"],
     lids: ["Flat Lid","Screw Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 20 litre round plastic pail container, second tool",
+    image: "/images/products/product-images/20Ltr.webp",
+    imageAlt: "ASIR white 20 litre round plastic pail container packshot, second tool",
     summary:
       "A second 20 litre round pail, plain (P20bp) or tinned (P20bt), for paint, agro and food packing.",
     context:
@@ -296,8 +296,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/food.jpg",
-    imageAlt: "Placeholder packshot — white 1 kilogram plastic pail container",
+    image: "/images/products/product-images/1kg.webp",
+    imageAlt: "ASIR white 1 kilogram plastic storage pail container packshot",
     summary:
       "Weight-marked 1 KG pail supplied plain (K1) for paint and food packing.",
     context:
@@ -314,8 +314,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/lube.jpg",
-    imageAlt: "Placeholder packshot — red 2 kilogram plastic pail container",
+    image: "/images/products/product-images/2kg.webp",
+    imageAlt: "ASIR 2 kilogram plastic storage pail container packshot",
     summary:
       "2 KG weight-marked pail supplied plain (K2) for paint, food and lubricant packing.",
     context:
@@ -333,8 +333,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/lube.jpg",
-    imageAlt: "Placeholder packshot — red 5 kilogram plastic pail container",
+    image: "/images/products/product-images/5kg.webp",
+    imageAlt: "ASIR 5 kilogram plastic storage pail container packshot",
     summary:
       "5 KG weight-marked pail supplied plain (K5) for paint, food and lubricant packing.",
     context:
@@ -351,8 +351,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid","Screw Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/paint.jpg",
-    imageAlt: "Placeholder packshot — white 10 kilogram plastic pail container",
+    image: "/images/products/product-images/10kg.webp",
+    imageAlt: "ASIR 10 kilogram plastic storage pail container packshot",
     summary:
       "10 KG weight-marked pail, plain (K10p) or tinned (K10t), for paint and agro-chemical packing.",
     context:
@@ -369,8 +369,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid","Screw Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/lube.jpg",
-    imageAlt: "Placeholder packshot — red 20 kilogram plastic pail container",
+    image: "/images/products/product-images/20kg.webp",
+    imageAlt: "ASIR 20 kilogram plastic storage pail container packshot",
     summary:
       "Bulk 20 KG weight-marked pail, plain (K20p) or tinned (K20t), for paint and lubricant packing.",
     context:
@@ -388,8 +388,8 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/agro.jpg",
-    imageAlt: "Placeholder packshot — green 5 litre round plastic pail container",
+    image: "/images/products/product-images/5ltr.webp",
+    imageAlt: "ASIR 5 litre round plastic pail container packshot",
     summary:
       "5 litre round pail supplied plain (A5) for agro-chemical and lubricant packing.",
     context:
@@ -407,9 +407,9 @@ export const products: Product[] = [
     locks: ["Inner Lock"],
     lids: ["Flat Lid","Spout Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/food.jpg",
+    image: "/images/products/product-images/15ltr.webp",
     imageAlt:
-      "Placeholder packshot — white 15 litre square plastic pail container with interlock lid",
+      "ASIR white 15 litre square plastic pail container with interlock lid packshot",
     summary:
       "15 litre square pail with an interlock lid, supplied plain (F15p) or tinned (F15s) for food packing.",
     context:
@@ -426,9 +426,9 @@ export const products: Product[] = [
     locks: ["Inner Lock"],
     lids: ["Flat Lid","Spout Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/food.jpg",
+    image: "/images/products/product-images/17kgsquare.webp",
     imageAlt:
-      "Placeholder packshot — white 17 litre square plastic pail container with interlock lid",
+      "ASIR white 17 litre square plastic pail container with interlock lid packshot",
     summary:
       "17 litre square interlock pail, supplied plain (F17ip) or tinned (F17is) for food packing.",
     context:
@@ -446,9 +446,9 @@ export const products: Product[] = [
     locks: ["Outer Lock"],
     lids: ["Flat Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/agro.jpg",
+    image: "/images/products/product-images/17kgsquaarelock.webp",
     imageAlt:
-      "Placeholder packshot — white 17 litre square plastic pail container with outer lock lid",
+      "ASIR white 17 litre square plastic pail container with outer lock lid packshot",
     summary:
       "17 litre square pail with an outer lock lid, supplied plain (F17op) or tinned (F17os) for food packing.",
     context:
@@ -465,9 +465,9 @@ export const products: Product[] = [
     locks: ["Inner Lock"],
     lids: ["Flat Lid","Spout Lid"],
     material: "Polypropylene (PP)",
-    image: "/images/categories/food.jpg",
+    image: "/images/products/product-images/5kgsquare.webp",
     imageAlt:
-      "Placeholder packshot — white 5 litre square plastic pail container with interlock lid",
+      "ASIR white 5 litre square plastic pail container with interlock lid packshot",
     summary:
       "5 litre square interlock pail, supplied plain (F5p) or tinned (F5s) for food packing.",
     context:

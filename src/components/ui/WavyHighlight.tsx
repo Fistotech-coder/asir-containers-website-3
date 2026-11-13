@@ -19,15 +19,15 @@ export function WavyHighlight({
 }: WavyHighlightProps) {
   return (
     <span
-      className={`relative inline-block font-serif italic font-semibold text-[#0066cc] sm:ml-1 ${className}`}
+      className={`relative inline-block font-serif italic font-semibold text-[#0e4c9c] sm:ml-1 ${className}`}
     >
       {children}
-      {dot && <span className="text-[#0066cc]">.</span>}
+      {dot && <span className="text-[#0e4c9c]">.</span>}
       <svg
         aria-hidden="true"
         viewBox="0 0 160 12"
         fill="none"
-        className="swoosh-underline absolute -bottom-1 left-0 w-full h-[7px] text-[#0066cc]/85 stroke-current pointer-events-none"
+        className="swoosh-underline absolute -bottom-1 left-0 w-full h-[7px] text-[#0e4c9c] stroke-current pointer-events-none"
       >
         <path
           d="M2 8C45 3 115 2.5 158 7"

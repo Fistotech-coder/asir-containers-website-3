@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Info } from "lucide-react";
 import { ProductMedia } from "@/components/products/ProductMedia";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductApplicationsShowcase } from "@/components/products/ProductApplicationsShowcase";
+import { ProductQualityInspection } from "@/components/products/ProductQualityInspection";
 import { Reveal } from "@/components/motion/Reveal";
 import { AnimatedIcon, applicationIcons, type IconMotion } from "@/components/ui/AnimatedIcon";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -164,14 +165,15 @@ export default async function ProductPage({ params }: PageProps) {
             <span className="font-semibold text-ink">{product.codes.plain}</span>
           </nav>
 
-          <div className="mt-5 grid items-stretch gap-8 pb-10 lg:grid-cols-12 lg:gap-10 lg:pb-12">
-            <div className="flex flex-col lg:col-span-5">
-              <div className="flex flex-1 flex-col lg:sticky lg:top-24">
+          <div className="mt-5 grid items-start lg:items-stretch gap-8 pb-10 lg:grid-cols-12 lg:gap-10 lg:pb-12">
+            <div className="flex flex-col lg:col-span-5 lg:h-full">
+              <div className="flex flex-col lg:h-full">
                 <ProductMedia
                   src={product.image}
                   alt={product.imageAlt}
                   capacity={capacityDisplay(product)}
                   category={applicationNames.join(" · ")}
+                  className="lg:h-full"
                 />
               </div>
             </div>
@@ -262,8 +264,11 @@ export default async function ProductPage({ params }: PageProps) {
         />
       </Reveal>
 
+      {/* Quality and Inspection */}
+      <ProductQualityInspection />
+
       {/* Related */}
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white py-12 lg:py-16">
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
             <div>
@@ -279,7 +284,7 @@ export default async function ProductPage({ params }: PageProps) {
             </Link>
           </div>
 
-          <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-[980px]">
             {related.map((item, relatedIndex) => (
               <li key={item.slug}>
                 <ProductCard product={item} index={relatedIndex} aspect="compact" />

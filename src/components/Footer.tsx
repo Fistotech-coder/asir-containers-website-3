@@ -111,12 +111,29 @@ export function Footer() {
         className="pointer-events-none absolute -top-12 -right-12 h-[340px] w-[420px] rounded-full bg-[#05448B]/40 blur-[30px]"
       />
 
+      {/* Low-opacity background container graphic matching user request */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 bottom-0 z-0 select-none overflow-hidden opacity-10 lg:opacity-15"
+      >
+        <div className="relative w-[340px] h-[260px] sm:w-[480px] sm:h-[360px] lg:w-[620px] lg:h-[460px] xl:w-[720px] xl:h-[530px]">
+          <Image
+            src="/images/footer-pails.webp"
+            alt=""
+            fill
+            priority={false}
+            sizes="(min-width: 1280px) 720px, (min-width: 1024px) 620px, 480px"
+            className="object-contain object-right-bottom"
+          />
+        </div>
+      </div>
+
       {/* Main Footer Body */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 pt-12 pb-10 lg:pt-14 lg:pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-0 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 items-stretch">
           
-          {/* Column 1: Brand & About (~28%) */}
-          <div className="lg:col-span-4 xl:col-span-3 flex flex-col justify-between lg:pr-8 xl:pr-10 lg:border-r lg:border-white/15">
+          {/* Column 1: Brand & About */}
+          <div className="flex flex-col justify-between lg:pr-8 xl:pr-10 lg:border-r lg:border-white/15">
             <div>
               <div className="flex items-center -mt-1">
                 <Logo tone="light" imageClassName="!h-10 sm:!h-11 w-auto" />
@@ -168,8 +185,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Contact (~24%) */}
-          <div className="lg:col-span-3 xl:col-span-3 lg:px-6 xl:px-8 lg:border-r lg:border-white/15">
+          {/* Column 2: Contact */}
+          <div className="lg:px-8 xl:px-10 lg:border-r lg:border-white/15">
             <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Contact
             </h3>
@@ -223,8 +240,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Navigate (~17%) */}
-          <div className="lg:col-span-2 xl:col-span-2 lg:px-5 xl:px-6 lg:border-r lg:border-white/15">
+          {/* Column 3: Navigate */}
+          <div className="lg:px-8 xl:px-10 lg:border-r lg:border-white/15">
             <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Navigate
             </h3>
@@ -236,7 +253,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group flex items-center justify-between rounded-xl bg-[#001c44]/70 hover:bg-[#001c44] px-3.5 py-2 text-[13.5px] font-medium text-white/90 hover:text-white transition-all"
+                    className="group flex items-center justify-between rounded-xl px-3.5 py-2 text-[13.5px] font-medium text-white/90 hover:text-white transition-all"
                   >
                     <span>{link.label}</span>
                     <ChevronRight className="h-4 w-4 text-white group-hover:translate-x-0.5 transition-all" />
@@ -246,8 +263,8 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Applications (~16%) */}
-          <div className="lg:col-span-3 xl:col-span-2 lg:pl-5 xl:pl-6">
+          {/* Column 4: Applications */}
+          <div className="lg:pl-8 xl:pl-10">
             <h3 className="font-display text-[17px] sm:text-[18px] font-bold text-white tracking-tight leading-none">
               Applications
             </h3>
@@ -275,20 +292,6 @@ export function Footer() {
                 );
               })}
             </ul>
-          </div>
-
-          {/* Column 5: Right Visual (Transparent Containers Cluster) */}
-          <div className="hidden xl:flex xl:col-span-2 relative h-[260px] items-end justify-end self-end">
-            <div className="relative h-[245px] w-full">
-              <Image
-                src="/images/footer-pails.webp"
-                alt="ASIR Containers Range"
-                fill
-                priority={false}
-                sizes="(min-width: 1280px) 280px, 0vw"
-                className="object-contain object-right-bottom drop-shadow-[0_16px_30px_rgba(0,10,35,0.4)]"
-              />
-            </div>
           </div>
 
         </div>
