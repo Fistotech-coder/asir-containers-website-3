@@ -20,6 +20,7 @@ export function Logo({ tone = "dark", className = "", imageClassName = "", compa
   return (
     <Link
       href="/"
+      prefetch={true}
       aria-label={`${site.name} — home`}
       className={`group inline-flex items-center transition-opacity hover:opacity-90 ${className}`}
     >

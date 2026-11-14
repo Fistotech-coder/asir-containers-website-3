@@ -70,9 +70,6 @@ export default async function ProductPage({ params }: PageProps) {
   const colors = colorsFor(product);
   const lids = lidsFor(product);
   const related = getRelatedProducts(product, 3);
-  const index = products.findIndex((item) => item.slug === product.slug);
-  const previous = products[(index - 1 + products.length) % products.length];
-  const next = products[(index + 1) % products.length];
 
   // Extract GSL and OFC specifications
   const gslMatch = product.specs.gslOfc.match(/GSL\s*([^/]+)/i)?.[1]?.trim();
@@ -150,13 +147,13 @@ export default async function ProductPage({ params }: PageProps) {
             aria-label="Breadcrumb"
             className="flex flex-wrap items-center gap-2 text-[14px] font-medium text-mid sm:text-[14.5px]"
           >
-            <Link href="/" className="transition-colors hover:text-ink">
+            <Link href="/" prefetch={true} className="transition-colors hover:text-ink">
               Home
             </Link>
             <span aria-hidden className="text-mid/40">
               /
             </span>
-            <Link href="/products" className="transition-colors hover:text-ink">
+            <Link href="/products" prefetch={true} className="transition-colors hover:text-ink">
               Products
             </Link>
             <span aria-hidden className="text-mid/40">
@@ -188,23 +185,21 @@ export default async function ProductPage({ params }: PageProps) {
                   {/* Product codes badge — responsive layout wrapping on small phones */}
                   <div className="flex flex-wrap shrink-0 items-center gap-2 self-start sm:mt-1">
                     <div className="rounded-xl border border-line bg-white px-3 py-1.5 text-center shadow-2xs sm:px-3.5">
-                      <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-mid">
+                      <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-mid">
                         Plain Code
                       </span>
-                      <span className="flex items-center justify-center gap-1.5 font-mono text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight text-ink">
+                      <span className="flex items-center justify-center font-mono text-[16px] sm:text-[18px] md:text-[20px] font-semibold tracking-tight text-ink">
                         {product.codes.plain}
-                        <AnimatedIcon name="pack" motion="float" className="h-4 w-4 text-brand" />
                       </span>
                     </div>
 
                     {product.codes.tin && (
                       <div className="rounded-xl border border-brand/25 bg-white px-3 py-1.5 text-center shadow-2xs sm:px-3.5">
-                        <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-brand">
+                        <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-brand">
                           Tin/Sp. Code
                         </span>
-                        <span className="flex items-center justify-center gap-1.5 font-mono text-[16px] sm:text-[18px] md:text-[20px] font-extrabold tracking-tight text-brand">
+                        <span className="flex items-center justify-center font-mono text-[16px] sm:text-[18px] md:text-[20px] font-semibold tracking-tight text-brand">
                           {product.codes.tin}
-                          <AnimatedIcon name="finish" motion="swing" className="h-4 w-4 text-brand" />
                         </span>
                       </div>
                     )}
@@ -225,7 +220,7 @@ export default async function ProductPage({ params }: PageProps) {
                       <dt className="text-[14px] font-medium text-mid sm:text-[15px]">
                         {row.label}
                       </dt>
-                      <dd className="text-[14.5px] font-semibold text-ink sm:max-w-[65%] sm:text-right sm:text-[15.5px] break-words">
+                      <dd className="text-[14.5px] font-medium text-slate-800 sm:max-w-[65%] sm:text-right sm:text-[15.5px] break-words">
                         {row.value}
                       </dd>
                     </div>
@@ -236,6 +231,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center" data-reveal>
                   <Link
                     href={`/contact?product=${product.slug}`}
+                    prefetch={true}
                     className="group inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-brand px-5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
                   >
                     <span>Enquire about {product.codes.plain}</span>
@@ -243,6 +239,7 @@ export default async function ProductPage({ params }: PageProps) {
                   </Link>
                   <Link
                     href="/products"
+                    prefetch={true}
                     className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-ink/20 px-5 text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-slate-50"
                   >
                     <ArrowLeft className="h-4 w-4" />
@@ -268,7 +265,7 @@ export default async function ProductPage({ params }: PageProps) {
       <ProductQualityInspection />
 
       {/* Related */}
-      <section className="bg-white py-12 lg:py-16">
+      <section className="bg-white pt-10 sm:pt-12 lg:pt-14 pb-3 sm:pb-4 lg:pb-5">
         <div className="shell">
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
             <div>
@@ -277,6 +274,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
             <Link
               href="/products"
+              prefetch={true}
               className="group inline-flex items-center gap-2 text-sm font-medium text-ink transition-colors hover:text-brand"
             >
               View all containers
@@ -284,45 +282,18 @@ export default async function ProductPage({ params }: PageProps) {
             </Link>
           </div>
 
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-[980px]">
+          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-[1020px] items-stretch">
             {related.map((item, relatedIndex) => (
-              <li key={item.slug}>
-                <ProductCard product={item} index={relatedIndex} aspect="compact" />
+              <li key={item.slug} className="h-full flex flex-col">
+                <ProductCard product={item} index={relatedIndex} />
               </li>
             ))}
           </ul>
-
-          <nav aria-label="Product navigation" className="mt-12 grid gap-8 border-t border-line pt-6 sm:grid-cols-2">
-            <Link
-              href={`/products/${previous.slug}`}
-              className="group flex items-center gap-4"
-            >
-              <ArrowLeft className="h-4 w-4 shrink-0 text-mid transition-transform duration-300 group-hover:-translate-x-1" />
-              <span>
-                <span className="block text-[12px] text-mid">
-                  Previous container
-                </span>
-                <span className="mt-1 block text-[15px] font-medium text-ink">{previous.name}</span>
-              </span>
-            </Link>
-            <Link
-              href={`/products/${next.slug}`}
-              className="group flex items-center justify-end gap-4 text-right"
-            >
-              <span>
-                <span className="block text-[12px] text-mid">
-                  Next container
-                </span>
-                <span className="mt-1 block text-[15px] font-medium text-ink">{next.name}</span>
-              </span>
-              <ArrowRight className="h-4 w-4 shrink-0 text-mid transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </nav>
         </div>
       </section>
 
       {/* Enquiry band — matches homepage ContactCTA design */}
-      <section className="bg-white pt-2 pb-14 lg:pb-18">
+      <section className="bg-white pt-1 pb-6 sm:pb-8 lg:pb-9">
         <div className="shell">
           <div className="relative overflow-hidden rounded-[24px] bg-charcoal shadow-xl">
             {/* Backdrop with plant photograph */}

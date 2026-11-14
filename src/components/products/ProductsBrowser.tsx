@@ -282,12 +282,12 @@ export function ProductsBrowser() {
       </Reveal>
 
       <div className="shell">
-        <div className="grid gap-10 pt-10 lg:grid-cols-12 lg:gap-10 xl:gap-14">
+        <div className="grid gap-6 pt-2 sm:pt-3 lg:grid-cols-12 lg:gap-8 xl:gap-10">
           {/* Desktop filter rail */}
           <aside className="hidden lg:col-span-4 lg:block xl:col-span-3">
             <div
               data-lenis-prevent
-              className="sticky top-24 max-h-[calc(100vh-8rem)] space-y-7 overflow-y-auto overscroll-contain border-r border-line/60 pb-8 pr-6 [scrollbar-width:thin]"
+              className="sticky top-20 max-h-[calc(100vh-6rem)] space-y-6 overflow-y-auto overscroll-contain border-r border-line/60 pb-8 pr-6 [scrollbar-width:thin]"
             >
               <div className="flex items-center justify-between border-b border-ink/15 pb-4">
                 <h2 className="inline-flex items-center gap-2.5 text-[18px] font-bold text-ink">
@@ -367,7 +367,7 @@ export function ProductsBrowser() {
 
             <div
               ref={gridRef}
-              className="mt-6 sm:mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-2 xl:grid-cols-3 xl:gap-x-9 xl:gap-y-14"
+              className="mt-1 sm:mt-2 pt-0 sm:pt-1 grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-14"
               aria-live="polite"
               aria-busy={!hydrated}
             >

@@ -1,27 +1,27 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   Boxes,
   Printer,
   Flame,
   Bot,
-  ShieldCheck,
   CheckCircle2,
-  Sparkles,
-  Layers,
-  ArrowRight,
-  Droplets,
   Clock,
+  ShieldCheck,
+  Sparkles,
+  Droplets,
+  Layers,
   Eye,
   Repeat,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { gsap, useGSAP, reduceMotion, useScrollReveal } from "@/lib/animations";
 import { clientLogos, allHomeClients, type ClientLogo } from "@/data/manufacturing";
 
-export type CapabilityId = "injection-moulding" | "screen-printing" | "htl" | "iml";
+export type CapabilityId = "injection-moulding" | "iml" | "htl" | "screen-printing";
 
 interface CapabilityItem {
   id: CapabilityId;
@@ -57,7 +57,7 @@ interface CapabilityItem {
 const capabilitiesData: CapabilityItem[] = [
   {
     id: "injection-moulding",
-    tabLabel: "Injection moulding",
+    tabLabel: "Injection Moulding",
     category: "moulding",
     title: "High-Tonnage Injection Moulding",
     tagline: "Micron-Level Precision Tooling & High-Volume Reliability",
@@ -126,148 +126,8 @@ const capabilitiesData: CapabilityItem[] = [
     clientLogos: allHomeClients.slice(0, 4),
   },
   {
-    id: "screen-printing",
-    tabLabel: "Screen Printing",
-    category: "printing",
-    title: "Screen Printing Technology",
-    tagline: "Bringing Designs to Life with Precision Screen Printing",
-    overview:
-      "Screen Printing is a highly reliable direct-to-wall printing technology used to transfer ink directly onto curved or flat container surfaces through specially exposed mesh screens. Using calibrated automated squeegees and in-line flame treatment, it delivers bold, opaque graphics, vibrant brand logos, and exceptional long-term outdoor resistance.",
-    image: "/images/technologies/capability-screen-printing.webp",
-    imageAlt: "Semi-automatic rotary screen printing line applying vibrant graphics on plastic pails",
-    icon: Printer,
-    stepsHeading: "How Screen Printing Works",
-    steps: [
-      {
-        number: "01",
-        title: "Artwork & Screen Prep",
-        description: "High-mesh tension polyester screens are photographically exposed with high-resolution stencils.",
-      },
-      {
-        number: "02",
-        title: "Pre-Treatment (Flame Treating)",
-        description: "Automated gas flaming increases surface energy on polymer walls to ensure maximum ink adhesion.",
-      },
-      {
-        number: "03",
-        title: "Direct Ink Transfer",
-        description: "A precision polyurethane squeegee presses heavy-bodied UV ink through the open screen mesh.",
-      },
-      {
-        number: "04",
-        title: "Instant UV / Thermal Curing",
-        description: "High-intensity UV lamp stations polymerize ink instantaneously, locking color vibrancy.",
-      },
-      {
-        number: "05",
-        title: "Quality Verification",
-        description: "Cross-hatch tape adhesion, color density, and registration checks conducted per batch.",
-      },
-    ],
-    benefitsHeading: "Key Advantages of Screen Printing",
-    benefits: [
-      {
-        title: "High-Visibility & Color Vibrancy",
-        description: "Solid, heavy ink deposits produce bold color depth and sharp, readable regulatory copy.",
-        icon: Eye,
-      },
-      {
-        title: "Cost-Effective for Bulk Production",
-        description: "Ultra-economical for large, repeat manufacturing runs with minimal tooling wear.",
-        icon: Sparkles,
-      },
-      {
-        title: "Outstanding Adhesion & Weatherproof",
-        description: "UV-cured formulation resists sun fade, moisture, oil splashes, and chemical spillage.",
-        icon: ShieldCheck,
-      },
-      {
-        title: "Multi-Color Rotary Registration",
-        description: "Up to 6 colors applied in seamless rotary indexing for complete circular coverage.",
-        icon: Layers,
-      },
-    ],
-    applications: [
-      "Plastic paint buckets & industrial emulsion pails",
-      "Chemical, solvent, and detergent packaging",
-      "Lubricants, automotive greases & gear oils",
-      "Construction chemicals & tile adhesive pails",
-    ],
-    clientLogos: clientLogos.screenPrinting,
-  },
-  {
-    id: "htl",
-    tabLabel: "HTL (Heat Transfer Labeling)",
-    category: "printing",
-    title: "Heat Transfer Labelling (HTL)",
-    tagline: "Precision Printing. Premium Finish. Powerful Branding.",
-    overview:
-      "Heat Transfer Labelling (HTL) transfers multi-color photographic graphics and metallic accents from a pre-printed carrier film directly onto plastic container surfaces using calibrated heat and pressure rollers. This specialized thermal process bonds the lacquer coating directly into the polymer substrate, producing a sleek, glossy, and scratch-resistant finish ideal for retail shelf appeal.",
-    image: "/images/technologies/capability-heat-transfer.webp",
-    imageAlt: "Heat transfer labeling machine transferring photographic graphics onto plastic buckets",
-    icon: Flame,
-    stepsHeading: "How HTL Technology Works",
-    steps: [
-      {
-        number: "01",
-        title: "Design & Film Gravure",
-        description: "Photo-quality graphics, gradients, and barcodes are printed onto specialized polyester transfer film.",
-      },
-      {
-        number: "02",
-        title: "Container Positioning",
-        description: "The container is positioned and locked onto an expanding mandrel for rigid cylindrical support.",
-      },
-      {
-        number: "03",
-        title: "Heated Roller Application",
-        description: "High-temperature silicone rollers apply calibrated pressure and thermal energy across the contact line.",
-      },
-      {
-        number: "04",
-        title: "Carrier Release",
-        description: "The carrier foil peels away cleanly, leaving the multi-color printed ink permanently fused.",
-      },
-      {
-        number: "05",
-        title: "Final Inspection",
-        description: "100% optical check for graphic alignment, gloss consistency, and bubble-free transfer.",
-      },
-    ],
-    benefitsHeading: "Key Benefits of HTL Technology",
-    benefits: [
-      {
-        title: "Photorealistic HD Reproduction",
-        description: "Renders complex gradients, metallic shades, fine typography, and scannable QR codes cleanly.",
-        icon: Sparkles,
-      },
-      {
-        title: "Smooth, Edge-Free Surface Finish",
-        description: "Creates an attractive, smooth surface that feels monolithic and premium to the touch.",
-        icon: CheckCircle2,
-      },
-      {
-        title: "Chemical & Moisture Resistance",
-        description: "Resistant to moisture, oils, and chemical spills encountered in agrochemical and retail environments.",
-        icon: Droplets,
-      },
-      {
-        title: "Flexible Production Runs",
-        description: "Allows rapid artwork changeovers between seasonal or localized packaging variants.",
-        icon: Repeat,
-      },
-    ],
-    applications: [
-      "Agrochemical & fertilizer containers",
-      "Decorative paint buckets & premium primers",
-      "Specialty household & retail packaging",
-      "Automotive lubricants & specialty greases",
-    ],
-    clientLogos: clientLogos.htl,
-  },
-  {
     id: "iml",
-    tabLabel: "In-mould labeling",
+    tabLabel: "In-Mould Labelling (IML)",
     category: "printing",
     title: "What is In-Mould Labelling (IML)?",
     tagline: "Seamless, Scratch-Resistant & Permanent Fusion",
@@ -362,22 +222,188 @@ const capabilitiesData: CapabilityItem[] = [
     ],
     clientLogos: clientLogos.iml,
   },
+  {
+    id: "htl",
+    tabLabel: "Heat Transfer Labelling (HTL)",
+    category: "printing",
+    title: "Heat Transfer Labelling (HTL)",
+    tagline: "Precision Printing. Premium Finish. Powerful Branding.",
+    overview:
+      "Heat Transfer Labelling (HTL) transfers multi-color photographic graphics and metallic accents from a pre-printed carrier film directly onto plastic container surfaces using calibrated heat and pressure rollers. This specialized thermal process bonds the lacquer coating directly into the polymer substrate, producing a sleek, glossy, and scratch-resistant finish ideal for retail shelf appeal.",
+    image: "/images/technologies/capability-heat-transfer.webp",
+    imageAlt: "Heat transfer labeling machine transferring photographic graphics onto plastic buckets",
+    icon: Flame,
+    stepsHeading: "How HTL Technology Works",
+    steps: [
+      {
+        number: "01",
+        title: "Design & Film Gravure",
+        description: "Photo-quality graphics, gradients, and barcodes are printed onto specialized polyester transfer film.",
+      },
+      {
+        number: "02",
+        title: "Container Positioning",
+        description: "The container is positioned and locked onto an expanding mandrel for rigid cylindrical support.",
+      },
+      {
+        number: "03",
+        title: "Heated Roller Application",
+        description: "High-temperature silicone rollers apply calibrated pressure and thermal energy across the contact line.",
+      },
+      {
+        number: "04",
+        title: "Carrier Release",
+        description: "The carrier foil peels away cleanly, leaving the multi-color printed ink permanently fused.",
+      },
+      {
+        number: "05",
+        title: "Final Inspection",
+        description: "100% optical check for graphic alignment, gloss consistency, and bubble-free transfer.",
+      },
+    ],
+    benefitsHeading: "Key Benefits of HTL Technology",
+    benefits: [
+      {
+        title: "Photorealistic HD Reproduction",
+        description: "Renders complex gradients, metallic shades, fine typography, and scannable QR codes cleanly.",
+        icon: Sparkles,
+      },
+      {
+        title: "Smooth, Edge-Free Surface Finish",
+        description: "Creates an attractive, smooth surface that feels monolithic and premium to the touch.",
+        icon: CheckCircle2,
+      },
+      {
+        title: "Chemical & Moisture Resistance",
+        description: "Resistant to moisture, oils, and chemical spills encountered in agrochemical and retail environments.",
+        icon: Droplets,
+      },
+      {
+        title: "Flexible Production Runs",
+        description: "Allows rapid artwork changeovers between seasonal or localized packaging variants.",
+        icon: Repeat,
+      },
+    ],
+    applications: [
+      "Agrochemical & fertilizer containers",
+      "Decorative paint buckets & premium primers",
+      "Specialty household & retail packaging",
+      "Automotive lubricants & specialty greases",
+    ],
+    clientLogos: clientLogos.htl,
+  },
+  {
+    id: "screen-printing",
+    tabLabel: "Screen Printing",
+    category: "printing",
+    title: "Screen Printing Technology",
+    tagline: "Bringing Designs to Life with Precision Screen Printing",
+    overview:
+      "Screen Printing is a highly reliable direct-to-wall printing technology used to transfer ink directly onto curved or flat container surfaces through specially exposed mesh screens. Using calibrated automated squeegees and in-line flame treatment, it delivers bold, opaque graphics, vibrant brand logos, and exceptional long-term outdoor resistance.",
+    image: "/images/technologies/capability-screen-printing.webp",
+    imageAlt: "Semi-automatic rotary screen printing line applying vibrant graphics on plastic pails",
+    icon: Printer,
+    stepsHeading: "How Screen Printing Works",
+    steps: [
+      {
+        number: "01",
+        title: "Artwork & Screen Prep",
+        description: "High-mesh tension polyester screens are photographically exposed with high-resolution stencils.",
+      },
+      {
+        number: "02",
+        title: "Pre-Treatment (Flame Treating)",
+        description: "Automated gas flaming increases surface energy on polymer walls to ensure maximum ink adhesion.",
+      },
+      {
+        number: "03",
+        title: "Direct Ink Transfer",
+        description: "A precision polyurethane squeegee presses heavy-bodied UV ink through the open screen mesh.",
+      },
+      {
+        number: "04",
+        title: "Instant UV / Thermal Curing",
+        description: "High-intensity UV lamp stations polymerize ink instantaneously, locking color vibrancy.",
+      },
+      {
+        number: "05",
+        title: "Quality Verification",
+        description: "Cross-hatch tape adhesion, color density, and registration checks conducted per batch.",
+      },
+    ],
+    benefitsHeading: "Key Advantages of Screen Printing",
+    benefits: [
+      {
+        title: "High-Visibility & Color Vibrancy",
+        description: "Solid, heavy ink deposits produce bold color depth and sharp, readable regulatory copy.",
+        icon: Eye,
+      },
+      {
+        title: "Cost-Effective for Bulk Production",
+        description: "Ultra-economical for large, repeat manufacturing runs with minimal tooling wear.",
+        icon: Sparkles,
+      },
+      {
+        title: "Outstanding Adhesion & Weatherproof",
+        description: "UV-cured formulation resists sun fade, moisture, oil splashes, and chemical spillage.",
+        icon: ShieldCheck,
+      },
+      {
+        title: "Multi-Color Rotary Registration",
+        description: "Up to 6 colors applied in seamless rotary indexing for complete circular coverage.",
+        icon: Layers,
+      },
+    ],
+    applications: [
+      "Plastic paint buckets & industrial emulsion pails",
+      "Chemical, solvent, and detergent packaging",
+      "Lubricants, automotive greases & gear oils",
+      "Construction chemicals & tile adhesive pails",
+    ],
+    clientLogos: clientLogos.screenPrinting,
+  },
 ];
+
+const printingSubItems = capabilitiesData.filter((c) => c.category === "printing");
 
 export function OurCapabilities() {
   const [activeId, setActiveId] = useState<CapabilityId>("injection-moulding");
+  const [isPrintingOpen, setIsPrintingOpen] = useState(true);
   const sectionRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useScrollReveal(sectionRef);
 
-  const activeCapability = capabilitiesData.find((c) => c.id === activeId) || capabilitiesData[0];
+  const activeCapability =
+    capabilitiesData.find((c) => c.id === activeId) || capabilitiesData[0];
 
-  // GSAP Smooth Transition on Tab Switch
+  const isPrintingActive =
+    activeId === "iml" || activeId === "htl" || activeId === "screen-printing";
+
+  // Auto-expand printing dropdown whenever a printing section is active
+  useEffect(() => {
+    if (isPrintingActive) {
+      setIsPrintingOpen(true);
+    }
+  }, [isPrintingActive]);
+
+  // Listen for custom event from Section 2 cards or URL hash
+  useEffect(() => {
+    const handleSelectEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id: CapabilityId }>;
+      if (customEvent.detail && customEvent.detail.id) {
+        handleSelectCapability(customEvent.detail.id);
+      }
+    };
+
+    window.addEventListener("select-capability", handleSelectEvent);
+    return () => window.removeEventListener("select-capability", handleSelectEvent);
+  }, []);
+
+  // GSAP Smooth Transition when switching the active capability
   useGSAP(
     () => {
       if (!contentRef.current) return;
-
       if (reduceMotion()) {
         gsap.set(contentRef.current, { opacity: 1, y: 0 });
         return;
@@ -386,164 +412,167 @@ export function OurCapabilities() {
       gsap.fromTo(
         contentRef.current,
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.38, ease: "power2.out" }
       );
     },
     { dependencies: [activeId], scope: sectionRef }
   );
 
+  const handleSelectCapability = (id: CapabilityId) => {
+    setActiveId(id);
+
+    // If user has scrolled down into content, smoothly align back to section top
+    const target = document.getElementById("capabilities");
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      if (rect.top < 70) {
+        window.scrollTo({
+          top: window.scrollY + rect.top - 84,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
       id="capabilities"
-      className="relative overflow-hidden bg-[#faf8f5] py-14 sm:py-18 lg:py-24 border-b border-slate-200/70"
-      aria-labelledby="capabilities-heading"
+      className="relative bg-white py-8 sm:py-12 lg:py-14 border-b border-slate-200/70"
+      aria-label="Capabilities Detail Breakdown"
     >
-      {/* Background Architectural Grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #002b49 1px, transparent 1px),
-            linear-gradient(to bottom, #002b49 1px, transparent 1px)
-          `,
-          backgroundSize: "44px 44px",
-        }}
-      />
-
-      {/* Atmospheric Ambient Glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-[550px] w-[550px] rounded-full bg-brand/[0.04] blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-20 bottom-10 h-[480px] w-[480px] rounded-full bg-sky-500/[0.04] blur-3xl"
-      />
-
       <div className="shell relative z-10">
         
-        {/* Section Header */}
-        <div className="max-w-3xl">
-          <h2
-            id="capabilities-heading"
-            data-reveal
-            className="font-display text-[2.4rem] sm:text-[3.2rem] lg:text-[3.8rem] font-extrabold tracking-tight text-ink leading-[1.05]"
-          >
-            Our Capabilities
-          </h2>
-
-          <p
-            data-reveal
-            data-reveal-delay="0.1"
-            className="mt-3.5 text-[15.5px] sm:text-[17px] text-slate-600 leading-relaxed font-normal max-w-2xl"
-          >
-            Moulded, printed, and packed on one unified floor. We engineer rigid containers with precision injection moulding cells and offer 3 distinct in-house decoration routes to match every brand vision.
-          </p>
-        </div>
-
-        {/* Capabilities Layout: Left Sidebar Navigation + Right Content Panel */}
-        <div className="mt-10 sm:mt-12 lg:mt-14 grid items-start gap-8 lg:grid-cols-12 lg:gap-8 xl:gap-10">
+        {/* ===================================================================
+            TWO-COLUMN ARCHITECTURE:
+            - Left: Narrow Sticky Text Navbar with Main Headings & Printing Dropdown
+            - Center: Crisp Dividing Line (lg:border-r)
+            - Right: Active Selected Capability Content (ONLY That Content Displays)
+            =================================================================== */}
+        <div className="grid items-start lg:grid-cols-12 gap-8 lg:gap-0">
           
           {/* ===================================================================
-              LEFT SIDEBAR: Clean Capabilities Navigation List
+              LEFT SIDEBAR: Narrow, Sticky, Text-Only Navigation
+              - Starts at the top (aligned with content title in the blue box position)
+              - Pins at top-[84px] throughout the right content scroll
+              - Naturally unpins when the right-side content reaches the end
               =================================================================== */}
-          <div className="lg:col-span-4 xl:col-span-3.5 lg:sticky lg:top-28">
+          <aside className="lg:col-span-3 xl:col-span-2.5 lg:sticky lg:top-[84px] lg:self-start lg:border-r lg:border-slate-200/90 lg:pr-6 xl:pr-8 pb-6 lg:pb-12 pt-1">
             <nav
               aria-label="Capabilities Navigation"
-              className="rounded-2xl border border-slate-200/90 bg-white p-2.5 sm:p-3 shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+              className="flex flex-col gap-1.5"
             >
-              <div className="space-y-1.5">
-                {capabilitiesData.map((item) => {
-                  const isActive = activeId === item.id;
-                  const Icon = item.icon;
+              {/* Main Heading 1: Injection Moulding */}
+              <button
+                type="button"
+                onClick={() => handleSelectCapability("injection-moulding")}
+                className={`group flex items-center justify-between w-full text-left py-2 px-2.5 rounded-lg transition-colors cursor-pointer ${
+                  activeId === "injection-moulding"
+                    ? "text-brand font-bold bg-brand/5"
+                    : "text-slate-800 hover:text-brand hover:bg-slate-50 font-semibold"
+                }`}
+              >
+                <span className="font-display text-[15.5px] sm:text-[16px] tracking-tight">
+                  Injection Moulding
+                </span>
+                {activeId === "injection-moulding" && (
+                  <span className="h-2 w-2 rounded-full bg-brand shrink-0" />
+                )}
+              </button>
 
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveId(item.id)}
-                      className={`group relative flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? "bg-slate-900 text-white shadow-md"
-                          : "text-slate-700 hover:bg-slate-100/80 hover:text-ink"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <span
-                          className={`flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                            isActive
-                              ? "bg-white/15 text-white"
-                              : "bg-slate-100 text-slate-600 group-hover:bg-slate-200/70"
+              {/* Main Heading 2: Printing (Dropdown) */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPrintingOpen((prev) => !prev);
+                    if (!isPrintingOpen && !isPrintingActive) {
+                      handleSelectCapability("iml");
+                    }
+                  }}
+                  className={`group flex items-center justify-between w-full text-left py-2 px-2.5 rounded-lg transition-colors cursor-pointer ${
+                    isPrintingActive
+                      ? "text-brand font-bold bg-brand/5"
+                      : "text-slate-800 hover:text-brand hover:bg-slate-50 font-semibold"
+                  }`}
+                >
+                  <span className="font-display text-[15.5px] sm:text-[16px] tracking-tight">
+                    Printing
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                      isPrintingOpen ? "rotate-0 text-brand" : "-rotate-90 text-slate-400"
+                    }`}
+                  />
+                </button>
+
+                {/* Sub-Headings inside Printing Dropdown (Distinct Sub-Tab Style) */}
+                {isPrintingOpen && (
+                  <div className="ml-3 pl-3.5 border-l-2 border-slate-200/80 space-y-1 mt-1.5 mb-1 transition-all duration-200">
+                    {printingSubItems.map((sub) => {
+                      const isSubActive = activeId === sub.id;
+
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          onClick={() => handleSelectCapability(sub.id)}
+                          className={`group flex items-center text-left w-full py-1.5 px-2 rounded-md text-[13.5px] sm:text-[14px] transition-all cursor-pointer ${
+                            isSubActive
+                              ? "font-bold text-brand bg-brand/5 -ml-[1px]"
+                              : "font-normal text-slate-500 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
-                          <Icon className="h-4.5 w-4.5" strokeWidth={2.2} />
-                        </span>
-                        <span className="text-[14px] sm:text-[14.5px] font-bold leading-snug">
-                          {item.tabLabel}
-                        </span>
-                      </div>
-
-                      <span
-                        className={`text-[15px] font-bold shrink-0 ml-2 transition-transform duration-200 ${
-                          isActive
-                            ? "translate-x-0.5 text-brand"
-                            : "text-slate-300 group-hover:translate-x-0.5 group-hover:text-slate-600"
-                        }`}
-                      >
-                        →
-                      </span>
-                    </button>
-                  );
-                })}
+                          <span className="truncate">{sub.tabLabel}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </nav>
-          </div>
+          </aside>
 
           {/* ===================================================================
-              RIGHT CONTENT PANEL: Active Capability Showcase
+              RIGHT SIDE: Only Selected Capability Content Displays
+              - Clean layout without card enclosures, full rich content & specs
               =================================================================== */}
-          <div ref={contentRef} key={activeCapability.id} className="lg:col-span-8 xl:col-span-8.5">
-            <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-              
-              {/* Header: Title, Tagline, & Description */}
+          <main
+            ref={contentRef}
+            key={activeCapability.id}
+            className="lg:col-span-9 xl:col-span-9.5 lg:pl-10 xl:pl-14"
+          >
+            <article className="pt-1">
+              {/* 1. Header: Title, Tagline, Overview (Clean, No Card, No Kicker) */}
               <div>
-                <h3 className="font-display text-[1.95rem] sm:text-[2.45rem] lg:text-[2.75rem] font-extrabold tracking-tight text-ink leading-[1.1]">
+                <h3 className="font-display text-[2.2rem] sm:text-[2.75rem] lg:text-[3.1rem] font-extrabold tracking-tight text-ink leading-[1.08]">
                   {activeCapability.title}
                 </h3>
 
-                <p className="mt-1.5 font-display text-[15px] sm:text-[16.5px] font-bold text-slate-700 leading-snug">
+                <p className="mt-2 font-display text-[16px] sm:text-[17.5px] font-bold text-slate-700 leading-snug">
                   {activeCapability.tagline}
                 </p>
 
-                <p className="mt-3.5 text-[15px] sm:text-[16px] text-slate-600 leading-relaxed font-normal">
+                <p className="mt-4 text-[15px] sm:text-[16px] text-slate-600 leading-relaxed font-normal">
                   {activeCapability.overview}
                 </p>
               </div>
 
-              {/* Showcase Image */}
-              <div className="mt-7 sm:mt-8 relative overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-900 shadow-md">
+              {/* 2. Showcase Image */}
+              <div className="mt-7 sm:mt-8 relative overflow-hidden rounded-2xl bg-slate-900 shadow-md">
                 <div className="relative aspect-[16/9] w-full">
                   <Image
                     src={activeCapability.image}
                     alt={activeCapability.imageAlt}
                     fill
                     priority
-                    sizes="(max-width: 1024px) 100vw, 65vw"
+                    sizes="(max-width: 1024px) 100vw, 70vw"
                     className="object-cover object-center"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-                </div>
-                
-                {/* Floating Image Badge */}
-                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 flex items-center gap-2 rounded-lg bg-black/75 px-3 py-1.5 font-mono text-[11.5px] sm:text-[12px] font-semibold text-white/95 backdrop-blur-md border border-white/15">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Production Live: {activeCapability.tabLabel}</span>
                 </div>
               </div>
 
-              {/* How Does It Work (Process Steps) */}
+              {/* 3. How Does It Work (Process Steps) */}
               <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-slate-200/70">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="h-[2px] w-5 bg-brand" />
@@ -572,7 +601,7 @@ export function OurCapabilities() {
                 </div>
               </div>
 
-              {/* Key Benefits Grid */}
+              {/* 4. Key Highlights & Advantages */}
               <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-slate-200/70">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="h-[2px] w-5 bg-brand" />
@@ -581,13 +610,13 @@ export function OurCapabilities() {
                   </h4>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3.5 sm:grid-cols-2">
                   {activeCapability.benefits.map((b) => {
                     const BIcon = b.icon;
                     return (
                       <div
                         key={b.title}
-                        className="flex items-start gap-3.5 rounded-xl border border-slate-200/70 bg-white p-4 shadow-2xs"
+                        className="flex items-start gap-3.5 rounded-xl border border-slate-200/70 bg-slate-50/50 p-4"
                       >
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
                           <BIcon className="h-5 w-5" strokeWidth={2.1} />
@@ -606,7 +635,7 @@ export function OurCapabilities() {
                 </div>
               </div>
 
-              {/* IML vs Traditional Labelling Comparison Table (IML specific) */}
+              {/* 5. IML vs Traditional Comparison Table (IML only) */}
               {activeCapability.comparisonTable && (
                 <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-slate-200/70">
                   <div className="flex items-center gap-2 mb-4">
@@ -641,7 +670,7 @@ export function OurCapabilities() {
                 </div>
               )}
 
-              {/* Applications Section */}
+              {/* 6. Typical Applications Checklist */}
               <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-slate-200/70">
                 <div className="flex items-center gap-2 mb-3.5">
                   <span className="h-[2px] w-5 bg-brand" />
@@ -663,7 +692,7 @@ export function OurCapabilities() {
                 </ul>
               </div>
 
-              {/* Client Logos Section (For Screen Printing, HTL, and IML separately) */}
+              {/* 7. Approved Client Badges */}
               {activeCapability.clientLogos && activeCapability.clientLogos.length > 0 && (
                 <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-slate-200/70">
                   <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -701,9 +730,8 @@ export function OurCapabilities() {
                   </div>
                 </div>
               )}
-
-            </div>
-          </div>
+            </article>
+          </main>
 
         </div>
 

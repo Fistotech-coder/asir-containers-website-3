@@ -1,11 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import { Cog, Printer, ShieldCheck, CheckCircle2, type LucideIcon } from "lucide-react";
-import { useScrollReveal } from "@/lib/animations";
-import { Reveal } from "@/components/motion/Reveal";
-import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 type Feature = {
   title: string;
@@ -15,9 +11,6 @@ type Feature = {
 };
 
 export function ManufacturingSection() {
-  const root = useRef<HTMLElement | null>(null);
-  useScrollReveal(root);
-
   const features: Feature[] = [
     {
       title: "Precision Injection",
@@ -47,49 +40,64 @@ export function ManufacturingSection() {
 
   return (
     <section
-      ref={root}
-      className="relative overflow-hidden bg-sandal py-8 lg:py-12 border-b border-sandal-border"
+      className="relative overflow-hidden bg-gradient-to-r from-[#d8eeff] via-[#e4ecf2] to-[#d8eeff] py-10 lg:py-14 border-b border-[#cfe6fa]"
     >
-      {/* Architectural Background Graphic Elements (similar to Who We Are) */}
+      {/* Background Decorative Graphic Elements matching reference style */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-24 -top-24 h-[500px] w-[500px] rounded-full border-[36px] border-[#0284c7]/[0.04] blur-[1px]"
+        className="pointer-events-none absolute -left-20 -top-24 h-[520px] w-[520px] rounded-full border-[36px] border-[#0066ff]/[0.05] blur-[1px]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute left-10 -bottom-20 h-[380px] w-[380px] rounded-full bg-gradient-to-tr from-[#0066cc]/[0.06] via-[#0284c7]/[0.03] to-transparent blur-3xl"
+        className="pointer-events-none absolute left-6 -bottom-16 h-[340px] w-[340px] rounded-full bg-gradient-to-tr from-[#0070f3]/[0.08] via-[#0284c7]/[0.04] to-transparent blur-2xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute right-1/3 top-10 h-32 w-32 opacity-20"
+        className="pointer-events-none absolute right-12 top-10 h-32 w-32 opacity-25"
         style={{
-          backgroundImage: "radial-gradient(#002b49 1.5px, transparent 1.5px)",
+          backgroundImage: "radial-gradient(#0052cc 1.5px, transparent 1.5px)",
           backgroundSize: "14px 14px",
         }}
       />
 
       <div className="shell relative z-10">
-        {/* 2-Column Grid: Left Content / Right Image */}
-        <div className="grid items-stretch gap-8 lg:grid-cols-12 lg:gap-12">
-          {/* Left Column (7 cols): Heading, Paragraph, and 2-per-row Icon + Text features */}
-          <div className="lg:col-span-7 flex flex-col justify-between">
+        {/* 2-Column Grid: Interchanged Left Image / Right Content */}
+        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+          
+          {/* Left Column (5 cols): Rounded Corner Facility Photo */}
+          <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col justify-center">
+            <div
+              className="relative w-full h-[300px] sm:h-[340px] lg:h-[390px] xl:h-[410px] overflow-hidden rounded-[24px] lg:rounded-[28px] border border-[#cfe6fa] bg-slate-900 shadow-xl transition-all duration-500 hover:shadow-2xl"
+            >
+              <Image
+                src="/images/manufacturing/manufacturing-unit.webp"
+                alt="High-tonnage injection moulding plant floor at ASIR Containers"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 42vw"
+                className="object-cover object-center transition-transform duration-700 hover:scale-103"
+              />
+              {/* Subtle soft gradient */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+            </div>
+          </div>
+
+          {/* Right Column (7 cols): Heading, Paragraph, and 2-per-row Icon + Text features */}
+          <div className="order-1 lg:order-2 lg:col-span-7 flex flex-col justify-between lg:pl-4">
             <div>
-              {/* Bold Dual-Color Heading */}
+              {/* Heading: Refined weight */}
               <h2
-                data-reveal
-                className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-[#002b49] leading-[1.06]"
+                className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-slate-900 leading-[1.06]"
               >
-                <span className="block">Where Design</span>
-                <span className="block">
-                  Meets <WavyHighlight dot={false}>Manufacturing</WavyHighlight>
+                <span className="block text-slate-900">Where Design</span>
+                <span className="block text-slate-900">
+                  Meets <span className="text-[#0066cc]">Manufacturing</span>
                 </span>
               </h2>
 
               {/* Formatted Narrative */}
               <p
-                data-reveal
-                data-reveal-delay="0.1"
-                className="mt-3.5 text-[14.5px] sm:text-[15.5px] leading-[1.6] text-slate-600 font-normal max-w-[520px]"
+                className="mt-3.5 text-[15px] sm:text-[16px] leading-[1.6] text-slate-600 font-normal max-w-[540px]"
               >
                 Our manufacturing facility brings moulding, robotic decoration, and quality auditing together under one roof—ensuring airtight seal integrity and reliable production timelines.
               </p>
@@ -110,16 +118,16 @@ export function ManufacturingSection() {
                       >
                         <IconComponent
                           className="h-9 w-9 sm:h-10 sm:w-10"
-                          strokeWidth={2.1}
+                          strokeWidth={1.65}
                         />
                       </div>
 
                       {/* Text block: Title + concise descriptor */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-display text-[15.5px] sm:text-[16.5px] font-bold text-[#002b49] leading-snug tracking-tight group-hover:text-ink transition-colors">
+                        <h3 className="font-display text-[15.5px] sm:text-[16.5px] font-semibold text-slate-900 leading-snug tracking-tight group-hover:text-ink transition-colors">
                           {feature.title}
                         </h3>
-                        <p className="mt-0.5 text-[12.5px] sm:text-[13px] leading-relaxed text-slate-500 font-normal">
+                        <p className="mt-0.5 text-[12.5px] sm:text-[13px] leading-relaxed text-slate-600 font-normal">
                           {feature.subtitle}
                         </p>
                       </div>
@@ -130,28 +138,6 @@ export function ManufacturingSection() {
             </div>
           </div>
 
-          {/* Right Column (5 cols): Rounded Corner Facility Photo - Matched Height */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <Reveal>
-              <div
-                data-reveal
-                data-reveal-dir="right"
-                data-reveal-delay="0.25"
-                className="relative w-full h-[280px] sm:h-[320px] lg:h-[365px] xl:h-[375px] overflow-hidden rounded-[24px] lg:rounded-[28px] border border-slate-200/90 bg-slate-900 shadow-xl transition-all duration-500 hover:shadow-2xl"
-              >
-                <Image
-                  src="/images/manufacturing/manufacturing-unit.webp"
-                  alt="High-tonnage injection moulding plant floor at ASIR Containers"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 42vw"
-                  className="object-cover object-center transition-transform duration-700 hover:scale-103"
-                />
-                {/* Subtle soft gradient */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-              </div>
-            </Reveal>
-          </div>
         </div>
       </div>
     </section>

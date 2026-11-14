@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ProductsBrowser } from "@/components/products/ProductsBrowser";
+import { ProductsPageSkeleton } from "@/components/products/ProductsPageSkeleton";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <div id="range" className="scroll-mt-24">
-      <Suspense fallback={<div className="shell py-12 text-sm text-mid">Loading products…</div>}>
+      <Suspense fallback={<ProductsPageSkeleton />}>
         <ProductsBrowser />
       </Suspense>
     </div>

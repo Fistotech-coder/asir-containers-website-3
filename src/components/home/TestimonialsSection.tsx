@@ -144,30 +144,29 @@ export function TestimonialsSection() {
         {/* Header with technical kicker and fluid masked entrance typography */}
         <div className="flex flex-col justify-between gap-4 pb-5 sm:pb-6 sm:flex-row sm:items-end">
           <div>
-            {/* Technical kicker */}
-            <div className="flex items-center gap-2 mb-2 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#0066cc]">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#0066cc]" />
-              <span>03 // CLIENT SPOTLIGHT</span>
-              <span className="h-px w-8 bg-[#0066cc]/30" />
-            </div>
-
             {/* Distinctive masked reveal heading */}
             <h2
               ref={headingRef}
               className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.65rem] font-bold tracking-tight text-slate-950 leading-[1.06]"
             >
               <span className="inline-block overflow-hidden py-1">
-                <span className="word-reveal inline-block">Straight</span>
+                <span className="word-reveal inline-block">Proven</span>
               </span>{" "}
               <span className="inline-block overflow-hidden py-1">
-                <span className="word-reveal inline-block">from</span>
+                <span className="word-reveal inline-block">Quality,</span>
               </span>{" "}
               <span className="inline-block overflow-hidden py-1">
-                <span className="word-reveal inline-block">the</span>
+                <span className="word-reveal inline-block">Shared</span>
               </span>{" "}
               <span className="inline-block overflow-hidden py-1">
-                <span className="word-reveal relative inline-block font-serif italic font-semibold text-[#0e4c9c] sm:ml-1">
-                  buyers<span className="text-[#0e4c9c]">.</span>
+                <span className="word-reveal inline-block">by</span>
+              </span>{" "}
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal inline-block">Our</span>
+              </span>{" "}
+              <span className="inline-block overflow-hidden py-1">
+                <span className="word-reveal relative inline-block font-display font-bold not-italic text-[#0e4c9c] sm:ml-1">
+                  Clients<span className="text-[#0e4c9c]">.</span>
                   <svg
                     aria-hidden="true"
                     viewBox="0 0 160 12"

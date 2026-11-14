@@ -908,3 +908,22 @@ select:focus-visible {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   Skeleton Shimmer Animation
+   ========================================================================== */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  [class*="animate-[shimmer"] {
+    animation: none !important;
+  }
+}

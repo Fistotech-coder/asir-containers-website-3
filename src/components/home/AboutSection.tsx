@@ -35,15 +35,15 @@ export function AboutSection() {
   );
 
   return (
-    <section ref={root} className="relative overflow-hidden bg-gradient-to-br from-[#dbeafe] via-[#eff6ff] to-[#bae6fd] py-10 lg:py-14 border-b border-[#bad5f5]">
+    <section ref={root} className="relative overflow-hidden bg-gradient-to-br from-[#d8eeff] via-[#e4ecf2] to-[#d8eeff] py-10 lg:py-14 border-b border-[#cfe6fa]">
       {/* Background Decorative Graphic Elements */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 -top-24 h-[550px] w-[550px] rounded-full border-[40px] border-[#003992]/[0.08] blur-[1px]"
+        className="pointer-events-none absolute -right-20 -top-24 h-[550px] w-[550px] rounded-full border-[40px] border-[#0066ff]/[0.05] blur-[1px]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute right-6 -bottom-16 h-[340px] w-[340px] rounded-full bg-gradient-to-tl from-[#00a2ff]/[0.15] to-transparent blur-2xl"
+        className="pointer-events-none absolute right-6 -bottom-16 h-[340px] w-[340px] rounded-full bg-gradient-to-tl from-[#0070f3]/[0.10] to-transparent blur-2xl"
       />
 
       <div className="shell relative z-10">
@@ -57,64 +57,61 @@ export function AboutSection() {
                 data-reveal
                 className="font-display text-[2.5rem] sm:text-[3.25rem] lg:text-[3.5rem] font-bold tracking-tight text-slate-900 leading-[1.06]"
               >
-                Who We <WavyHighlight dot={false}>Are</WavyHighlight>
+                Who We <WavyHighlight dot={false} serif={false} italic={false}>Are</WavyHighlight>
               </h2>
 
               {/* Subtitle */}
               <p
                 data-reveal
                 data-reveal-delay="0.1"
-                className="mt-4 font-display text-[18px] sm:text-[20px] lg:text-[21px] font-bold text-slate-800 leading-snug"
+                className="mt-4 font-display text-[18px] sm:text-[20px] lg:text-[21px] font-semibold text-slate-800 leading-snug"
               >
                 Precision Packaging for a Safer, Brighter Tomorrow
               </p>
 
-              {/* Narrative Paragraphs */}
+              {/* Narrative Paragraphs with Key Terms Bolded */}
               <div
                 data-reveal
                 data-reveal-delay="0.16"
                 className="mt-5 space-y-4 text-[16px] sm:text-[17px] leading-[1.7] text-slate-600 font-normal"
               >
                 <p>
-                  Established in the year 2018, we &ldquo;ASIR CONTAINERS&rdquo; are the leading Manufacturer of a wide range of Paint Bucket, Fertiliser Bucket, etc. Our presented products are extremely admired for their sturdiness, longer life, top quality and nominal costs.
+                  Established in the year <strong className="font-semibold text-slate-900">2018</strong>, we <strong className="font-semibold text-slate-900">&ldquo;ASIR CONTAINERS&rdquo;</strong> are the leading Manufacturer of a wide range of Paint Bucket, Fertiliser Bucket, etc. Our presented products are extremely admired for their sturdiness, longer life, top quality and nominal costs.
                 </p>
                 <p>
                   Moreover, we work under the direction of our mentor Mr. ASIR CONTAINERS. Under his headship, we have achieved a prominent place in the market.
                 </p>
               </div>
 
-              {/* 3 Centered Icon Blocks with Linear Gradient in Logo Colors */}
-              <div className="mt-10 flex flex-wrap items-center justify-start gap-6 sm:gap-8 lg:gap-10">
+              {/* 3 Centered Icon Blocks Matching Reference Image */}
+              <div className="mt-8 sm:mt-10 flex flex-wrap items-start justify-start gap-7 sm:gap-10">
                 
-                {/* 1. Precision Engineering: Aligned center with logo gradient */}
-                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.22" className="flex flex-col items-center text-center max-w-[110px] sm:max-w-[125px]">
-                  <div className="flex h-[72px] w-[72px] sm:h-[80px] sm:w-[80px] items-center justify-center rounded-[24px] bg-gradient-to-br from-[#003992] via-[#0052cc] to-[#00a2ff] border border-white/60 shadow-[0_8px_20px_rgba(0,57,146,0.25)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_28px_rgba(0,57,146,0.35)]">
-                    {/* High-definition gear icon with circular center hole */}
-                    <Icon icon="fa6-solid:gear" className="h-8 w-8 sm:h-9 sm:w-9 text-white drop-shadow-xs" />
+                {/* 1. Precision Engineering */}
+                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.22" className="flex flex-col items-center text-center">
+                  <div className="flex h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] items-center justify-center rounded-[18px] sm:rounded-[20px] bg-gradient-to-b from-[#0066ff] to-[#0052cc] shadow-[0_8px_18px_rgba(0,102,255,0.30)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_24px_rgba(0,102,255,0.40)]">
+                    <Icon icon="fa6-solid:gear" className="h-7 w-7 sm:h-[30px] sm:w-[30px] text-white drop-shadow-xs" />
                   </div>
-                  <p className="mt-3 font-display text-[13.5px] sm:text-[14.5px] font-bold text-slate-800 leading-tight">
+                  <p className="mt-2.5 max-w-[85px] sm:max-w-[95px] font-display text-[12.5px] sm:text-[13.5px] font-semibold text-slate-900 leading-[1.25]">
                     Precision Engineering
                   </p>
                 </div>
 
-                {/* 2. Trusted Protection: Aligned center with logo gradient */}
-                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.3" className="flex flex-col items-center text-center max-w-[110px] sm:max-w-[125px]">
-                  <div className="flex h-[72px] w-[72px] sm:h-[80px] sm:w-[80px] items-center justify-center rounded-[24px] bg-gradient-to-br from-[#003992] via-[#0052cc] to-[#00a2ff] border border-white/60 shadow-[0_8px_20px_rgba(0,57,146,0.25)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_28px_rgba(0,57,146,0.35)]">
-                    {/* High-definition shield with checkmark */}
-                    <Icon icon="fluent:shield-task-24-filled" className="h-9 w-9 sm:h-10 sm:w-10 text-white drop-shadow-xs" />
+                {/* 2. Trusted Protection */}
+                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.3" className="flex flex-col items-center text-center">
+                  <div className="flex h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] items-center justify-center rounded-[18px] sm:rounded-[20px] bg-gradient-to-b from-[#0066ff] to-[#0052cc] shadow-[0_8px_18px_rgba(0,102,255,0.30)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_24px_rgba(0,102,255,0.40)]">
+                    <Icon icon="fluent:shield-task-24-filled" className="h-7 w-7 sm:h-[30px] sm:w-[30px] text-white drop-shadow-xs" />
                   </div>
-                  <p className="mt-3 font-display text-[13.5px] sm:text-[14.5px] font-bold text-slate-800 leading-tight">
+                  <p className="mt-2.5 max-w-[85px] sm:max-w-[95px] font-display text-[12.5px] sm:text-[13.5px] font-semibold text-slate-900 leading-[1.25]">
                     Trusted Protection
                   </p>
                 </div>
 
-                {/* 3. Built for Your Brand: Aligned center with logo gradient */}
-                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.38" className="flex flex-col items-center text-center max-w-[110px] sm:max-w-[125px]">
-                  <div className="flex h-[72px] w-[72px] sm:h-[80px] sm:w-[80px] items-center justify-center rounded-[24px] bg-gradient-to-br from-[#003992] via-[#0052cc] to-[#00a2ff] border border-white/60 shadow-[0_8px_20px_rgba(0,57,146,0.25)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_28px_rgba(0,57,146,0.35)]">
-                    {/* High-definition 3-person team silhouette */}
-                    <Icon icon="fluent:people-community-24-filled" className="h-9 w-9 sm:h-10 sm:w-10 text-white drop-shadow-xs" />
+                {/* 3. Built for Your Brand */}
+                <div data-reveal data-reveal-dir="scale" data-reveal-delay="0.38" className="flex flex-col items-center text-center">
+                  <div className="flex h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] items-center justify-center rounded-[18px] sm:rounded-[20px] bg-gradient-to-b from-[#0066ff] to-[#0052cc] shadow-[0_8px_18px_rgba(0,102,255,0.30)] transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_24px_rgba(0,102,255,0.40)]">
+                    <Icon icon="fluent:people-community-24-filled" className="h-7 w-7 sm:h-[30px] sm:w-[30px] text-white drop-shadow-xs" />
                   </div>
-                  <p className="mt-3 font-display text-[13.5px] sm:text-[14.5px] font-bold text-slate-800 leading-tight">
+                  <p className="mt-2.5 max-w-[85px] sm:max-w-[95px] font-display text-[12.5px] sm:text-[13.5px] font-semibold text-slate-900 leading-[1.25]">
                     Built for Your Brand
                   </p>
                 </div>

@@ -7,8 +7,8 @@ import { gsap, useGSAP, reduceMotion } from "@/lib/animations";
 type ProductMediaProps = {
   src: string;
   alt: string;
-  capacity: string;
-  category: string;
+  capacity?: string;
+  category?: string;
   className?: string;
 };
 
@@ -30,26 +30,24 @@ const detailShots = [
  * Product hero image: masked clip reveal on load, gentle parallax on scroll and
  * a subtle continuous float that stops under reduced-motion.
  */
-export function ProductMedia({ src, alt, capacity, category, className }: ProductMediaProps) {
+export function ProductMedia({ src, alt, className }: ProductMediaProps) {
   const root = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
       const frame = root.current?.querySelector<HTMLElement>("[data-pm-frame]");
       const image = root.current?.querySelector<HTMLElement>("[data-pm-image]");
-      const meta = root.current?.querySelectorAll<HTMLElement>("[data-pm-meta]");
       if (!frame || !image) return;
 
       if (reduceMotion()) {
-        gsap.set([frame, image, ...Array.from(meta ?? [])], { opacity: 1, clearProps: "clipPath" });
+        gsap.set([frame, image], { opacity: 1, clearProps: "clipPath" });
         return;
       }
 
       const timeline = gsap.timeline({ defaults: { ease: "expo.out" } });
       timeline
         .fromTo(frame, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.15 })
-        .fromTo(image, { scale: 1.16 }, { scale: 1, duration: 1.5 }, 0.1)
-        .fromTo(meta ?? [], { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, 0.5);
+        .fromTo(image, { scale: 1.16 }, { scale: 1, duration: 1.5 }, 0.1);
     },
     { scope: root },
   );
@@ -69,20 +67,6 @@ export function ProductMedia({ src, alt, capacity, category, className }: Produc
             />
           </div>
         </div>
-
-        <span
-          data-pm-meta
-          className="absolute left-5 top-5 text-[13px] font-semibold text-ink tabular"
-        >
-          {capacity}
-        </span>
-
-        <span
-          data-pm-meta
-          className="absolute bottom-5 right-5 text-[12px] font-medium text-ink"
-        >
-          {category}
-        </span>
       </div>
 
       <div className="mt-2.5 grid grid-cols-2 gap-2.5 lg:flex-1 lg:min-h-0">

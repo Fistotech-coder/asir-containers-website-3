@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProcessHero } from "@/components/process/ProcessHero";
+import { CapabilitiesCardsSection } from "@/components/process/CapabilitiesCardsSection";
 import { OurCapabilities } from "@/components/process/OurCapabilities";
 import { ColorCTA } from "@/components/sections/ColorCTA";
 import { site } from "@/data/site";
@@ -21,6 +22,7 @@ export default function ProcessPage() {
   return (
     <>
       <ProcessHero />
+      <CapabilitiesCardsSection />
       <OurCapabilities />
       <ColorCTA
         eyebrow="Quality Assurance & Custom Runs"

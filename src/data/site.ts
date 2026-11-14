@@ -99,14 +99,14 @@ export const site = {
 };
 
 /**
- * Primary navigation — Home, Products, Process, Technologies, Contact.
- * `Products` carries an application submenu.
+ * Primary navigation — Home, Products, Process, Machineries, Contact.
+ * `Products` and `Machineries` carry submenus.
  */
 export const navigation = [
   { label: "Home", href: "/", hasMenu: false },
   { label: "Products", href: "/products", hasMenu: true },
   { label: "Process", href: "/process", hasMenu: false },
-  { label: "Technologies", href: "/technologies", hasMenu: false },
+  { label: "Machineries", href: "/machineries/production-machineries", hasMenu: true },
   { label: "Contact", href: "/contact", hasMenu: false },
 ];
 

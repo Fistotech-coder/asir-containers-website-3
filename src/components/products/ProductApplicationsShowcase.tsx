@@ -27,17 +27,15 @@ export function ProductApplicationsShowcase({
           {/* Left Column: Heading and prominent description */}
           <div className={isSingle ? "lg:col-span-5" : "lg:col-span-4"}>
             <h2 className="font-display text-[2.4rem] font-bold tracking-tight text-ink sm:text-[2.85rem] lg:text-[3rem] leading-[1.08]">
-              Where this <br className="hidden sm:inline" />
-              container is used<span className="text-brand">.</span>
+              Designed for <br className="hidden sm:inline" />
+              Demanding Applications<span className="text-brand">.</span>
             </h2>
 
             <p className="mt-4 text-[15px] sm:text-[15.5px] leading-relaxed text-slate-600">
-              {isSingle
-                ? `Specifically engineered and tested for demanding ${applications[0].name.toLowerCase()} industrial duty cycles and automated filling lines.`
-                : "Engineered and tested for demanding industrial duty cycles across primary packaging categories."}
+              Precision-moulded containers built for heavy-duty stacking, chemical safety, and reliable performance across diverse industrial sectors.
             </p>
 
-            {/* Red accent line indicator */}
+            {/* Accent line indicator */}
             <div className="mt-6 h-[2.5px] w-12 bg-brand" />
           </div>
 

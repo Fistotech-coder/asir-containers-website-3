@@ -88,7 +88,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/products" },
   { label: "Process", href: "/process" },
-  { label: "Technologies", href: "/technologies" },
+  { label: "Machineries", href: "/machineries/production-machineries" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -253,6 +253,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={true}
                     className="group flex items-center justify-between rounded-xl px-3.5 py-2 text-[13.5px] font-medium text-white/90 hover:text-white transition-all"
                   >
                     <span>{link.label}</span>
@@ -278,6 +279,7 @@ export function Footer() {
                   <li key={app.label}>
                     <Link
                       href={app.href}
+                      prefetch={true}
                       className="group flex items-center justify-between text-[13.5px] sm:text-[14px] font-medium text-white/90 hover:text-white py-0.5 transition-colors"
                     >
                       <span className="flex items-center gap-3">

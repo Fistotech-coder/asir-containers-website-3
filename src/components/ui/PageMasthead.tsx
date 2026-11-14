@@ -35,7 +35,7 @@ export function PageMasthead({
   return (
     <section
       className={`relative overflow-hidden border-b border-ink/10 bg-soft ${
-        compact ? "pb-7 pt-24 lg:pb-8 lg:pt-28" : "pb-12 pt-28 lg:pb-14 lg:pt-34"
+        compact ? "pt-20 pb-3 sm:pt-22 sm:pb-4 lg:pt-24 lg:pb-4" : "pb-12 pt-28 lg:pb-14 lg:pt-34"
       }`}
     >
       {/* Soft arc that ties the masthead to the brand red without a band */}

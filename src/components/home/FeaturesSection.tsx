@@ -4,81 +4,143 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import { gsap, useGSAP, reduceMotion } from "@/lib/animations";
-import { WavyHighlight } from "@/components/ui/WavyHighlight";
 
 type FeatureItem = {
   id: string;
   title: string;
   subtitle: string;
   color: string;
+  bgColor: string;
   icon: string;
   pos: { left: string; top: string };
+  posClass?: string;
 };
 
+// 8 feature nodes arranged symmetrically in a PROPER CIRCLE
 const featuresList: FeatureItem[] = [
   {
     id: "printable",
     title: "PRINTABLE",
     subtitle: "Custom Branding",
-    color: "#d97706",
+    color: "#b45309",
+    bgColor: "#fffbeb",
     icon: "tabler:box",
-    pos: { left: "15%", top: "18%" },
+    pos: { left: "16%", top: "18%" },
+    posClass: "-translate-y-1/2",
   },
   {
     id: "oven-safe",
     title: "OVEN SAFE",
     subtitle: "Microwave Friendly",
     color: "#ea580c",
+    bgColor: "#fff7ed",
     icon: "tabler:microwave",
-    pos: { left: "42%", top: "8%" },
+    pos: { left: "50%", top: "6%" },
+    posClass: "-translate-x-1/2 -translate-y-1/2",
   },
   {
     id: "hygienic",
     title: "HYGIENIC",
     subtitle: "Untouched by Hand",
     color: "#0284c7",
+    bgColor: "#f0f9ff",
     icon: "lucide:shield-check",
-    pos: { left: "71%", top: "18%" },
+    pos: { left: "68%", top: "18%" },
+    posClass: "-translate-y-1/2",
   },
   {
     id: "stackable",
     title: "STACKABLE",
     subtitle: "Compact Storage",
     color: "#1d4ed8",
+    bgColor: "#eff6ff",
     icon: "fluent:stack-24-regular",
-    pos: { left: "77%", top: "50%" },
+    pos: { left: "75%", top: "50%" },
+    posClass: "-translate-y-1/2",
   },
   {
     id: "bpa-free",
     title: "BPA FREE",
     subtitle: "100% Non-Toxic",
     color: "#16a34a",
+    bgColor: "#f0fdf4",
     icon: "tabler:leaf",
-    pos: { left: "71%", top: "78%" },
+    pos: { left: "68%", top: "82%" },
+    posClass: "-translate-y-1/2",
   },
   {
     id: "food-safe",
     title: "FOOD SAFE",
     subtitle: "Food Grade Certified",
     color: "#0d9488",
+    bgColor: "#f0fdfa",
     icon: "tabler:tools-kitchen-2",
-    pos: { left: "43%", top: "95%" },
+    pos: { left: "50%", top: "94%" },
+    posClass: "-translate-x-1/2 -translate-y-1/2",
   },
   {
     id: "freezer-safe",
     title: "FREEZER SAFE",
     subtitle: "Freezer Proof",
     color: "#2563eb",
+    bgColor: "#eff6ff",
     icon: "tabler:snowflake",
-    pos: { left: "14%", top: "78%" },
+    pos: { left: "16%", top: "82%" },
+    posClass: "-translate-y-1/2",
   },
   {
     id: "recyclable",
     title: "RECYCLABLE",
     subtitle: "Eco & Sustainable",
     color: "#15803d",
+    bgColor: "#f0fdf4",
     icon: "tabler:recycle",
-    pos: { left: "9%", top: "50%" },
+    pos: { left: "10%", top: "50%" },
+    posClass: "-translate-y-1/2",
+  },
+];
+
+// 5 compact circular arcs with fading opacity on the trailing edge (ending edge fadeout)
+const orbitArcs = [
+  {
+    id: 1,
+    x1: 150,
+    y1: 30,
+    x2: 239.2,
+    y2: 69.7,
+    d: "M 150 30 A 120 120 0 0 1 239.2 69.7",
+  },
+  {
+    id: 2,
+    x1: 264.1,
+    y1: 112.9,
+    x2: 253.9,
+    y2: 210,
+    d: "M 264.1 112.9 A 120 120 0 0 1 253.9 210",
+  },
+  {
+    id: 3,
+    x1: 220.5,
+    y1: 247.1,
+    x2: 125.1,
+    y2: 267.4,
+    d: "M 220.5 247.1 A 120 120 0 0 1 125.1 267.4",
+  },
+  {
+    id: 4,
+    x1: 79.5,
+    y1: 247.1,
+    x2: 30.7,
+    y2: 162.5,
+    d: "M 79.5 247.1 A 120 120 0 0 1 30.7 162.5",
+  },
+  {
+    id: 5,
+    x1: 35.9,
+    y1: 112.9,
+    x2: 101.2,
+    y2: 40.4,
+    d: "M 35.9 112.9 A 120 120 0 0 1 101.2 40.4",
   },
 ];
 
@@ -103,7 +165,7 @@ export function FeaturesSection({ index = "02" }: Props) {
 
       // 1. Header reveal
       tl.from(".feature-header-left", {
-        x: -30,
+        x: -25,
         opacity: 0,
         duration: 0.8,
         ease: "power3.out",
@@ -111,7 +173,7 @@ export function FeaturesSection({ index = "02" }: Props) {
       .from(
         ".feature-header-right",
         {
-          x: 30,
+          x: 25,
           opacity: 0,
           duration: 0.8,
           ease: "power3.out",
@@ -119,34 +181,24 @@ export function FeaturesSection({ index = "02" }: Props) {
         "-=0.6"
       )
 
-      // 2. Center Pail Visual & Blue Glow
+      // 2. Center Pail Visual
       .from(
         ".feature-center-pails",
         {
-          scale: 0.82,
+          scale: 0.85,
           opacity: 0,
           duration: 0.9,
-          ease: "back.out(1.25)",
+          ease: "back.out(1.2)",
         },
         "-=0.5"
       )
-      .from(
-        ".feature-center-glow",
-        {
-          scale: 0.5,
-          opacity: 0,
-          duration: 1,
-          ease: "power2.out",
-        },
-        "-=0.8"
-      )
 
-      // 3. Elliptical Orbit Arcs
+      // 3. Circular Orbit Arcs
       .from(
         ".feature-orbit-arc",
         {
           opacity: 0,
-          scale: 0.92,
+          scale: 0.94,
           duration: 0.7,
           stagger: 0.08,
           ease: "power2.out",
@@ -154,14 +206,14 @@ export function FeaturesSection({ index = "02" }: Props) {
         "-=0.7"
       )
 
-      // 4. Staggered 8 Feature Nodes flying to their orbital coordinates
+      // 4. Staggered 8 Feature Nodes
       .from(
         ".feature-node",
         {
-          scale: 0.65,
+          scale: 0.7,
           opacity: 0,
           duration: 0.7,
-          stagger: 0.07,
+          stagger: 0.06,
           ease: "back.out(1.4)",
         },
         "-=0.4"
@@ -180,9 +232,9 @@ export function FeaturesSection({ index = "02" }: Props) {
         "-=0.5"
       );
 
-      // Gentle floating animation on the center containers
+      // Subtle float animation on center pails
       gsap.to(".feature-center-pails-img", {
-        y: -6,
+        y: -5,
         duration: 3.2,
         repeat: -1,
         yoyo: true,
@@ -195,123 +247,99 @@ export function FeaturesSection({ index = "02" }: Props) {
   return (
     <section
       ref={containerRef}
-      className="relative bg-white lg:h-screen lg:min-h-[620px] lg:max-h-[960px] flex flex-col justify-between py-6 sm:py-8 lg:py-8 border-b border-slate-100/90 overflow-hidden"
+      className="relative bg-white lg:h-screen lg:min-h-[640px] lg:max-h-[960px] flex flex-col justify-between py-6 sm:py-8 lg:py-10 border-b border-slate-100 overflow-hidden"
     >
       <div className="mx-auto w-full max-w-[1380px] px-5 sm:px-8 lg:px-12 relative z-10 flex-1 flex flex-col justify-between">
         
-        {/* Top Header: Left Title / Right Subtitle matching UI graphic */}
+        {/* Top Header: "Product" in black text, "Features" in brand blue */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shrink-0 pt-2 lg:pt-3">
           <div className="feature-header-left">
-            <h2 className="font-display text-[2.4rem] sm:text-[3.1rem] lg:text-[3.4rem] font-bold tracking-tight text-slate-900 leading-[1.08]">
-              Product <WavyHighlight dot={false}>Features</WavyHighlight>
+            <h2 className="text-[2.6rem] sm:text-[3.2rem] lg:text-[3.6rem] font-extrabold tracking-tight leading-[1.06]">
+              <span className="text-slate-900">Product</span>{" "}
+              <span className="text-[#024182]">Features</span>
             </h2>
           </div>
 
-          <div className="feature-header-right sm:text-right max-w-xs">
-            <p className="text-slate-600 text-[14px] sm:text-[15px] font-medium leading-relaxed">
+          <div className="feature-header-right sm:text-right max-w-sm">
+            <p className="text-slate-600 text-[14.5px] sm:text-[15.5px] font-medium leading-relaxed">
               Thoughtfully designed for safer, cleaner and more convenient storage.
             </p>
           </div>
         </div>
 
-        {/* Desktop Elliptical Orbit Presentation (Hidden on Mobile, Screen-size & Centered on lg+) */}
+        {/* Desktop Proper Circular Presentation (Centered & Proportionally Balanced) */}
         <div className="hidden lg:flex flex-1 items-center justify-center relative w-full my-auto">
-          <div className="relative w-full max-w-[1120px] xl:max-w-[1200px] h-[480px] xl:h-[530px] scale-[0.90] xl:scale-100 origin-center">
+          <div className="relative w-full max-w-[860px] xl:max-w-[920px] h-[520px] xl:h-[550px] mx-auto scale-[0.95] xl:scale-100 origin-center">
             
-            {/* Elliptical Ring Container (Horizontal Oval with 6 Directional Arrows - Equal Space, No Dotted Lines) */}
-            <div className="feature-orbit-ring absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[480px] pointer-events-none select-none z-0">
+            {/* Arrow Circle with Fading Opacity on Trailing Edges */}
+            <div className="feature-orbit-ring absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] xl:w-[380px] xl:h-[380px] pointer-events-none select-none z-0">
               <svg
-                viewBox="0 0 700 480"
+                viewBox="0 0 300 300"
                 className="w-full h-full pointer-events-none"
                 fill="none"
               >
                 <defs>
+                  {/* Subtle small arrowhead marker */}
                   <marker
                     id="orbit-arrow"
-                    viewBox="0 0 10 10"
-                    refX="5"
-                    refY="5"
-                    markerWidth="7"
-                    markerHeight="7"
-                    orient="auto-start-reverse"
+                    viewBox="0 0 6 6"
+                    refX="4.5"
+                    refY="3"
+                    markerWidth="3.5"
+                    markerHeight="3.5"
+                    orient="auto"
                   >
-                    <path d="M 1 2 L 8 5 L 1 8 z" fill="#475569" />
+                    <path d="M 0.5 0.8 L 5 3 L 0.5 5.2 z" fill="#475569" />
                   </marker>
+
+                  {/* Individual gradients for each arc: trailing edge fades out to low opacity */}
+                  {orbitArcs.map((arc) => (
+                    <linearGradient
+                      key={`grad-${arc.id}`}
+                      id={`arc-grad-${arc.id}`}
+                      x1={arc.x1}
+                      y1={arc.y1}
+                      x2={arc.x2}
+                      y2={arc.y2}
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0%" stopColor="#64748b" stopOpacity="0.04" />
+                      <stop offset="60%" stopColor="#64748b" stopOpacity="0.45" />
+                      <stop offset="100%" stopColor="#334155" stopOpacity="0.85" />
+                    </linearGradient>
+                  ))}
                 </defs>
 
-                {/* Exactly 6 Clockwise Directional Arcs with Equal Spacing around the Ellipse (No Dotted Lines) */}
-                {/* 1. Top Arc (~10:00 to 12:00) */}
-                <path
-                  d="M 129 123 A 280 190 0 0 1 321 51"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
-                {/* 2. Top-Right Arc (~12:30 to 2:00) */}
-                <path
-                  d="M 389 52 A 280 190 0 0 1 577 128"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
-                {/* 3. Middle-Right Arc (~2:30 to 4:00) */}
-                <path
-                  d="M 610 169 A 280 190 0 0 1 606 317"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
-                {/* 4. Bottom-Right Arc (~4:30 to 6:00) */}
-                <path
-                  d="M 571 357 A 280 190 0 0 1 379 429"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
-                {/* 5. Bottom-Left Arc (~6:30 to 8:00) */}
-                <path
-                  d="M 311 428 A 280 190 0 0 1 123 352"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
-                {/* 6. Upper-Left Arc (~8:30 to 10:00) */}
-                <path
-                  d="M 90 311 A 280 190 0 0 1 94 163"
-                  stroke="#64748b"
-                  strokeWidth="1.6"
-                  markerEnd="url(#orbit-arrow)"
-                  className="feature-orbit-arc"
-                />
+                {/* 5 Clockwise Directional Arcs with Fading Trailing Edges */}
+                {orbitArcs.map((arc) => (
+                  <path
+                    key={arc.id}
+                    d={arc.d}
+                    stroke={`url(#arc-grad-${arc.id})`}
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    markerEnd="url(#orbit-arrow)"
+                    className="feature-orbit-arc"
+                  />
+                ))}
               </svg>
             </div>
 
-            {/* Centerpiece: Container Cluster & Blue Glow */}
-            <div className="feature-center-pails absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] xl:w-[380px] flex items-center justify-center pointer-events-none select-none z-10">
-              {/* Ambient blue glow base */}
-              <div
-                aria-hidden="true"
-                className="feature-center-glow absolute bottom-4 left-1/2 -translate-x-1/2 w-[270px] xl:w-[320px] h-[90px] xl:h-[120px] rounded-full bg-gradient-to-t from-[#0052cc]/45 via-[#0066cc]/25 to-transparent blur-2xl"
-              />
-
-              <div className="relative w-full h-[240px] xl:h-[280px]">
+            {/* Centerpiece: White Buckets with Blue Base Graphic - Sits tightly inside circle */}
+            <div className="feature-center-pails absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] xl:w-[240px] h-[145px] xl:h-[160px] flex items-center justify-center pointer-events-none select-none z-10">
+              <div className="relative w-full h-full">
                 <Image
-                  src="/images/footer-pails.webp"
+                  src="/images/features/product-features-pails.webp"
                   alt="ASIR Containers Rigid Plastic Packaging Range"
                   fill
                   priority
-                  sizes="(min-width: 1280px) 380px, 340px"
-                  className="feature-center-pails-img object-contain object-center drop-shadow-[0_16px_35px_rgba(0,35,90,0.16)]"
+                  sizes="(min-width: 1280px) 240px, 220px"
+                  className="feature-center-pails-img object-contain object-center drop-shadow-[0_12px_24px_rgba(0,40,100,0.12)]"
                 />
               </div>
             </div>
 
-            {/* 8 Feature Nodes Orbiting Along the Ellipse */}
+            {/* 8 Feature Nodes Aligned in a PROPER CIRCLE */}
             {featuresList.map((item) => (
               <div
                 key={item.id}
@@ -319,23 +347,26 @@ export function FeaturesSection({ index = "02" }: Props) {
                   left: item.pos.left,
                   top: item.pos.top,
                 }}
-                className="feature-node absolute -translate-y-1/2 flex items-center gap-3 group cursor-default z-20"
+                className={`feature-node absolute ${item.posClass ?? "-translate-y-1/2"} flex items-center gap-3 group cursor-default z-20`}
               >
-                {/* Circular Icon Badge */}
+                {/* Circular Icon Badge with refined border and soft background color */}
                 <div
-                  style={{ borderColor: item.color }}
-                  className="relative flex h-12 w-12 xl:h-13 xl:w-13 items-center justify-center rounded-full border-2 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)] shrink-0"
+                  style={{
+                    borderColor: item.color,
+                    backgroundColor: item.bgColor,
+                  }}
+                  className="relative flex h-12 w-12 xl:h-13 xl:w-13 items-center justify-center rounded-full border-[1.5px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] shrink-0"
                 >
                   <Icon
                     icon={item.icon}
                     style={{ color: item.color }}
-                    className="h-6 w-6 transition-transform duration-300 group-hover:scale-110"
+                    className="h-6 w-6 xl:h-6.5 xl:w-6.5 transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
 
                 {/* Title & Subtitle */}
                 <div className="flex flex-col whitespace-nowrap">
-                  <span className="font-display text-[14px] xl:text-[15px] font-black tracking-wide text-slate-900 group-hover:text-ink transition-colors leading-tight">
+                  <span className="text-[13.5px] xl:text-[14.5px] font-bold tracking-wide text-slate-900 group-hover:text-ink transition-colors leading-tight uppercase">
                     {item.title}
                   </span>
                   <span className="text-[11.5px] xl:text-[12px] font-medium text-slate-500 leading-tight mt-0.5">
@@ -348,24 +379,17 @@ export function FeaturesSection({ index = "02" }: Props) {
           </div>
         </div>
 
-        {/* Mobile / Tablet View (Visible on < lg, Scrollable & Responsive) */}
+        {/* Mobile / Tablet View (< lg) */}
         <div className="block lg:hidden my-6">
-          {/* Mobile Center Graphic with Glow */}
-          <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[200px] sm:h-[230px] mx-auto flex items-center justify-center my-3">
-            <div
-              aria-hidden="true"
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[220px] sm:w-[260px] h-[70px] sm:h-[90px] rounded-full bg-gradient-to-t from-[#0052cc]/40 via-[#0066cc]/20 to-transparent blur-xl pointer-events-none"
+          {/* Mobile Center Graphic */}
+          <div className="relative w-full max-w-[280px] sm:max-w-[320px] h-[180px] sm:h-[200px] mx-auto flex items-center justify-center my-4">
+            <Image
+              src="/images/features/product-features-pails.webp"
+              alt="ASIR Containers Rigid Plastic Packaging"
+              fill
+              sizes="320px"
+              className="object-contain object-center drop-shadow-md"
             />
-            
-            <div className="relative w-[230px] sm:w-[270px] h-[170px] sm:h-[200px]">
-              <Image
-                src="/images/footer-pails.webp"
-                alt="ASIR Containers Rigid Plastic Packaging"
-                fill
-                sizes="270px"
-                className="object-contain object-center drop-shadow-md"
-              />
-            </div>
           </div>
 
           {/* 8 Features Responsive Grid */}
@@ -376,17 +400,20 @@ export function FeaturesSection({ index = "02" }: Props) {
                 className="feature-mobile-card flex items-center gap-3.5 p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-slate-300 hover:shadow-sm transition-all"
               >
                 <div
-                  style={{ borderColor: item.color }}
-                  className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 bg-white shrink-0 shadow-xs"
+                  style={{
+                    borderColor: item.color,
+                    backgroundColor: item.bgColor,
+                  }}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border-[1.5px] shrink-0 shadow-xs"
                 >
                   <Icon
                     icon={item.icon}
                     style={{ color: item.color }}
-                    className="h-5.5 w-5.5"
+                    className="h-6 w-6"
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-display text-[14px] sm:text-[14.5px] font-black tracking-wide text-slate-900 leading-tight">
+                  <span className="text-[14px] sm:text-[14.5px] font-bold tracking-wide text-slate-900 leading-tight uppercase">
                     {item.title}
                   </span>
                   <span className="text-[11.5px] sm:text-[12px] font-medium text-slate-500 leading-tight mt-0.5">

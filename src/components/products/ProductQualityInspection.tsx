@@ -177,24 +177,24 @@ export function ProductQualityInspection() {
           {/* Left Column: Heading, Quote, and 3 Sub-Tab Buttons */}
           <div className="flex flex-col justify-between lg:col-span-7">
             <div>
-              {/* Heading 1: Quality Control */}
+              {/* Heading 1: Quality Control (Signature Brand Blue) */}
               <div className="flex items-center gap-2.5">
-                <span className="h-[2px] w-6 bg-emerald-600" />
+                <span className="h-[2px] w-6 bg-[#0066cc]" />
                 <h2
                   id="quality-inspection-heading"
-                  className="font-mono text-[12.5px] sm:text-[13.5px] font-bold uppercase tracking-[0.2em] text-emerald-600"
+                  className="font-mono text-[12.5px] sm:text-[13.5px] font-bold uppercase tracking-[0.2em] text-[#0066cc]"
                 >
                   Quality Control
                 </h2>
               </div>
 
-              {/* Slogan Quote with green accent line — larger and impactful */}
-              <blockquote className="mt-3.5 sm:mt-4 border-l-3 border-emerald-600 pl-4 sm:pl-5 font-display text-[clamp(1.45rem,2.4vw,2.15rem)] font-bold leading-[1.2] tracking-tight text-ink">
+              {/* Slogan Quote with matching blue accent line — larger and impactful */}
+              <blockquote className="mt-3.5 sm:mt-4 border-l-3 border-[#0066cc] pl-4 sm:pl-5 font-display text-[clamp(1.45rem,2.4vw,2.15rem)] font-bold leading-[1.2] tracking-tight text-ink">
                 All incoming materials which is going into the stroke process will be inspected as per
                 IS Standards
               </blockquote>
 
-              {/* Heading 2: Inspection & 3 Sub-Tab Buttons */}
+              {/* Heading 2: Inspection (Emerald Green) & 3 Sub-Tab Buttons */}
               <div className="mt-4 sm:mt-5 border-t border-slate-200/80 pt-3 sm:pt-3.5">
                 <div className="flex items-center gap-2.5 mb-2.5 sm:mb-3">
                   <span className="h-[2px] w-6 bg-emerald-600" />

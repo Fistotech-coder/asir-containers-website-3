@@ -3,23 +3,30 @@ import React from "react";
 interface WavyHighlightProps {
   children: React.ReactNode;
   dot?: boolean;
+  serif?: boolean;
+  italic?: boolean;
   className?: string;
 }
 
 /**
  * Common signature heading accent:
- * - Font: font-serif italic font-semibold text-[#0066cc]
+ * - Font: font-serif or font-display, customizable italic/normal
  * - Smooth architectural wave underline SVG
  * - Optional trailing colored dot
  */
 export function WavyHighlight({
   children,
   dot = true,
+  serif = true,
+  italic = true,
   className = "",
 }: WavyHighlightProps) {
+  const fontClass = serif ? "font-serif" : "font-display";
+  const styleClass = italic ? "italic font-semibold" : "not-italic font-bold";
+
   return (
     <span
-      className={`relative inline-block font-serif italic font-semibold text-[#0e4c9c] sm:ml-1 ${className}`}
+      className={`relative inline-block ${fontClass} ${styleClass} text-[#0e4c9c] sm:ml-1 ${className}`}
     >
       {children}
       {dot && <span className="text-[#0e4c9c]">.</span>}

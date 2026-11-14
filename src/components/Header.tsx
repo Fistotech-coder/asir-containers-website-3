@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowUpRight, ChevronDown, ChevronRight, LayoutGrid, Menu, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronRight, Cog, LayoutGrid, Menu, Snowflake, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { navigation, site } from "@/data/site";
@@ -37,21 +37,23 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [machineriesOpen, setMachineriesOpen] = useState(false);
+  const [mobileMachineriesOpen, setMobileMachineriesOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const closeTimer = useRef<number | null>(null);
+  const machineriesCloseTimer = useRef<number | null>(null);
   const productsNavRef = useRef<HTMLDivElement | null>(null);
+  const machineriesNavRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const machineriesDropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // Navigate immediately to product and close dropdowns smoothly
-  const handleProductNavigate = (slug: string) => {
-    router.push(`/products/${slug}`);
+  // Close all open dropdowns/drawers cleanly
+  const closeAllMenus = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    if (machineriesCloseTimer.current) window.clearTimeout(machineriesCloseTimer.current);
     setProductsOpen(false);
+    setMachineriesOpen(false);
     setOpen(false);
-    try {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts: { immediate: boolean }) => void } }).__lenis;
-      lenis?.scrollTo(0, { immediate: true });
-    } catch {}
   };
 
   useEffect(() => setMounted(true), []);
@@ -66,6 +68,7 @@ export function Header() {
   useEffect(() => {
     setOpen(false);
     setProductsOpen(false);
+    setMachineriesOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -83,16 +86,23 @@ export function Header() {
   }, [open]);
 
   useEffect(() => {
-    if (!productsOpen) return;
+    if (!productsOpen && !machineriesOpen) return;
     const onPointerDown = (event: PointerEvent) => {
       const target = event.target as Node;
       if (productsNavRef.current?.contains(target) || modalRef.current?.contains(target)) {
         return;
       }
+      if (machineriesNavRef.current?.contains(target) || machineriesDropdownRef.current?.contains(target)) {
+        return;
+      }
       setProductsOpen(false);
+      setMachineriesOpen(false);
     };
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setProductsOpen(false);
+      if (event.key === "Escape") {
+        setProductsOpen(false);
+        setMachineriesOpen(false);
+      }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKey);
@@ -100,27 +110,13 @@ export function Header() {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [productsOpen]);
-
-  // Preload product pages when dropdown opens so navigation is instantaneous
-  useEffect(() => {
-    if (productsOpen) {
-      navProductItems.forEach((item) => {
-        try {
-          router.prefetch(`/products/${item.slug}`);
-        } catch {}
-      });
-    }
-  }, [productsOpen, router]);
+  }, [productsOpen, machineriesOpen]);
 
   const hoverOpen = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    if (machineriesCloseTimer.current) window.clearTimeout(machineriesCloseTimer.current);
+    setMachineriesOpen(false);
     setProductsOpen(true);
-    navProductItems.forEach((item) => {
-      try {
-        router.prefetch(`/products/${item.slug}`);
-      } catch {}
-    });
   };
 
   const hoverClose = () => {
@@ -128,10 +124,29 @@ export function Header() {
     closeTimer.current = window.setTimeout(() => setProductsOpen(false), 180);
   };
 
+  const hoverMachineriesOpen = () => {
+    if (machineriesCloseTimer.current) window.clearTimeout(machineriesCloseTimer.current);
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setProductsOpen(false);
+    setMachineriesOpen(true);
+    try {
+      router.prefetch("/machineries/production-machineries");
+      router.prefetch("/machineries/auxiliaries");
+    } catch {}
+  };
+
+  const hoverMachineriesClose = () => {
+    if (machineriesCloseTimer.current) window.clearTimeout(machineriesCloseTimer.current);
+    machineriesCloseTimer.current = window.setTimeout(() => setMachineriesOpen(false), 180);
+  };
+
   /* Transparent nav on /contact before scroll */
   const isTransparentNav = pathname === "/contact" && !scrolled && !open;
+  const onMachineriesPage = pathname.startsWith("/machineries") || pathname === "/technologies";
   const overLightHero =
-    (pathname === "/" || pathname === "/process" || pathname === "/technologies") && !scrolled && !open;
+    (pathname === "/" || pathname === "/process" || pathname === "/technologies" || pathname.startsWith("/machineries")) &&
+    !scrolled &&
+    !open;
   const onProductsPage = pathname.startsWith("/products");
 
   const isActive = (href: string) => {
@@ -180,37 +195,80 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav aria-label="Primary" className="hidden items-center gap-7 xl:gap-9 lg:flex">
-            {navigation.map((item) =>
-              item.hasMenu ? (
-                <div
-                  key={item.href}
-                  ref={productsNavRef}
-                  className="relative flex items-center"
-                  onMouseEnter={hoverOpen}
-                  onMouseLeave={hoverClose}
-                >
-                  <div className="flex items-center gap-1">
-                    <Link
-                      href={item.href}
-                      className={`link-rule text-[15px] xl:text-[15.5px] font-semibold tracking-tight transition-colors duration-200 ${linkTone} ${
-                        onProductsPage ? activeLinkClass : ""
-                      }`}
-                      data-active={onProductsPage}
-                    >
-                      {item.label}
-                    </Link>
+            {navigation.map((item) => {
+              if (item.label === "Products") {
+                return (
+                  <div
+                    key={item.href}
+                    ref={productsNavRef}
+                    className="relative flex items-center"
+                    onMouseEnter={hoverOpen}
+                    onMouseLeave={hoverClose}
+                  >
+                    <div className="flex items-center gap-1">
+                      <Link
+                        href={item.href}
+                        prefetch={true}
+                        onClick={closeAllMenus}
+                        className={`link-rule text-[15px] xl:text-[15.5px] font-semibold tracking-tight transition-colors duration-200 ${linkTone} ${
+                          onProductsPage ? activeLinkClass : ""
+                        }`}
+                        data-active={onProductsPage}
+                      >
+                        {item.label}
+                      </Link>
+                      <button
+                        type="button"
+                        aria-expanded={productsOpen}
+                        aria-controls="products-menu"
+                        aria-label={productsOpen ? "Close products menu" : "Open products menu"}
+                        onClick={() => setProductsOpen((value) => !value)}
+                        className={`flex h-8 w-5 items-center justify-center transition-colors ${linkTone}`}
+                      >
+                        <ChevronDown
+                          aria-hidden
+                          className={`h-3.5 w-3.5 transition-transform duration-300 stroke-2 ${
+                            productsOpen
+                              ? isTransparentNav
+                                ? "rotate-180 text-white"
+                                : "rotate-180 text-brand"
+                              : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (item.label === "Machineries") {
+                return (
+                  <div
+                    key={item.href}
+                    ref={machineriesNavRef}
+                    className="relative flex items-center"
+                    onMouseEnter={hoverMachineriesOpen}
+                    onMouseLeave={hoverMachineriesClose}
+                  >
                     <button
                       type="button"
-                      aria-expanded={productsOpen}
-                      aria-controls="products-menu"
-                      aria-label={productsOpen ? "Close products menu" : "Open products menu"}
-                      onClick={() => setProductsOpen((value) => !value)}
-                      className={`flex h-8 w-5 items-center justify-center transition-colors ${linkTone}`}
+                      aria-expanded={machineriesOpen}
+                      aria-controls="machineries-menu"
+                      aria-label={machineriesOpen ? "Close machineries menu" : "Open machineries menu"}
+                      onClick={() => {
+                        setProductsOpen(false);
+                        setMachineriesOpen((value) => !value);
+                      }}
+                      className={`link-rule flex items-center gap-1 text-[15px] xl:text-[15.5px] font-semibold tracking-tight transition-colors duration-200 cursor-pointer ${linkTone} ${
+                        onMachineriesPage ? activeLinkClass : ""
+                      }`}
+                      data-active={onMachineriesPage}
                     >
+                      <span>{item.label}</span>
                       <ChevronDown
                         aria-hidden
-                        className={`h-4 w-4 transition-transform duration-300 stroke-[2.5] ${
-                          productsOpen
+                        className={`h-3.5 w-3.5 transition-transform duration-300 stroke-2 ${
+                          machineriesOpen
                             ? isTransparentNav
                               ? "rotate-180 text-white"
                               : "rotate-180 text-brand"
@@ -218,22 +276,91 @@ export function Header() {
                         }`}
                       />
                     </button>
+
+                    {/* Desktop Machineries Floating Dropdown */}
+                    <div
+                      id="machineries-menu"
+                      ref={machineriesDropdownRef}
+                      aria-hidden={!machineriesOpen}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 pt-2.5 w-[330px] transition-all duration-200 ${
+                        machineriesOpen
+                          ? "visible opacity-100 translate-y-0 pointer-events-auto"
+                          : "invisible opacity-0 -translate-y-2 pointer-events-none"
+                      }`}
+                    >
+                      <div className="relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-2 shadow-[0_20px_45px_-12px_rgba(0,35,90,0.18)]">
+                        <Link
+                          href="/machineries/production-machineries"
+                          prefetch={true}
+                          tabIndex={machineriesOpen ? 0 : -1}
+                          onClick={closeAllMenus}
+                          className="group relative z-10 flex items-start gap-3 rounded-xl p-3 transition-all duration-200 hover:bg-[#0066cc]/[0.08]"
+                        >
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#0066cc] group-hover:bg-[#0066cc] group-hover:text-white transition-colors duration-200">
+                            <Cog className="h-5 w-5 transition-transform duration-500 group-hover:rotate-90" strokeWidth={2} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <span className="font-display text-[14.5px] font-bold text-slate-900 group-hover:text-[#0066cc] transition-colors">
+                                Production machineries
+                              </span>
+                              <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#0066cc] group-hover:translate-x-0.5 transition-all" />
+                            </div>
+                            <p className="text-[12px] text-slate-500 mt-0.5 leading-snug">
+                              Screen Printing, HTL, Inmould labeling
+                            </p>
+                          </div>
+                        </Link>
+
+                        <div className="h-px bg-slate-100 my-1 mx-2" />
+
+                        <Link
+                          href="/machineries/auxiliaries"
+                          prefetch={true}
+                          tabIndex={machineriesOpen ? 0 : -1}
+                          onClick={closeAllMenus}
+                          className="group relative z-10 flex items-start gap-3 rounded-xl p-3 transition-all duration-200 hover:bg-[#0066cc]/[0.08]"
+                        >
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-600 group-hover:bg-[#0066cc] group-hover:text-white transition-colors duration-200">
+                            <Snowflake className="h-5 w-5" strokeWidth={2} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <span className="font-display text-[14.5px] font-bold text-slate-900 group-hover:text-[#0066cc] transition-colors">
+                                Auxiliaries
+                              </span>
+                              <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#0066cc] group-hover:translate-x-0.5 transition-all" />
+                            </div>
+                            <p className="text-[12px] text-slate-500 mt-0.5 leading-snug">
+                              Chiller 1, Chiller 2 & plant systems
+                            </p>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ) : (
+                );
+              }
+
+              return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   data-active={isActive(item.href)}
-                  onMouseEnter={() => setProductsOpen(false)}
+                  onMouseEnter={() => {
+                    setProductsOpen(false);
+                    setMachineriesOpen(false);
+                  }}
+                  onClick={closeAllMenus}
                   className={`link-rule text-[15px] xl:text-[15.5px] font-semibold tracking-tight transition-colors duration-200 ${linkTone} ${
                     isActive(item.href) ? activeLinkClass : ""
                   }`}
                 >
                   {item.label}
                 </Link>
-              ),
-            )}
+              );
+            })}
           </nav>
 
           {/* Desktop Right CTAs */}
@@ -315,17 +442,7 @@ export function Header() {
                   href={`/products/${item.slug}`}
                   prefetch={true}
                   tabIndex={productsOpen ? 0 : -1}
-                  onMouseEnter={() => {
-                    try {
-                      router.prefetch(`/products/${item.slug}`);
-                    } catch {}
-                  }}
-                  onClick={(e) => {
-                    if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
-                      e.preventDefault();
-                      handleProductNavigate(item.slug);
-                    }
-                  }}
+                  onClick={closeAllMenus}
                   className="group relative flex h-[62px] items-center justify-between rounded-2xl border border-slate-200/70 bg-white px-3 py-2 transition-all duration-200 hover:border-brand hover:bg-brand hover:shadow-md cursor-pointer"
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-1">
@@ -359,50 +476,70 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile/Tablet Backdrop Scrim */}
+      <div
+        aria-hidden="true"
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-xs transition-[opacity,visibility] duration-300 lg:hidden ${
+          open ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
+        }`}
+      />
+
+      {/* Mobile & Tablet Popup Menu (Floating dialog card, perfectly responsive) */}
       <div
         id="mobile-menu"
         aria-hidden={!open}
         data-lenis-prevent
-        className={`fixed inset-0 z-50 overflow-y-auto bg-slate-950/98 backdrop-blur-xl transition-[opacity,visibility] duration-500 lg:hidden ${
-          open ? "visible opacity-100" : "invisible opacity-0"
+        className={`fixed z-50 transition-all duration-300 ease-out lg:hidden ${
+          scrolled ? "top-[70px] sm:top-[76px]" : "top-[80px] sm:top-[88px]"
+        } inset-x-3 sm:inset-x-auto sm:right-6 sm:w-[460px] max-w-[calc(100vw-1.5rem)] ${
+          open
+            ? "visible opacity-100 translate-y-0 scale-100 pointer-events-auto"
+            : "invisible opacity-0 -translate-y-3 scale-[0.97] pointer-events-none"
         }`}
       >
-        <div className="shell flex min-h-full flex-col justify-between pb-8 pt-5">
-          {/* Mobile drawer header with white logo and close button */}
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <Logo tone="light" />
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-slate-950/95 p-4 sm:p-5 shadow-[0_24px_60px_-10px_rgba(0,10,35,0.7),0_0_0_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl max-h-[calc(100dvh-95px)] sm:max-h-[calc(100dvh-110px)] overflow-y-auto overscroll-contain">
+          {/* Popup top indicator bar */}
+          <div className="flex items-center justify-between pb-3 border-b border-white/10">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-brand animate-pulse" />
+              <span className="font-mono text-[11px] font-bold tracking-widest uppercase text-slate-400">
+                Menu // Navigation
+              </span>
+            </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white transition-colors hover:border-brand hover:text-brand"
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/5 text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
             >
-              <X className="h-6 w-6" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
           {/* Navigation Links with Architectural 01 // format */}
-          <nav aria-label="Mobile" className="py-4">
+          <nav aria-label="Mobile" className="py-2">
             <Link
               href="/"
+              prefetch={true}
               tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between border-b border-white/10 py-4 transition-colors hover:text-brand"
+              onClick={closeAllMenus}
+              className="flex items-center justify-between border-b border-white/10 py-3 transition-colors hover:text-brand"
             >
-              <span className={`font-display text-[22px] sm:text-[24px] font-bold ${pathname === "/" ? "text-brand" : "text-white"}`}>
+              <span className={`font-display text-[17px] sm:text-[18.5px] font-bold ${pathname === "/" ? "text-brand" : "text-white"}`}>
                 Home
               </span>
               <span className="font-mono text-[11px] font-bold tracking-wider text-brand">01 //</span>
             </Link>
 
-            <div className="border-b border-white/10 py-4">
+            <div className="border-b border-white/10 py-3">
               <div className="flex items-center justify-between">
                 <Link
                   href="/products"
+                  prefetch={true}
                   tabIndex={open ? 0 : -1}
-                  onClick={() => setOpen(false)}
-                  className={`font-display text-[22px] sm:text-[24px] font-bold ${onProductsPage ? "text-brand" : "text-white"}`}
+                  onClick={closeAllMenus}
+                  className={`font-display text-[17px] sm:text-[18.5px] font-bold ${onProductsPage ? "text-brand" : "text-white"}`}
                 >
                   Products
                 </Link>
@@ -412,45 +549,35 @@ export function Header() {
                   aria-expanded={productsOpen}
                   aria-label={productsOpen ? "Hide products" : "Show products"}
                   tabIndex={open ? 0 : -1}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-white transition-colors hover:text-brand"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 text-white transition-colors hover:text-brand"
                 >
                   <ChevronDown
                     aria-hidden
-                    className={`h-5 w-5 transition-transform duration-300 ${productsOpen ? "rotate-180 text-brand" : ""}`}
+                    className={`h-4 w-4 transition-transform duration-300 ${productsOpen ? "rotate-180 text-brand" : ""}`}
                   />
                 </button>
               </div>
 
               {/* Collapsible Mobile Products List */}
               <div
-                className={`grid overflow-hidden transition-[max-height,opacity] duration-500 ${
-                  productsOpen ? "mt-4 max-h-[380px] overflow-y-auto pr-1 opacity-100" : "max-h-0 opacity-0"
+                className={`grid overflow-hidden transition-[max-height,opacity] duration-300 ${
+                  productsOpen ? "mt-3 max-h-[260px] overflow-y-auto pr-1 opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="space-y-1 rounded-2xl bg-white/[0.03] p-2 border border-white/10">
+                <div className="space-y-1 rounded-xl bg-white/[0.04] p-2 border border-white/10">
                   {products.map((item) => (
                     <Link
                       key={item.slug}
                       href={`/products/${item.slug}`}
                       prefetch={true}
                       tabIndex={open && productsOpen ? 0 : -1}
-                      onMouseEnter={() => {
-                        try {
-                          router.prefetch(`/products/${item.slug}`);
-                        } catch {}
-                      }}
-                      onClick={(e) => {
-                        if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
-                          e.preventDefault();
-                          handleProductNavigate(item.slug);
-                        }
-                      }}
-                      className="flex items-center justify-between rounded-xl px-3 py-2.5 text-[14px] text-white/80 transition-all hover:bg-brand/15 hover:text-white cursor-pointer"
+                      onClick={closeAllMenus}
+                      className="flex items-center justify-between rounded-lg px-2.5 py-2 text-[13px] text-white/85 transition-all hover:bg-brand/20 hover:text-white cursor-pointer"
                     >
-                      <span className="truncate pr-2 font-semibold">
+                      <span className="truncate pr-2 font-medium">
                         {item.name}
                       </span>
-                      <span className="shrink-0 font-mono text-[12px] font-medium text-brand">
+                      <span className="shrink-0 font-mono text-[11px] font-bold text-brand">
                         {item.codes.plain}
                       </span>
                     </Link>
@@ -461,46 +588,95 @@ export function Header() {
 
             <Link
               href="/process"
+              prefetch={true}
               tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between border-b border-white/10 py-4 transition-colors hover:text-brand"
+              onClick={closeAllMenus}
+              className="flex items-center justify-between border-b border-white/10 py-3 transition-colors hover:text-brand"
             >
-              <span className={`font-display text-[22px] sm:text-[24px] font-bold ${pathname === "/process" ? "text-brand" : "text-white"}`}>
+              <span className={`font-display text-[17px] sm:text-[18.5px] font-bold ${pathname === "/process" ? "text-brand" : "text-white"}`}>
                 Process
               </span>
               <span className="font-mono text-[11px] font-bold tracking-wider text-slate-400">03 //</span>
             </Link>
 
-            <Link
-              href="/technologies"
-              tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between border-b border-white/10 py-4 transition-colors hover:text-brand"
-            >
-              <span className={`font-display text-[22px] sm:text-[24px] font-bold ${pathname === "/technologies" ? "text-brand" : "text-white"}`}>
-                Technologies
-              </span>
-              <span className="font-mono text-[11px] font-bold tracking-wider text-slate-400">04 //</span>
-            </Link>
+            {/* Mobile Machineries Accordion */}
+            <div className="border-b border-white/10 py-3">
+              <button
+                type="button"
+                onClick={() => setMobileMachineriesOpen((value) => !value)}
+                aria-expanded={mobileMachineriesOpen}
+                aria-label={mobileMachineriesOpen ? "Hide machineries" : "Show machineries"}
+                tabIndex={open ? 0 : -1}
+                className="flex w-full items-center justify-between text-left cursor-pointer"
+              >
+                <span className={`font-display text-[17px] sm:text-[18.5px] font-bold ${onMachineriesPage ? "text-brand" : "text-white"}`}>
+                  Machineries
+                </span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 text-white transition-colors hover:text-brand">
+                  <ChevronDown
+                    aria-hidden
+                    className={`h-4 w-4 transition-transform duration-300 ${mobileMachineriesOpen ? "rotate-180 text-brand" : ""}`}
+                  />
+                </div>
+              </button>
+
+              {/* Collapsible Mobile Machineries List */}
+              <div
+                className={`grid overflow-hidden transition-[max-height,opacity] duration-300 ${
+                  mobileMachineriesOpen ? "mt-3 max-h-[160px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="space-y-1.5 rounded-xl bg-white/[0.04] p-2 border border-white/10">
+                  <Link
+                    href="/machineries/production-machineries"
+                    prefetch={true}
+                    tabIndex={open && mobileMachineriesOpen ? 0 : -1}
+                    onClick={closeAllMenus}
+                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-[13.5px] text-white/90 transition-all hover:bg-brand/20 hover:text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Cog className="h-4 w-4 text-brand" />
+                      <span className="font-medium">Production machineries</span>
+                    </div>
+                    <ChevronRight className="h-3.5 w-3.5 text-brand" />
+                  </Link>
+
+                  <Link
+                    href="/machineries/auxiliaries"
+                    prefetch={true}
+                    tabIndex={open && mobileMachineriesOpen ? 0 : -1}
+                    onClick={closeAllMenus}
+                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-[13.5px] text-white/90 transition-all hover:bg-brand/20 hover:text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Snowflake className="h-4 w-4 text-sky-400" />
+                      <span className="font-medium">Auxiliaries</span>
+                    </div>
+                    <ChevronRight className="h-3.5 w-3.5 text-brand" />
+                  </Link>
+                </div>
+              </div>
+            </div>
 
             <Link
               href="/contact"
+              prefetch={true}
               tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between border-b border-white/10 py-4 transition-colors hover:text-white"
+              onClick={closeAllMenus}
+              className="flex items-center justify-between border-b border-white/10 py-3 transition-colors hover:text-white"
             >
               <span
-                className={`font-display text-[22px] sm:text-[24px] font-bold ${
+                className={`font-display text-[17px] sm:text-[18.5px] font-bold ${
                   pathname === "/contact"
-                    ? "text-white underline decoration-white decoration-2 underline-offset-8"
-                    : "text-white/80 hover:text-white"
+                    ? "text-brand underline decoration-brand decoration-2 underline-offset-4"
+                    : "text-white/90 hover:text-white"
                 }`}
               >
                 Contact
               </span>
               <span
                 className={`font-mono text-[11px] font-bold tracking-wider ${
-                  pathname === "/contact" ? "text-white" : "text-slate-400"
+                  pathname === "/contact" ? "text-brand" : "text-slate-400"
                 }`}
               >
                 05 //
@@ -512,28 +688,29 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
               tabIndex={open ? 0 : -1}
-              className="flex items-center justify-between border-b border-white/10 py-4 text-white transition-colors hover:text-brand"
+              className="flex items-center justify-between border-b border-white/10 py-3 text-white transition-colors hover:text-brand"
             >
-              <span className="font-display text-[22px] sm:text-[24px] font-bold">Catalogue</span>
+              <span className="font-display text-[17px] sm:text-[18.5px] font-bold">Catalogue</span>
               <ArrowUpRight
                 aria-hidden
-                className={`h-5 w-5 ${pathname === "/contact" ? "text-white" : "text-brand"}`}
+                className="h-4.5 w-4.5 text-brand"
               />
             </a>
           </nav>
 
-          <div className="space-y-4 pt-4 border-t border-white/10">
+          <div className="space-y-3 pt-3.5 border-t border-white/10">
             <Button
               href="/contact"
+              prefetch={true}
               variant="primary"
-              size="lg"
-              className="w-full rounded-xl shadow-[0_4px_20px_rgba(0,102,204,0.35)]"
+              size="md"
+              className="w-full rounded-xl py-2.5 text-[14.5px] font-bold shadow-[0_4px_16px_rgba(0,102,204,0.35)]"
               withArrow
-              onClick={() => setOpen(false)}
+              onClick={closeAllMenus}
             >
               Send an enquiry
             </Button>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[12.5px] text-slate-400 pt-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11.5px] text-slate-400 pt-0.5 px-0.5">
               <span>{site.contact.phone ?? "Phone to be supplied"}</span>
               <span className="text-brand font-medium">sales@asircontainers.com</span>
             </div>
