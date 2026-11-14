@@ -23,7 +23,7 @@ export function ColorCTA({
   imageAlt,
 }: ColorCTAProps) {
   return (
-    <section className="bg-white pt-2 pb-14 lg:pb-18">
+    <section className="bg-white py-8 sm:py-10 lg:py-12">
       <Reveal className="shell">
         <div
           data-reveal

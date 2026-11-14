@@ -281,15 +281,19 @@ export function ProcessHero() {
           className="absolute inset-0 z-30 flex items-center justify-center px-6 sm:px-10"
           style={{ opacity: 0, transform: "translateY(24px)", pointerEvents: "none" }}
         >
-          <div className="shell flex flex-col items-center text-center max-w-3xl">
+          <div className="shell flex flex-col items-center text-center max-w-4xl">
             {/* Heading in Black & Blue (Visible on White Canvas) */}
-            <h1 className="font-display text-[clamp(2.3rem,5.2vw,4.5rem)] font-bold leading-[1.06] tracking-tight text-slate-950">
-              Advanced In-Process{" "}
-              <span className="text-brand">Production Systems</span>
+            <h1 className="font-display text-[clamp(2.2rem,4.6vw,4.25rem)] font-bold leading-[1.12] tracking-tight">
+              <span className="block text-slate-950">
+                Advanced <span className="whitespace-nowrap">In-Process</span>
+              </span>
+              <span className="block text-brand">
+                Production Systems
+              </span>
             </h1>
 
             {/* Content Description in Dark Charcoal/Black */}
-            <p className="mt-5 text-[15.5px] sm:text-[18px] md:text-[19px] leading-relaxed text-slate-700 max-w-2xl font-medium">
+            <p className="mt-5 text-[15.5px] sm:text-[17.5px] md:text-[18.5px] leading-relaxed text-slate-700 max-w-2xl font-medium">
               Automated moulding and custom labeling operations engineered for tight dimensional accuracy, vibrant finishes, and zero-defect repeatability.
             </p>
 

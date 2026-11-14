@@ -26,14 +26,6 @@ export function ScrollRotatingLid({
       const rootEl = root.current;
       if (!posWrapper || !spinWrapper || !rootEl || reduceMotion()) return;
 
-      // 1. Continuous slow-motion auto-rotation (silky smooth, never freezes)
-      const autoSpin = gsap.to(spinWrapper, {
-        rotation: 360,
-        duration: 24, // Slow motion: 24s per revolution
-        repeat: -1,
-        ease: "none",
-      });
-
       // The shell container where both header and alternating cards are located
       const shell = (rootEl.closest(".shell") as HTMLElement | null) || rootEl.parentElement;
       if (!shell) return;
@@ -44,11 +36,10 @@ export function ScrollRotatingLid({
 
       const mm = gsap.matchMedia();
 
-      // Helper to calculate target coordinate relative to root's starting position in shell
+      // Helper to calculate target coordinate relative to root's starting position in shell (Desktop)
       const getCardTarget = (
         card: HTMLElement | null,
-        isLeftCard: boolean,
-        isSmallScreen: boolean = false
+        isLeftCard: boolean
       ) => {
         if (!card || !shell || !rootEl) return { x: 0, y: 0 };
         const shellRect = shell.getBoundingClientRect();
@@ -66,28 +57,13 @@ export function ScrollRotatingLid({
         const lidW = rootRect.width || 320;
         const lidH = rootRect.height || 320;
 
-        let targetCenterX: number;
-        let targetCenterY: number;
-
-        if (isSmallScreen) {
-          // On mobile/tablet (< 1024px):
-          // The image card is stacked on top.
-          // Dock the lid right at the edge of the card with ~35% overlapping the image edge
-          // and ~65% protruding, staying snugly attached to the image without any floating gap.
-          targetCenterX = isLeftCard
-            ? cardXInShell + cardRect.width - (lidW * 0.35)
-            : cardXInShell + (lidW * 0.35);
-          targetCenterY = cardYInShell + (cardRect.height * 0.45);
-        } else {
-          // On desktop (>= 1024px):
-          // For Left Card (Topic 1 & 3): Center is positioned near the right edge of the card
-          // For Right Card (Topic 2): Center is positioned near the left edge of the card
-          // Tucked directly against the image card, bridging the gap to the text
-          targetCenterX = isLeftCard
-            ? cardXInShell + cardRect.width - (lidW * 0.12)
-            : cardXInShell + (lidW * 0.12);
-          targetCenterY = cardYInShell + (cardRect.height * 0.5);
-        }
+        // On desktop (>= 1024px):
+        // For Left Card (Topic 1 & 3): Center is positioned near the right edge of the card
+        // For Right Card (Topic 2): Center is positioned near the left edge of the card
+        const targetCenterX = isLeftCard
+          ? cardXInShell + cardRect.width - (lidW * 0.12)
+          : cardXInShell + (lidW * 0.12);
+        const targetCenterY = cardYInShell + (cardRect.height * 0.5);
 
         return {
           x: targetCenterX - (lidW * 0.5) - rootXInShell,
@@ -95,8 +71,17 @@ export function ScrollRotatingLid({
         };
       };
 
-      // DESKTOP (>= 1024px): Responsive glide to the backside of alternating image cards
+      // DESKTOP ONLY (>= 1024px): Rotate & scroll-driven glide movement across alternating cards
+      // Mobile and tablet screens (< 1024px) are intentionally excluded so movement/rotation stops completely
       mm.add("(min-width: 1024px)", () => {
+        // Continuous slow-motion auto-rotation on desktop
+        const autoSpin = gsap.to(spinWrapper, {
+          rotation: 360,
+          duration: 24,
+          repeat: -1,
+          ease: "none",
+        });
+
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: shell,
@@ -120,24 +105,24 @@ export function ScrollRotatingLid({
           // PRODUCTION MACHINERIES (3 topics):
           // Phase 1: Glides to Card 1 (Screen Printing - Card on Left)
           tl.to(posWrapper, {
-            x: () => getCardTarget(card1, true, false).x,
-            y: () => getCardTarget(card1, true, false).y,
+            x: () => getCardTarget(card1, true).x,
+            y: () => getCardTarget(card1, true).y,
             rotation: 180,
             duration: 0.3,
             ease: "power1.inOut",
           })
             // Phase 2: Glides across to Card 2 (HTL - Card on Right)
             .to(posWrapper, {
-              x: () => getCardTarget(card2, false, false).x,
-              y: () => getCardTarget(card2, false, false).y,
+              x: () => getCardTarget(card2, false).x,
+              y: () => getCardTarget(card2, false).y,
               rotation: 360,
               duration: 0.3,
               ease: "power1.inOut",
             })
             // Phase 3: Glides back to Card 3 (IML - Card on Left)
             .to(posWrapper, {
-              x: () => getCardTarget(card3, true, false).x,
-              y: () => getCardTarget(card3, true, false).y,
+              x: () => getCardTarget(card3, true).x,
+              y: () => getCardTarget(card3, true).y,
               rotation: 540,
               duration: 0.3,
               ease: "power1.inOut",
@@ -146,79 +131,28 @@ export function ScrollRotatingLid({
           // AUXILIARIES (2 topics):
           // Phase 1: Glides to Card 1 (Chiller 1 - Card on Left)
           tl.to(posWrapper, {
-            x: () => getCardTarget(card1, true, false).x,
-            y: () => getCardTarget(card1, true, false).y,
+            x: () => getCardTarget(card1, true).x,
+            y: () => getCardTarget(card1, true).y,
             rotation: 220,
             duration: 0.45,
             ease: "power1.inOut",
           })
             // Phase 2: Glides across to Card 2 (Chiller 2 - Card on Right)
             .to(posWrapper, {
-              x: () => getCardTarget(card2, false, false).x,
-              y: () => getCardTarget(card2, false, false).y,
+              x: () => getCardTarget(card2, false).x,
+              y: () => getCardTarget(card2, false).y,
               rotation: 440,
               duration: 0.45,
               ease: "power1.inOut",
             });
         }
-      });
 
-      // MOBILE & TABLET (< 1024px): Responsive dynamic tracking directly alongside each image
-      mm.add("(max-width: 1023px)", () => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: shell,
-            start: "top 25%",
-            end: "bottom 85%",
-            scrub: 1.0,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        tl.to(posWrapper, { x: 0, y: 0, duration: 0.05, ease: "none" });
-
-        if (mode === "3-topics") {
-          tl.to(posWrapper, {
-            x: () => getCardTarget(card1, true, true).x,
-            y: () => getCardTarget(card1, true, true).y,
-            rotation: 180,
-            duration: 0.3,
-            ease: "power1.inOut",
-          })
-            .to(posWrapper, {
-              x: () => getCardTarget(card2, false, true).x,
-              y: () => getCardTarget(card2, false, true).y,
-              rotation: 360,
-              duration: 0.3,
-              ease: "power1.inOut",
-            })
-            .to(posWrapper, {
-              x: () => getCardTarget(card3, true, true).x,
-              y: () => getCardTarget(card3, true, true).y,
-              rotation: 540,
-              duration: 0.3,
-              ease: "power1.inOut",
-            });
-        } else {
-          tl.to(posWrapper, {
-            x: () => getCardTarget(card1, true, true).x,
-            y: () => getCardTarget(card1, true, true).y,
-            rotation: 220,
-            duration: 0.45,
-            ease: "power1.inOut",
-          })
-            .to(posWrapper, {
-              x: () => getCardTarget(card2, false, true).x,
-              y: () => getCardTarget(card2, false, true).y,
-              rotation: 440,
-              duration: 0.45,
-              ease: "power1.inOut",
-            });
-        }
+        return () => {
+          autoSpin.kill();
+        };
       });
 
       return () => {
-        autoSpin.kill();
         mm.revert();
       };
     },
